@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" width="9.250mm" height="3.830mm" viewBox="-4.625 -1.915 9.250 3.830">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" viewBox="-4.625000 -1.915222 9.250000 3.830444" height="3.830444mm" width="9.250000mm">
   <defs/>
-  <rect x="-4.500" y="-1.790" width="9.000" height="3.580" fill="#efedeb" stroke="#331a00" stroke-width="0.250" rx="0.500" ry="0.500"/>
-  <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
-    <path d="m -3.3236049,0.8565965 h 0.336682 v -1.58145703 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m -1.5846246,0.8565965 h 0.3248271 v -1.58145703 h -0.3366821 v 1.02427202 l -0.732639,-1.02427202 h -0.346166 V 0.8565965 h 0.336682 v -1.06220802 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m -0.94797404,0.8565965 h 0.33668201 V 0.28992749 h 0.40307001 c 0.34142401,0 0.53110401,-0.22998701 0.53110401,-0.50502301 0,-0.27740701 -0.187309,-0.50976501 -0.53110401,-0.50976501 h -0.73975202 z m 0.92706102,-1.07406302 c 0,0.132776 -0.099582,0.21813200109 -0.232358,0.21813200109 H -0.61129203 V -0.43559853 h 0.35802101 c 0.132776,0 0.232358,0.087727 0.232358,0.21813201 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m 0.5292701,0.22591049 c 0,0.388844 0.22524501,0.65913801 0.708929,0.65913801 0.478942,0 0.704187,-0.26792301 0.704187,-0.66150901 v -0.94840002 h -0.341424 v 0.93891602 c 0,0.220503 -0.120921,0.372247 -0.362763,0.372247 -0.24658399,0 -0.36750499,-0.151744 -0.36750499,-0.372247 V -0.72486053 H 0.5292701 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m 2.6217145,0.8565965 h 0.339053 v -1.28508203 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
+  <g>
+    <rect x="-4.5" y="-1.7902222222222222" width="9" height="3.5804444444444443" rx="0.5" ry="0.5" fill="#efedeb" stroke="#18191c" stroke-width="0.25"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c">
+      <path d="M -3.3231377,0.85699603 H -2.986503 V -0.72423869 H -3.3231377 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="m -1.5844018,0.85699603 h 0.3247814 v -1.58123472 h -0.3366347 v 1.02412804 l -0.732536,-1.02412804 h -0.3461174 v 1.58123472 h 0.3366347 v -1.0620587 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="m -0.94784084,0.85699603 h 0.33663468 V 0.29040668 h 0.40301335 c 0.34137601,0 0.53102935,-0.22995468 0.53102935,-0.50495202 0,-0.27736801 -0.18728268,-0.50969335 -0.53102935,-0.50969335 h -0.73964803 z m 0.9269307,-1.07391203 c 0,0.13275733 -0.099568,0.21810134 -0.23232534,0.21810134 h -0.35797068 v -0.43620268 h 0.35797068 c 0.13275734,0 0.23232534,0.0877147 0.23232534,0.21810134 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="m 0.52919564,0.22639868 c 0,0.38878934 0.22521334,0.65904535 0.70882936,0.65904535 0.4788747,0 0.704088,-0.26788534 0.704088,-0.66141602 v -0.9482667 H 1.600737 v 0.93878403 c 0,0.22047201 -0.120904,0.37219468 -0.362712,0.37219468 -0.24654935,0 -0.36745335,-0.15172267 -0.36745335,-0.37219468 V -0.72423869 H 0.52919564 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="M 2.621346,0.85699603 H 2.9603514 V -0.42790534 H 3.4202607 V -0.72423869 H 2.159066 v 0.29633335 h 0.46228 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+    </g>
   </g>
 </svg>

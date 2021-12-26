@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" width="8.250mm" height="3.830mm" viewBox="-4.125 -1.915 8.250 3.830">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" viewBox="-3.625000 -1.915222 7.250000 3.830444" height="3.830444mm" width="7.250000mm">
   <defs/>
-  <rect x="-4.000" y="-1.790" width="8.000" height="3.580" fill="#faf7f0" stroke="#0044cc" stroke-width="0.250" rx="0.500" ry="0.500"/>
-  <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc">
-    <path d="m -0.61566351,0.08365048 h 0.42440901 v -0.184938 h -0.42440901 v -0.46708701 h -0.206277 v 0.46708701 H -1.2487205 v 0.184938 h 0.42677999 v 0.48368401 h 0.206277 z M -1.2487205,0.8565965 h 1.057466 v -0.184938 h -1.057466 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"/>
-    <path d="m -0.00653877,0.6479485 c 0.13514701,0.147002 0.33431101,0.2371 0.60934702,0.2371 0.38173101,0 0.63305705,-0.211019 0.63305705,-0.54533001 0,-0.32008501 -0.23947104,-0.50976501 -0.50739405,-0.50976501 -0.144631,0 -0.27266501,0.056904 -0.35565001,0.130405 V -0.43559853 H 1.1291703 v -0.289262 H 0.04325224 v 0.90335101 l 0.234729,0.064017 c 0.09484,-0.090098 0.20153501,-0.13040501 0.33194001,-0.13040501 0.180196,0 0.28452,0.097211 0.28452,0.24184201 0,0.130405 -0.106695,0.2371 -0.294004,0.2371 -0.16597001,0 -0.31297201,-0.059275 -0.42203801,-0.170712 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"/>
+  <g>
+    <rect x="-3.5" y="-1.7902222222222222" width="7" height="3.5804444444444443" rx="0.5" ry="0.5" fill="#f0f3fa" stroke="#0044cc" stroke-width="0.25"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc">
+      <path d="m -0.61557696,0.08415867 h 0.42434935 v -0.184912 h -0.42434935 v -0.46702135 h -0.206248 v 0.46702135 H -1.248545 v 0.184912 h 0.42672004 v 0.48361602 h 0.206248 z M -1.248545,0.85699603 h 1.05731739 V 0.67208402 H -1.248545 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"/>
+      <path d="m -0.00653786,0.64837736 c 0.13512801,0.14698133 0.33426402,0.23706667 0.60926136,0.23706667 0.38167734,0 0.632968,-0.21098934 0.632968,-0.54525335 0,-0.32004001 -0.23943732,-0.50969335 -0.50732267,-0.50969335 -0.14461067,0 -0.27262667,0.056896 -0.35560001,0.13038667 V -0.43501734 H 1.1290115 V -0.72423869 H 0.04324615 v 0.90322403 l 0.234696,0.064008 c 0.0948267,-0.0900853 0.20150668,-0.13038667 0.33189335,-0.13038667 0.18017067,0 0.28448001,0.0971973 0.28448001,0.24180801 0,0.13038667 -0.10668001,0.23706667 -0.29396268,0.23706667 -0.16594667,0 -0.31292801,-0.0592667 -0.42197868,-0.170688 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#0044cc"/>
+    </g>
   </g>
 </svg>

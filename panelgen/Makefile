@@ -37,6 +37,6 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 clobber: clean
-	rm -rf $(INSTALL_DIR)
+	rm -rf $(ASSET_INSTALL_DIR) $(IMAGE_INSTALL_DIR)
 
 .PHONY: clean clobber

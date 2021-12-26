@@ -84,13 +84,14 @@ $(STAGING_DIR) $(STAGING_PLUGIN_DIR):
 
 stage: dist $(STAGING_PLUGIN_DIR)
 	cp $(DIST_PLUGIN_ZIP) $(STAGING_PLUGIN_DIR)
-	cd $(STAGING_PLUGIN_DIR) && tar xf $(PLUGIN_ZIP_NAME)
-	jq '.modules[].hidden=false' plugin.json > $(STAGING_PLUGIN_MANIFEST)
 
 clean-stage:
 	rm -rf $(STAGING_DIRNAME)
 
 run: stage
+	cd $(STAGING_PLUGIN_DIR) && tar xf $(PLUGIN_ZIP_NAME)
+	rm $(STAGING_PLUGIN_ZIP)
+	jq '.modules[].hidden=false' plugin.json > $(STAGING_PLUGIN_MANIFEST)
 	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
 
 clean: clean-stage

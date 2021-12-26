@@ -23,14 +23,14 @@ type xyLfoLayout struct {
 func (l xyLfoLayout) Build() *Panel {
 	const (
 		hue = 270
-		hp  = 10
+		hp  = 11
 	)
 
 	var (
 		fg = svg.HslColor(hue, 1.0, 0.5)
 		bg = svg.HslColor(hue, 0.66, 0.97)
 	)
-	p := NewPanel(l.name, hp, fg, bg, "xycloid")
+	p := NewPanel(l.name, hp, fg, bg, "xylfo")
 
 	const (
 		width       = hp * mmPerHp

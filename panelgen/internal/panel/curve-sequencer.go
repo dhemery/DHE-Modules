@@ -21,13 +21,13 @@ func (cs curveSequencer) slug() string {
 
 func (cs curveSequencer) build() *Panel {
 	const (
-		hue      = 30
-		stepDxHp = 2.25
-		baseHp   = 13
+		hue         = 30
+		baseHp      = 13
+		stepWidthHp = 2.25
 	)
 	var (
 		steps    = int(cs)
-		hp    Hp = baseHp + Hp(float64(steps)*stepDxHp)
+		hp    Hp = baseHp + Hp(float64(steps)*stepWidthHp)
 		fg       = svg.HslColor(hue, 10, .1)
 		bg       = svg.HslColor(hue, .1, .93)
 	)
@@ -38,7 +38,7 @@ func (cs curveSequencer) build() *Panel {
 		top                    = 4.0 * mmPerHp
 		bottom                 = 23.0 * mmPerHp
 		sequenceControlsTop    = top + 2.75*mmPerHp
-		sequenceControlsBottom = bottom - control.PortDiameter - 1.0
+		sequenceControlsBottom = bottom - control.PortRadius - 1.0
 		sequenceControlsDy     = (sequenceControlsBottom - sequenceControlsTop) / 4.0
 		runY                   = sequenceControlsTop + 0.0*sequenceControlsDy
 		loopY                  = sequenceControlsTop + 1.0*sequenceControlsDy
@@ -57,9 +57,9 @@ func (cs curveSequencer) build() *Panel {
 	p.InButtonPort(left, resetY, "RESET")
 
 	const (
-		stepDx          = stepDxHp * mmPerHp
-		stepBlockLeft   = 10.0*mmPerHp - stepDx/2.0
-		stepBlockLabelX = stepBlockLeft - 0.1*stepDx
+		stepWidth       = stepWidthHp * mmPerHp
+		stepBlockLeft   = 10.0*mmPerHp - stepWidth/2.0
+		stepBlockLabelX = stepBlockLeft - 0.1*stepWidth
 
 		generateModeY  = top + 1.61*mmPerHp
 		advanceModeY   = top + 3.25*mmPerHp
@@ -85,7 +85,7 @@ func (cs curveSequencer) build() *Panel {
 		stepperWidth        = 9.0
 	)
 	var (
-		stepBlockRight = stepBlockLeft + float64(steps)*stepDx
+		stepBlockRight = stepBlockLeft + float64(steps)*stepWidth
 
 		smallKnob           = control.SmallKnob(fg, bg)
 		port                = control.Port(fg, bg)
@@ -96,9 +96,9 @@ func (cs curveSequencer) build() *Panel {
 		generateModeStepper = control.Stepper("generate-mode", fg, bg, svg.SmallFont, stepperWidth, 1, generateModes)
 	)
 	for step := 0; step < steps; step++ {
-		channelSeparatorX := stepBlockLeft + float64(step)*stepDx
+		channelSeparatorX := stepBlockLeft + float64(step)*stepWidth
 		p.VLine(channelSeparatorX, channelSeparatorTop, bottom)
-		x := channelSeparatorX + stepDx/2.0
+		x := channelSeparatorX + stepWidth/2.0
 		p.Light(x, activeY)
 		p.Engrave(x, stepLabelY, svg.TextAbove(fmt.Sprint(step+1), svg.LargeFont, fg))
 		p.Install(x, generateModeY, generateModeStepper)
@@ -112,7 +112,7 @@ func (cs curveSequencer) build() *Panel {
 		p.VLine(x, enabledButtonY, enabledPortY)
 	}
 
-	selectionMarkerOffset := (stepDx-stepperWidth)/2.0 + control.LightRadius
+	selectionMarkerOffset := (stepWidth-stepperWidth)/2.0 + control.LightRadius
 	p.Install(stepBlockLeft+selectionMarkerOffset, activeY, control.SelectionMarker(0, fg))
 	p.Install(stepBlockRight-selectionMarkerOffset, activeY, control.SelectionMarker(1, fg))
 

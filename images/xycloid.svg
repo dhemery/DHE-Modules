@@ -1,333 +1,283 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" width="55.880mm" height="128.500mm" viewBox="0 0 55.880 128.500">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" viewBox="0.000000 0.000000 55.880000 128.500000" height="128.500000mm" width="55.880000mm">
   <defs/>
   <g>
-    <rect x="0.250" y="0.250" width="55.380" height="128.000" fill="#f7f2fc" stroke="#7f00ff" stroke-width="0.500" rx="0.000" ry="0.000"/>
-    <g transform="translate(27.940,9.000)">
-      <g style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -6.5284987,0 h 0.69088 l -0.983488,-1.393952 0.922528,-1.3167361 h -0.694944 l -0.613664,0.926592 -0.621792,-0.926592 H -8.5157948 L -7.5932667,-1.389888 -8.5767548,0 h 0.686816 l 0.6827521,-0.99161603 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -4.8258096,0 h 0.577088 v -1.109472 l 1.03632,-1.6012161 h -0.658368 l -0.666496,1.089152 -0.674624,-1.089152 h -0.6583681 l 1.0444481,1.6012161 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -1.8287367,0.048768 c 0.617728,0 0.95910406,-0.32918401 1.15417607,-0.66649602 L -1.1703686,-0.85750403 c -0.1137921,0.22352001 -0.3576321,0.39420802 -0.6583681,0.39420802 -0.471424,0 -0.829056,-0.37795202 -0.829056,-0.89001599 0,-0.5120641 0.357632,-0.8900161 0.829056,-0.8900161 0.300736,0 0.544576,0.174752 0.6583681,0.394208 l 0.49580797,-0.24384 c -0.19100801,-0.337312 -0.53644807,-0.662432 -1.15417607,-0.662432 -0.79248,0 -1.4224,0.56896 -1.4224,1.4020801 0,0.83311998 0.62992,1.40208 1.4224,1.40208 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M -0.32708809,0 H 1.396048 V -0.50800002 H 0.24999993 V -2.7106881 h -0.57708802 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.5589886,-1.353312 c 0,0.81686398 0.5974081,1.40208 1.4142721,1.40208 0.820928,0 1.418336,-0.58521602 1.418336,-1.40208 0,-0.8168641 -0.597408,-1.4020801 -1.418336,-1.4020801 -0.816864,0 -1.4142721,0.585216 -1.4142721,1.4020801 z m 2.2392641,0 c 0,0.50393597 -0.32512,0.89001599 -0.824992,0.89001599 -0.499872,0 -0.820928,-0.38608002 -0.820928,-0.89001599 0,-0.5080001 0.321056,-0.8900161 0.820928,-0.8900161 0.499872,0 0.824992,0.382016 0.824992,0.8900161 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 4.8005364,0 h 0.577088 v -2.7106881 h -0.577088 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 5.9117863,0 h 1.0688321 c 0.849376,0 1.438656,-0.53644802 1.438656,-1.353312 0,-0.8168641 -0.58928,-1.3573761 -1.438656,-1.3573761 H 5.9117863 Z M 6.4888744,-0.50800002 V -2.2026881 h 0.491744 c 0.556768,0 0.849376,0.369824 0.849376,0.8493761 0,0.45923197 -0.312928,0.84531198 -0.849376,0.84531198 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <rect x="0.25" y="0.25" width="55.38" height="128" fill="#f7f2fc" stroke="#8000ff" stroke-width="0.5"/>
+    <g style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 21.411502,9 h 0.69088 L 21.118894,7.606048 22.041422,6.2893119 h -0.694944 l -0.613664,0.926592 -0.621792,-0.926592 H 19.424206 L 20.346734,7.610112 19.363246,9 h 0.686816 l 0.682752,-0.991616 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 23.114191,9 h 0.577088 V 7.890528 l 1.03632,-1.6012161 h -0.658368 l -0.666496,1.089152 -0.674624,-1.089152 h -0.658368 l 1.044448,1.6012161 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 26.111264,9.048768 c 0.617728,0 0.959104,-0.329184 1.154176,-0.666496 L 26.769632,8.142496 C 26.65584,8.366016 26.412,8.536704 26.111264,8.536704 c -0.471424,0 -0.829056,-0.377952 -0.829056,-0.890016 0,-0.5120641 0.357632,-0.8900161 0.829056,-0.8900161 0.300736,0 0.544576,0.174752 0.658368,0.394208 l 0.495808,-0.24384 c -0.191008,-0.337312 -0.536448,-0.662432 -1.154176,-0.662432 -0.79248,0 -1.4224,0.56896 -1.4224,1.4020801 0,0.83312 0.62992,1.40208 1.4224,1.40208 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 27.612912,9 h 1.723137 V 8.492 H 28.19 V 6.2893119 h -0.577088 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 29.498989,7.646688 c 0,0.816864 0.597408,1.40208 1.414272,1.40208 0.820928,0 1.418336,-0.585216 1.418336,-1.40208 0,-0.8168641 -0.597408,-1.4020801 -1.418336,-1.4020801 -0.816864,0 -1.414272,0.585216 -1.414272,1.4020801 z m 2.239264,0 c 0,0.503936 -0.32512,0.890016 -0.824992,0.890016 -0.499872,0 -0.820928,-0.38608 -0.820928,-0.890016 0,-0.5080001 0.321056,-0.8900161 0.820928,-0.8900161 0.499872,0 0.824992,0.382016 0.824992,0.8900161 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 32.740537,9 h 0.577088 V 6.2893119 h -0.577088 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 33.851787,9 h 1.068832 c 0.849376,0 1.438656,-0.536448 1.438656,-1.353312 0,-0.8168641 -0.58928,-1.3573761 -1.438656,-1.3573761 H 33.851787 Z M 34.428875,8.492 V 6.7973119 h 0.491744 c 0.556768,0 0.849376,0.369824 0.849376,0.8493761 0,0.459232 -0.312928,0.845312 -0.849376,0.845312 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(27.940,119.500)">
-      <g style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff">
-        <path d="m -3.8632449,2.7584481 h 1.0688321 c 0.849376,0 1.438656,-0.5364481 1.438656,-1.3533121 0,-0.816864 -0.58928,-1.35737602 -1.438656,-1.35737602 H -3.8632449 Z M -3.2861569,2.250448 V 0.55575999 h 0.4917441 c 0.556768,0 0.849376,0.36982402 0.849376,0.84937601 0,0.459232 -0.312928,0.845312 -0.849376,0.845312 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.91500319,2.7584481 H 1.4961552 V 0.04775998 H 0.91500319 V 1.112528 H -0.36515685 V 0.04775998 H -0.94224487 V 2.7584481 h 0.57708802 V 1.620528 h 1.28016004 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 2.0263802,2.7584481 H 3.9445883 V 2.258576 H 2.6034682 V 1.628656 H 3.9161403 V 1.132848 H 2.6034682 V 0.54356799 H 3.9445883 V 0.04775998 H 2.0263802 Z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff">
+      <path d="m 24.076756,122.2581 h 1.068832 c 0.849376,0 1.438656,-0.53645 1.438656,-1.35331 0,-0.81687 -0.58928,-1.35738 -1.438656,-1.35738 h -1.068832 z m 0.577088,-0.508 v -1.69469 h 0.491744 c 0.556768,0 0.849376,0.36983 0.849376,0.84938 0,0.45923 -0.312928,0.84531 -0.849376,0.84531 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 28.855004,122.2581 h 0.581152 v -2.71069 h -0.581152 v 1.06477 h -1.28016 v -1.06477 h -0.577088 v 2.71069 h 0.577088 v -1.13792 h 1.28016 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 29.966381,122.2581 h 1.918208 v -0.49987 h -1.34112 v -0.62992 h 1.312672 v -0.49581 h -1.312672 v -0.58928 h 1.34112 v -0.49581 h -1.918208 z" style="font-weight:bold;font-size:4.064px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="25.000" x2="34.592" y2="25.000" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,19.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <line x1="7.982857142857143" y1="25" x2="34.59238095238095" y2="25" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,19.828447 c 0.3603413,0 0.5594773,-0.192024 0.6732693,-0.388789 L 7.6566683,19.299789 c -0.066379,0.130386 -0.2086187,0.229954 -0.384048,0.229954 -0.2749974,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.2086186,-0.519176 0.483616,-0.519176 0.1754293,0 0.3176693,0.101939 0.384048,0.229955 l 0.2892213,-0.14224 c -0.1114213,-0.196765 -0.312928,-0.386419 -0.6732693,-0.386419 -0.46228,0 -0.8297334,0.331894 -0.8297334,0.81788 0,0.485987 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="M 8.5826359,19.799999 H 9.0046145 L 9.6138759,18.218765 H 9.2298279 L 8.7936252,19.434917 8.3550519,18.218765 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,20.500)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8969038,-0.57302402 h 0.73152 v -0.32918401 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.3546456,-0.90830403 h 0.545592 V -1.149096 H 1.3546456 V -1.7434561 H 1.0894696 V -1.149096 H 0.54082954 v 0.24079197 H 1.0894696 v 0.61874402 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 19.390715,19.926976 h 0.73152 v -0.329184 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 22.642264,19.591696 h 0.545592 v -0.240792 h -0.545592 v -0.59436 h -0.265176 v 0.59436 h -0.54864 v 0.240792 h 0.54864 v 0.618744 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,17.650)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -4.6777276,-0.28651201 c 0.192024,0.19202401 0.47244,0.32308801 0.862584,0.32308801 0.54864,0 0.813816,-0.28041601 0.813816,-0.65227202 0,-0.45110398 -0.42672,-0.55168798 -0.762,-0.62788798 -0.234696,-0.054864 -0.405384,-0.097536 -0.405384,-0.234696 0,-0.1219201 0.103632,-0.2072641 0.298704,-0.2072641 0.19812,0 0.417576,0.070104 0.582168,0.2225041 l 0.240792,-0.3169921 c -0.201168,-0.185928 -0.469392,-0.283464 -0.79248,-0.283464 -0.478536,0 -0.771144,0.27432 -0.771144,0.6126481 0,0.45415197 0.42672,0.54559197 0.758952,0.62179197 0.234696,0.054864 0.41148,0.10668001 0.41148,0.25908001 0,0.11582401 -0.115824,0.22860001 -0.353568,0.22860001 -0.280416,0 -0.50292,-0.124968 -0.646176,-0.27432001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -2.7099102,0 h 0.432816 v -0.72847202 h 0.51816 c 0.438912,0 0.682752,-0.29565598 0.682752,-0.64922398 0,-0.3566161 -0.240792,-0.6553201 -0.682752,-0.6553201 h -0.950976 z m 1.191768,-1.380744 c 0,0.170688 -0.128016,0.280416 -0.298704,0.280416 h -0.460248 v -0.5608321 h 0.460248 c 0.170688,0 0.298704,0.1127761 0.298704,0.2804161 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M -0.81086321,0 H 0.62779284 V -0.37490401 H -0.37804719 V -0.84734403 H 0.60645684 V -1.2192 h -0.98450403 v -0.4419601 h 1.00584003 v -0.371856 h -1.43865605 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.96912127,0 H 2.4077773 v -0.37490401 h -1.00584 v -0.47244002 h 0.984504 V -1.2192 h -0.984504 v -0.4419601 h 1.00584 v -0.371856 H 0.96912127 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 2.7491057,0 h 0.8016241 c 0.637032,0 1.078992,-0.40233601 1.078992,-1.014984 0,-0.6126481 -0.44196,-1.0180321 -1.078992,-1.0180321 H 2.7491057 Z M 3.1819218,-0.38100001 V -1.6520161 h 0.368808 c 0.417576,0 0.637032,0.2773681 0.637032,0.6370321 0,0.34442398 -0.234696,0.63398399 -0.637032,0.63398399 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 29.914653,17.363488 c 0.192024,0.192024 0.47244,0.323088 0.862584,0.323088 0.54864,0 0.813816,-0.280416 0.813816,-0.652272 0,-0.451104 -0.42672,-0.551688 -0.762,-0.627888 -0.234696,-0.05486 -0.405384,-0.09754 -0.405384,-0.234696 0,-0.12192 0.103632,-0.207264 0.298704,-0.207264 0.19812,0 0.417576,0.0701 0.582168,0.222504 l 0.240792,-0.316992 c -0.201168,-0.185928 -0.469392,-0.283464 -0.79248,-0.283464 -0.478536,0 -0.771144,0.27432 -0.771144,0.612648 0,0.454152 0.42672,0.545592 0.758952,0.621792 0.234696,0.05486 0.41148,0.10668 0.41148,0.25908 0,0.115824 -0.115824,0.2286 -0.353568,0.2286 -0.280416,0 -0.50292,-0.124968 -0.646176,-0.27432 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 31.88247,17.65 h 0.432816 v -0.728472 h 0.51816 c 0.438912,0 0.682752,-0.295656 0.682752,-0.649224 0,-0.356616 -0.240792,-0.65532 -0.682752,-0.65532 H 31.88247 Z m 1.191768,-1.380744 c 0,0.170688 -0.128016,0.280416 -0.298704,0.280416 H 32.315286 V 15.98884 h 0.460248 c 0.170688,0 0.298704,0.112776 0.298704,0.280416 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 33.781517,17.65 h 1.438656 v -0.374904 h -1.00584 v -0.47244 h 0.984504 V 16.4308 h -0.984504 v -0.44196 h 1.00584 v -0.371856 h -1.438656 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.561502,17.65 h 1.438656 v -0.374904 h -1.00584 v -0.47244 h 0.984504 V 16.4308 h -0.984504 v -0.44196 h 1.00584 v -0.371856 h -1.438656 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 37.341486,17.65 h 0.801624 c 0.637032,0 1.078992,-0.402336 1.078992,-1.014984 0,-0.612648 -0.44196,-1.018032 -1.078992,-1.018032 h -0.801624 z m 0.432816,-0.381 v -1.271016 h 0.368808 c 0.417576,0 0.637032,0.277368 0.637032,0.637032 0,0.344424 -0.234696,0.633984 -0.637032,0.633984 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="43.500" x2="47.897" y2="43.500" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,38.300)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <line x1="7.982857142857143" y1="43.5" x2="47.89714285714286" y2="43.5" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,38.328447 c 0.3603413,0 0.5594773,-0.192024 0.6732693,-0.388789 L 7.6566683,37.799789 c -0.066379,0.130386 -0.2086187,0.229954 -0.384048,0.229954 -0.2749974,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.2086186,-0.519176 0.483616,-0.519176 0.1754293,0 0.3176693,0.101939 0.384048,0.229955 l 0.2892213,-0.14224 c -0.1114213,-0.196765 -0.312928,-0.386419 -0.6732693,-0.386419 -0.46228,0 -0.8297334,0.331894 -0.8297334,0.81788 0,0.485987 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="M 8.5826359,38.299999 H 9.0046145 L 9.6138759,36.718765 H 9.2298279 L 8.7936252,37.934917 8.3550519,36.718765 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,39.000)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8969038,-0.57302402 h 0.73152 v -0.32918401 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.3546456,-0.90830403 h 0.545592 V -1.149096 H 1.3546456 V -1.7434561 H 1.0894696 V -1.149096 H 0.54082954 v 0.24079197 H 1.0894696 v 0.61874402 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 19.390715,38.426976 h 0.73152 v -0.329184 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 22.642264,38.091696 h 0.545592 v -0.240792 h -0.545592 v -0.59436 h -0.265176 v 0.59436 h -0.54864 v 0.240792 h 0.54864 v 0.618744 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,36.150)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -3.0431423,0 h 0.496824 l -0.4572,-0.77419202 c 0.219456,-0.051816 0.445008,-0.24383998 0.445008,-0.60350398 0,-0.3779521 -0.25908,-0.6553201 -0.6827521,-0.6553201 h -0.950976 V 0 h 0.432816 v -0.72847202 h 0.316992 z m 0.042672,-1.380744 c 0,0.170688 -0.131064,0.280416 -0.3048001,0.280416 h -0.454152 v -0.5608321 h 0.454152 c 0.1737361,0 0.3048001,0.1097281 0.3048001,0.2804161 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -0.81024411,0 h 0.47244002 L -1.1211401,-2.0330161 h -0.542544 L -2.4500682,0 h 0.4754881 l 0.128016,-0.35052001 h 0.90830399 z m -0.58216799,-1.6581121 0.33528,0.93268808 h -0.673608 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.12287249,0 H 0.55873651 V -1.6520161 H 1.1500485 v -0.381 h -1.62153603 v 0.381 h 0.59436002 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 1.4275116,0 H 1.8603277 V -2.0330161 H 1.4275116 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 2.1634131,-1.014984 c 0,0.61264799 0.448056,1.05156 1.060704,1.05156 0.615696,0 1.063752,-0.43891201 1.063752,-1.05156 0,-0.6126481 -0.448056,-1.0515601 -1.063752,-1.0515601 -0.612648,0 -1.060704,0.438912 -1.060704,1.0515601 z m 1.679448,0 c 0,0.37795198 -0.24384,0.66751199 -0.618744,0.66751199 -0.374904,0 -0.615696,-0.28956001 -0.615696,-0.66751199 0,-0.381 0.240792,-0.6675121 0.615696,-0.6675121 0.374904,0 0.618744,0.2865121 0.618744,0.6675121 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 31.549238,36.150002 h 0.496824 l -0.4572,-0.774192 c 0.219456,-0.05182 0.445008,-0.243841 0.445008,-0.603505 0,-0.377952 -0.25908,-0.65532 -0.682752,-0.65532 h -0.950976 v 2.033017 h 0.432816 V 35.42153 h 0.316992 z m 0.04267,-1.380745 c 0,0.170688 -0.131064,0.280416 -0.3048,0.280416 h -0.454152 v -0.560832 h 0.454152 c 0.173736,0 0.3048,0.109728 0.3048,0.280416 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 33.782136,36.150002 h 0.47244 L 33.47124,34.116985 h -0.542544 l -0.786384,2.033017 H 32.6178 l 0.128016,-0.35052 h 0.908304 z m -0.582168,-1.658113 0.33528,0.932689 H 32.86164 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 34.715253,36.150002 h 0.435864 v -1.652017 h 0.591312 v -0.381 h -1.621536 v 0.381 h 0.59436 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 36.019892,36.150002 h 0.432816 v -2.033017 h -0.432816 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 36.755794,35.135017 c 0,0.612649 0.448056,1.051561 1.060704,1.051561 0.615696,0 1.063752,-0.438912 1.063752,-1.051561 0,-0.612648 -0.448056,-1.05156 -1.063752,-1.05156 -0.612648,0 -1.060704,0.438912 -1.060704,1.05156 z m 1.679448,0 c 0,0.377953 -0.24384,0.667513 -0.618744,0.667513 -0.374904,0 -0.615696,-0.28956 -0.615696,-0.667513 0,-0.381 0.240792,-0.667512 0.615696,-0.667512 0.374904,0 0.618744,0.286512 0.618744,0.667512 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(47.897,47.500)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff">
-        <path d="m -2.909143,1.609472 h 1.0053041 V 1.313097 H -2.572461 V 0.02801494 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -1.8087767,0.81992896 c 0,0.47657104 0.348537,0.81799504 0.82510805,0.81799504 0.47894201,0 0.82747901,-0.341424 0.82747901,-0.81799504 0,-0.47657101 -0.348537,-0.81799502 -0.82747901,-0.81799502 -0.47657105,0 -0.82510805,0.34142401 -0.82510805,0.81799502 z m 1.30642106,0 c 0,0.29400404 -0.18968001,0.51924904 -0.48131301,0.51924904 -0.29163305,0 -0.47894205,-0.225245 -0.47894205,-0.51924904 0,-0.29637501 0.187309,-0.51924901 0.47894205,-0.51924901 0.291633,0 0.48131301,0.222874 0.48131301,0.51924901 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 0.83637023,1.637924 c 0.36039197,0 0.55955597,-0.192051 0.67336397,-0.388844 L 1.2204722,1.109191 c -0.066388,0.130405 -0.208648,0.229987 -0.38410197,0.229987 -0.275036,0 -0.48368401,-0.220503 -0.48368401,-0.51924904 0,-0.29874601 0.20864801,-0.51924901 0.48368401,-0.51924901 0.17545397,0 0.31771397,0.101953 0.38410197,0.229987 l 0.289262,-0.14226 c -0.111437,-0.196793 -0.312972,-0.38647301 -0.67336397,-0.38647301 -0.46234501,0 -0.82985001,0.33194001 -0.82985001,0.81799502 0,0.48605504 0.367505,0.81799504 0.82985001,0.81799504 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 2.6513708,1.609472 h 0.414925 L 2.3953028,0.77013796 3.0236178,0.02801494 H 2.6086928 L 2.0491368,0.73457296 V 0.02801494 H 1.7124548 V 1.609472 h 0.336682 V 1.123417 l 0.123292,-0.14700204 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff">
+      <path d="m 44.98841,49.108891 h 1.005163 V 48.812558 H 45.325045 V 47.527657 H 44.98841 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 46.088622,48.319459 c 0,0.476504 0.348488,0.81788 0.824992,0.81788 0.478875,0 0.827363,-0.341376 0.827363,-0.81788 0,-0.476504 -0.348488,-0.81788 -0.827363,-0.81788 -0.476504,0 -0.824992,0.341376 -0.824992,0.81788 z m 1.306237,0 c 0,0.293963 -0.189653,0.519176 -0.481245,0.519176 -0.291592,0 -0.478875,-0.225213 -0.478875,-0.519176 0,-0.296333 0.187283,-0.519176 0.478875,-0.519176 0.291592,0 0.481245,0.222843 0.481245,0.519176 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 48.733397,49.137339 c 0.360341,0 0.559477,-0.192024 0.673269,-0.388789 l -0.289221,-0.139869 c -0.06638,0.130386 -0.208619,0.229954 -0.384048,0.229954 -0.274997,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.208619,-0.519176 0.483616,-0.519176 0.175429,0 0.317669,0.101939 0.384048,0.229955 l 0.289221,-0.14224 c -0.111421,-0.196765 -0.312928,-0.386419 -0.673269,-0.386419 -0.46228,0 -0.829733,0.331894 -0.829733,0.81788 0,0.485987 0.367453,0.81788 0.829733,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 50.548142,49.108891 h 0.414867 L 50.29211,48.269675 50.920337,47.527657 H 50.50547 l -0.559477,0.706458 v -0.706458 h -0.336635 v 1.581234 h 0.336635 v -0.485986 l 0.123274,-0.146982 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(47.897,39.500)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -2.6660228,0 h 0.336682 v -0.65913801 h 0.765833 v -0.28926201 h -0.765833 V -1.292195 h 0.78243 v -0.289262 h -1.119112 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -0.41994483,0 h 0.38647301 l -0.35565001,-0.60223401 c 0.17071201,-0.040307 0.34616601,-0.18968001 0.34616601,-0.46945799 0,-0.294004 -0.20153501,-0.509765 -0.53110401,-0.509765 H -1.3138118 V 0 h 0.33668196 v -0.56666901 h 0.246584 z m 0.033194,-1.074063 c 0,0.13277598 -0.101953,0.21813198 -0.2371,0.21813198 H -0.97712984 V -1.292195 h 0.35327901 c 0.135147,0 0.2371,0.085356 0.2371,0.218132 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.20974105,0 H 1.3288531 V -0.29163301 H 0.54642305 v -0.367505 H 1.3122561 V -0.94840002 H 0.54642305 V -1.292195 H 1.3288531 V -1.581457 H 0.20974105 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.5943679,0 h 1.119112 v -0.29163301 h -0.78243 v -0.367505 h 0.765833 V -0.94840002 H 1.9310499 V -1.292195 h 0.78243 v -0.289262 h -1.119112 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 45.231496,39.5 h 0.336635 v -0.659045 h 0.765725 v -0.289222 h -0.765725 v -0.343746 h 0.78232 v -0.289222 h -1.118955 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 47.477258,39.5 h 0.386419 l -0.3556,-0.602149 c 0.170688,-0.0403 0.346117,-0.189654 0.346117,-0.469392 0,-0.293963 -0.201506,-0.509694 -0.531029,-0.509694 H 46.583517 V 39.5 h 0.336635 v -0.566589 h 0.246549 z m 0.03319,-1.073912 c 0,0.132757 -0.101939,0.218101 -0.237067,0.218101 h -0.353229 v -0.436202 h 0.353229 c 0.135128,0 0.237067,0.08534 0.237067,0.218101 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 48.106856,39.5 h 1.118954 v -0.291592 h -0.78232 v -0.367453 h 0.765726 V 38.551733 H 48.44349 v -0.343746 h 0.78232 v -0.289222 h -1.118954 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 49.491288,39.5 h 1.118955 v -0.291592 h -0.78232 v -0.367453 h 0.765725 v -0.289222 h -0.765725 v -0.343746 h 0.78232 v -0.289222 h -1.118955 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="62.000" x2="47.897" y2="62.000" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,56.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,56.828447 c 0.3603413,0 0.5594773,-0.192024 0.6732693,-0.388789 L 7.6566683,56.299789 c -0.066379,0.130386 -0.2086187,0.229954 -0.384048,0.229954 -0.2749974,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.2086186,-0.519176 0.483616,-0.519176 0.1754293,0 0.3176693,0.101939 0.384048,0.229955 l 0.2892213,-0.14224 c -0.1114213,-0.196765 -0.312928,-0.386419 -0.6732693,-0.386419 -0.46228,0 -0.8297334,0.331894 -0.8297334,0.81788 0,0.485987 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="M 8.5826359,56.799999 H 9.0046145 L 9.6138759,55.218765 H 9.2298279 L 8.7936252,56.434917 8.3550519,55.218765 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,57.500)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8969038,-0.57302402 h 0.73152 v -0.32918401 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.3546456,-0.90830403 h 0.545592 V -1.149096 H 1.3546456 V -1.7434561 H 1.0894696 V -1.149096 H 0.54082954 v 0.24079197 H 1.0894696 v 0.61874402 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 19.390715,56.926976 h 0.73152 v -0.329184 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 22.642264,56.591696 h 0.545592 v -0.240792 h -0.545592 v -0.59436 h -0.265176 v 0.59436 h -0.54864 v 0.240792 h 0.54864 v 0.618744 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,54.650)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -4.7339728,0 h 0.801624 c 0.6370321,0 1.0789921,-0.40233601 1.0789921,-1.014984 0,-0.6126481 -0.44196,-1.0180321 -1.0789921,-1.0180321 h -0.801624 z m 0.432816,-0.38100001 V -1.6520161 h 0.368808 c 0.4175761,0 0.6370321,0.2773681 0.6370321,0.6370321 0,0.34442398 -0.234696,0.63398399 -0.6370321,0.63398399 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -2.5432227,0 h 1.4386561 v -0.37490401 h -1.00584 v -0.47244002 h 0.984504 V -1.2192 h -0.984504 v -0.4419601 h 1.00584 v -0.371856 h -1.4386561 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -0.76323818,0 h 0.43281601 v -0.72847202 h 0.51816002 c 0.43891201,0 0.68275202,-0.29565598 0.68275202,-0.64922398 0,-0.3566161 -0.24079201,-0.6553201 -0.68275202,-0.6553201 h -0.95097603 z m 1.19176804,-1.380744 c 0,0.170688 -0.12801601,0.280416 -0.29870401,0.280416 h -0.46024802 v -0.5608321 h 0.46024802 c 0.170688,0 0.29870401,0.1127761 0.29870401,0.2804161 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.6052007,0 h 0.435864 v -1.6520161 h 0.5913121 v -0.381 H 1.0108407 v 0.381 h 0.59436 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 4.3027759,0 h 0.435864 V -2.0330161 H 4.3027759 V -1.23444 h -0.96012 V -2.0330161 H 2.9098399 V 0 h 0.432816 v -0.85344003 h 0.96012 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 29.858408,54.650002 h 0.801624 c 0.637032,0 1.078992,-0.402336 1.078992,-1.014985 0,-0.612648 -0.44196,-1.018032 -1.078992,-1.018032 h -0.801624 z m 0.432816,-0.381 v -1.271017 h 0.368808 c 0.417576,0 0.637032,0.277368 0.637032,0.637032 0,0.344425 -0.234696,0.633985 -0.637032,0.633985 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 32.049158,54.650002 h 1.438656 v -0.374904 h -1.00584 v -0.472441 h 0.984504 v -0.371856 h -0.984504 v -0.44196 h 1.00584 v -0.371856 h -1.438656 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 33.829142,54.650002 h 0.432816 V 53.92153 h 0.51816 c 0.438912,0 0.682752,-0.295657 0.682752,-0.649225 0,-0.356616 -0.240792,-0.65532 -0.682752,-0.65532 h -0.950976 z m 1.191768,-1.380745 c 0,0.170688 -0.128016,0.280416 -0.298704,0.280416 h -0.460248 v -0.560832 h 0.460248 c 0.170688,0 0.298704,0.112776 0.298704,0.280416 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 36.197581,54.650002 h 0.435864 v -1.652017 h 0.591312 v -0.381 h -1.621536 v 0.381 h 0.59436 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 38.895156,54.650002 h 0.435864 v -2.033017 h -0.435864 v 0.798576 h -0.96012 V 52.616985 H 37.50222 v 2.033017 h 0.432816 v -0.853441 h 0.96012 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(47.897,67.500)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.0313295,1.609472 h 0.33668206 V 0.02801494 H -1.0313295 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.70765089,1.609472 H 1.0324779 V 0.02801494 H 0.69579589 V 1.052287 L -0.03684313,0.02801494 h -0.346166 V 1.609472 h 0.336682 V 0.54726395 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <line x1="7.982857142857143" y1="62" x2="47.89714285714286" y2="62" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff">
+      <path d="m 46.86596,69.108895 h 0.336635 V 67.52766 H 46.86596 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 48.604696,69.108895 h 0.324781 V 67.52766 h -0.336635 v 1.024128 L 47.860306,67.52766 h -0.346117 v 1.581235 h 0.336635 v -1.062059 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(47.897,56.500)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -2.3806878,-0.78954302 c 0,0.47657101 0.348537,0.81799502 0.825108,0.81799502 0.478942,0 0.82747903,-0.34142401 0.82747903,-0.81799502 0,-0.47657098 -0.34853703,-0.81799498 -0.82747903,-0.81799498 -0.476571,0 -0.825108,0.341424 -0.825108,0.81799498 z m 1.306421,0 c 0,0.29400401 -0.18968,0.51924901 -0.481313,0.51924901 -0.291633,0 -0.478942,-0.225245 -0.478942,-0.51924901 0,-0.29637498 0.187309,-0.51924898 0.478942,-0.51924898 0.291633,0 0.481313,0.222874 0.481313,0.51924898 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -0.48951892,-0.63068601 c 0,0.388844 0.22524501,0.65913801 0.70892902,0.65913801 0.47894201,0 0.70418701,-0.26792301 0.70418701,-0.66150901 V -1.581457 H 0.5821731 v 0.93891599 c 0,0.220503 -0.120921,0.372247 -0.362763,0.372247 -0.24658401,0 -0.36750501,-0.151744 -0.36750501,-0.372247 V -1.581457 h -0.34142401 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.6029255,0 h 0.339053 v -1.285082 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 45.516791,55.710568 c 0,0.476504 0.348488,0.81788 0.824992,0.81788 0.478875,0 0.827363,-0.341376 0.827363,-0.81788 0,-0.476504 -0.348488,-0.81788 -0.827363,-0.81788 -0.476504,0 -0.824992,0.341376 -0.824992,0.81788 z m 1.306238,0 c 0,0.293963 -0.189654,0.519176 -0.481246,0.519176 -0.291592,0 -0.478874,-0.225213 -0.478874,-0.519176 0,-0.296333 0.187282,-0.519176 0.478874,-0.519176 0.291592,0 0.481246,0.222843 0.481246,0.519176 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 47.407694,55.869403 c 0,0.388789 0.225214,0.659045 0.70883,0.659045 0.478874,0 0.704088,-0.267885 0.704088,-0.661416 v -0.948267 h -0.341376 v 0.938784 c 0,0.220472 -0.120904,0.372195 -0.362712,0.372195 -0.24655,0 -0.367454,-0.151723 -0.367454,-0.372195 v -0.938784 h -0.341376 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 49.499845,56.5 h 0.339005 v -1.284901 h 0.459909 v -0.296334 h -1.261194 v 0.296334 h 0.46228 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(50.397,62.000)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;fill:#7f00ff"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;fill:#8000ff"/>
+    <line x1="7.982857142857143" y1="80.5" x2="34.59238095238095" y2="80.5" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,75.328451 c 0.3603413,0 0.5594773,-0.192024 0.6732693,-0.388789 l -0.2892213,-0.13987 c -0.066379,0.130387 -0.2086187,0.229955 -0.384048,0.229955 -0.2749974,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.2086186,-0.519176 0.483616,-0.519176 0.1754293,0 0.3176693,0.101939 0.384048,0.229955 l 0.2892213,-0.14224 c -0.1114213,-0.196766 -0.312928,-0.386419 -0.6732693,-0.386419 -0.46228,0 -0.8297334,0.331893 -0.8297334,0.81788 0,0.485987 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="M 8.5826359,75.300003 H 9.0046145 L 9.6138759,73.718768 H 9.2298279 L 8.7936252,74.93492 8.3550519,73.718768 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="80.500" x2="34.592" y2="80.500" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,75.300)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 19.390715,75.426976 h 0.73152 v -0.329184 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 22.642264,75.091696 h 0.545592 v -0.240792 h -0.545592 v -0.59436 h -0.265176 v 0.59436 h -0.54864 v 0.240792 h 0.54864 v 0.618744 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,76.000)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8969038,-0.57302402 h 0.73152 v -0.32918401 h -0.73152 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.3546456,-0.90830403 h 0.545592 V -1.149096 H 1.3546456 V -1.7434561 H 1.0894696 V -1.149096 H 0.54082954 v 0.24079197 H 1.0894696 v 0.61874402 h 0.265176 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 29.897103,73.150002 h 0.432816 V 72.42153 h 0.51816 c 0.438912,0 0.682752,-0.295657 0.682752,-0.649225 0,-0.356616 -0.240792,-0.65532 -0.682752,-0.65532 h -0.950976 z m 1.191768,-1.380745 c 0,0.170688 -0.128016,0.280416 -0.298704,0.280416 h -0.460248 v -0.560832 h 0.460248 c 0.170688,0 0.298704,0.112776 0.298704,0.280416 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 33.189086,73.150002 h 0.435864 v -2.033017 h -0.435864 v 0.798576 h -0.96012 V 71.116985 H 31.79615 v 2.033017 h 0.432816 v -0.853441 h 0.96012 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.446035,73.150002 h 0.47244 l -0.783336,-2.033017 h -0.542544 l -0.786384,2.033017 h 0.475488 l 0.128016,-0.35052 h 0.908304 z m -0.582168,-1.658113 0.33528,0.932689 h -0.673608 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.942192,72.86349 c 0.192024,0.192024 0.47244,0.323088 0.862584,0.323088 0.54864,0 0.813816,-0.280416 0.813816,-0.652272 0,-0.451105 -0.42672,-0.551689 -0.762,-0.627889 -0.234696,-0.05486 -0.405384,-0.09754 -0.405384,-0.234696 0,-0.12192 0.103632,-0.207264 0.298704,-0.207264 0.19812,0 0.417576,0.0701 0.582168,0.222504 l 0.240792,-0.316992 c -0.201168,-0.185928 -0.469392,-0.283464 -0.79248,-0.283464 -0.478536,0 -0.771144,0.27432 -0.771144,0.612648 0,0.454152 0.42672,0.545592 0.758952,0.621792 0.234696,0.05487 0.41148,0.106681 0.41148,0.259081 0,0.115824 -0.115824,0.2286 -0.353568,0.2286 -0.280416,0 -0.50292,-0.124968 -0.646176,-0.27432 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 37.910009,73.150002 h 1.438656 v -0.374904 h -1.00584 v -0.472441 h 0.984504 v -0.371856 h -0.984504 v -0.44196 h 1.00584 v -0.371856 h -1.438656 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,73.150)">
-      <g style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -4.6952775,0 h 0.4328161 v -0.72847202 h 0.51816 c 0.438912,0 0.682752,-0.29565598 0.682752,-0.64922398 0,-0.3566161 -0.240792,-0.6553201 -0.682752,-0.6553201 h -0.9509761 z m 1.1917681,-1.380744 c 0,0.170688 -0.128016,0.280416 -0.298704,0.280416 h -0.460248 v -0.5608321 h 0.460248 c 0.170688,0 0.298704,0.1127761 0.298704,0.2804161 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m -1.4032945,0 h 0.43586399 V -2.0330161 H -1.4032945 V -1.23444 h -0.9601201 v -0.7985761 h -0.432816 V 0 h 0.432816 v -0.85344003 h 0.9601201 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.85365452,0 H 1.3260945 L 0.54275851,-2.0330161 H 2.1449365e-4 L -0.78616953,0 h 0.47548801 l 0.12801601,-0.35052001 H 0.72563852 Z M 0.2714865,-1.6581121 0.60676651,-0.72542402 h -0.67360802 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 1.3498115,-0.28651201 C 1.5418356,-0.094488 1.8222516,0.036576 2.2123956,0.036576 c 0.54864,0 0.813816,-0.28041601 0.813816,-0.65227202 0,-0.45110398 -0.42672,-0.55168798 -0.762,-0.62788798 -0.234696,-0.054864 -0.405384,-0.097536 -0.405384,-0.234696 0,-0.1219201 0.103632,-0.2072641 0.298704,-0.2072641 0.19812,0 0.417576,0.070104 0.582168,0.2225041 l 0.240792,-0.3169921 c -0.201168,-0.185928 -0.469392,-0.283464 -0.79248,-0.283464 -0.478536,0 -0.7711441,0.27432 -0.7711441,0.6126481 0,0.45415197 0.4267201,0.54559197 0.7589521,0.62179197 0.234696,0.054864 0.41148,0.10668001 0.41148,0.25908001 0,0.11582401 -0.115824,0.22860001 -0.353568,0.22860001 -0.280416,0 -0.50292,-0.124968 -0.646176,-0.27432001 z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 3.3176286,0 H 4.7562847 V -0.37490401 H 3.7504446 V -0.84734403 H 4.7349487 V -1.2192 H 3.7504446 v -0.4419601 h 1.0058401 v -0.371856 H 3.3176286 Z" style="font-weight:bold;font-size:3.048px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <line x1="7.982857142857143" y1="97" x2="47.89714285714286" y2="97" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,91.828451 c 0.3603413,0 0.5594773,-0.192024 0.6732693,-0.388789 l -0.2892213,-0.13987 c -0.066379,0.130387 -0.2086187,0.229955 -0.384048,0.229955 -0.2749974,0 -0.483616,-0.220472 -0.483616,-0.519176 0,-0.298704 0.2086186,-0.519176 0.483616,-0.519176 0.1754293,0 0.3176693,0.101939 0.384048,0.229955 l 0.2892213,-0.14224 c -0.1114213,-0.196766 -0.312928,-0.386419 -0.6732693,-0.386419 -0.46228,0 -0.8297334,0.331893 -0.8297334,0.81788 0,0.485987 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="M 8.5826359,91.800003 H 9.0046145 L 9.6138759,90.218768 H 9.2298279 L 8.7936252,91.43492 8.3550519,90.218768 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="97.000" x2="47.897" y2="97.000" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,91.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 18.525273,91.010571 c 0,0.49784 0.379307,0.820251 0.841587,0.820251 0.286851,0 0.512064,-0.118534 0.673269,-0.298704 v -0.60452 h -0.753872 v 0.289221 h 0.421979 v 0.192024 c -0.06875,0.06164 -0.196765,0.120904 -0.341376,0.120904 -0.286851,0 -0.495469,-0.220472 -0.495469,-0.519176 0,-0.298704 0.208618,-0.519176 0.495469,-0.519176 0.165947,0 0.301075,0.08772 0.374565,0.199136 l 0.279739,-0.151723 c -0.120904,-0.187282 -0.327152,-0.346117 -0.654304,-0.346117 -0.46228,0 -0.841587,0.317669 -0.841587,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 21.398262,91.800003 h 0.367453 l -0.609261,-1.581235 h -0.421979 l -0.611632,1.581235 h 0.369824 l 0.09957,-0.272627 h 0.706459 z m -0.452797,-1.289643 0.260773,0.725424 h -0.523917 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 21.911733,91.800003 h 0.336635 v -1.581235 h -0.336635 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 23.65047,91.800003 h 0.324781 v -1.581235 h -0.336635 v 1.024128 L 22.90608,90.218768 h -0.346117 v 1.581235 h 0.336635 v -1.062059 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,91.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -2.7627337,-0.78954302 c 0,0.49791001 0.37936,0.82036602 0.841705,0.82036602 0.286891,0 0.512136,-0.11855 0.673364,-0.29874601 v -0.60460501 h -0.753978 v 0.28926201 h 0.422038 v 0.192051 c -0.068759,0.061646 -0.196793,0.120921 -0.341424,0.120921 -0.286891,0 -0.495539,-0.220503 -0.495539,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.495539,-0.51924898 0.16597,0 0.301117,0.087727 0.374618,0.199164 l 0.279778,-0.151744 c -0.120921,-0.187309 -0.327198,-0.346166 -0.654396,-0.346166 -0.462345,0 -0.841705,0.317714 -0.841705,0.81799498 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.11065906,0 H 0.47816407 L -0.13118295,-1.581457 H -0.55322096 L -1.164939,0 h 0.36987604 l 0.099582,-0.27266501 h 0.70655802 z m -0.45286101,-1.289824 0.26081,0.72552599 h -0.52399101 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 0.62420301,0 h 0.336682 v -1.581457 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 2.3631832,0 h 0.324827 v -1.581457 h -0.336682 v 1.02427199 L 1.6186892,-1.581457 H 1.2725232 V 0 h 0.336682 v -1.062208 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff">
+      <path d="m 33.63991,102.6089 h 0.858181 c 0.301075,0 0.459909,-0.18966 0.459909,-0.42672 0,-0.19914 -0.135128,-0.36272 -0.303445,-0.38879 0.149352,-0.0308 0.272627,-0.16358 0.272627,-0.36272 0,-0.21099 -0.154094,-0.40301 -0.455168,-0.40301 H 33.63991 Z m 0.336634,-0.9459 v -0.34849 h 0.421979 c 0.113792,0 0.184912,0.0759 0.184912,0.17306 0,0.10194 -0.07112,0.17543 -0.184912,0.17543 z m 0,0.65904 v -0.37219 h 0.433832 c 0.132758,0 0.203878,0.0853 0.203878,0.18491 0,0.11379 -0.07586,0.18728 -0.203878,0.18728 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.20955,102.6089 h 0.336635 v -1.58124 H 35.20955 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,101.000)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.95260484,1.609472 h 0.85830202 c 0.301117,0 0.45997401,-0.18968 0.45997401,-0.42678 0,-0.19916404 -0.13514701,-0.36276304 -0.30348801,-0.38884404 0.149373,-0.030823 0.27266501,-0.163599 0.27266501,-0.36276301 0,-0.211019 -0.15411501,-0.40307001 -0.45523201,-0.40307001 H -0.95260484 Z M -0.61592283,0.66344296 V 0.31490595 h 0.42203801 c 0.113808,0 0.184938,0.075872 0.184938,0.173083 0,0.101953 -0.07113,0.17545401 -0.184938,0.17545401 z m 0,0.65913804 V 0.95033396 h 0.43389301 c 0.132776,0 0.203906,0.085356 0.203906,0.18493804 0,0.113808 -0.075872,0.187309 -0.203906,0.187309 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.61725657,1.609472 H 0.95393858 V 0.02801494 H 0.61725657 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 32.697662,92.369403 c 0,0.388789 0.225214,0.659045 0.70883,0.659045 0.478874,0 0.704088,-0.267885 0.704088,-0.661416 v -0.948267 h -0.341376 v 0.938784 c 0,0.220472 -0.120904,0.372195 -0.362712,0.372195 -0.24655,0 -0.367454,-0.151723 -0.367454,-0.372195 v -0.938784 h -0.341376 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.515237,93 h 0.324781 v -1.581235 h -0.336635 v 1.024128 L 34.770847,91.418765 H 34.42473 V 93 h 0.336635 v -1.062059 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 36.151798,93 h 0.336634 v -1.581235 h -0.336634 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,93.000)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8949847,-0.63068601 c 0,0.388844 0.225245,0.65913801 0.708929,0.65913801 0.47894198,0 0.70418699,-0.26792301 0.70418699,-0.66150901 V -1.581457 h -0.34142401 v 0.93891599 c 0,0.220503 -0.120921,0.372247 -0.36276298,0.372247 -0.246584,0 -0.367505,-0.151744 -0.367505,-0.372247 V -1.581457 h -0.341424 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.92298582,0 H 1.2478128 V -1.581457 H 0.91113082 v 1.02427199 L 0.1784918,-1.581457 H -0.16767421 V 0 H 0.1690078 v -1.062208 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.5596363,0 h 0.336682 v -1.581457 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <rect x="42.69714285714286" y="90.46955555555556" width="10.4" height="12.980444444444444" rx="1" ry="1" fill="#8000ff" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc">
+      <path d="m 45.528848,93.050003 h 0.403014 l -0.573702,-0.813139 0.538142,-0.768096 h -0.405384 l -0.357971,0.540512 -0.362712,-0.540512 h -0.400643 l 0.538142,0.770467 -0.573702,0.810768 h 0.400643 l 0.398272,-0.578443 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 46.611835,92.260571 c 0,0.476504 0.348488,0.81788 0.824992,0.81788 0.478875,0 0.827363,-0.341376 0.827363,-0.81788 0,-0.476504 -0.348488,-0.81788 -0.827363,-0.81788 -0.476504,0 -0.824992,0.341376 -0.824992,0.81788 z m 1.306238,0 c 0,0.293963 -0.189654,0.519176 -0.481246,0.519176 -0.291592,0 -0.478874,-0.225213 -0.478874,-0.519176 0,-0.296333 0.187282,-0.519176 0.478874,-0.519176 0.291592,0 0.481246,0.222843 0.481246,0.519176 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 48.502739,92.419406 c 0,0.388789 0.225213,0.659045 0.708829,0.659045 0.478875,0 0.704088,-0.267885 0.704088,-0.661416 V 91.468768 H 49.57428 v 0.938784 c 0,0.220472 -0.120904,0.372195 -0.362712,0.372195 -0.246549,0 -0.367453,-0.151723 -0.367453,-0.372195 v -0.938784 h -0.341376 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 50.594889,93.050003 h 0.339005 v -1.284901 h 0.45991 v -0.296334 h -1.261195 v 0.296334 h 0.46228 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
     </g>
-    <rect x="42.697" y="90.470" width="10.400" height="12.980" fill="#7f00ff" stroke="#7f00ff" stroke-width="0.350" rx="1.000" ry="1.000"/>
-    <g transform="translate(47.897,93.050)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc">
-        <path d="M -2.3686291,0 H -1.965559 L -2.5393411,-0.81325302 -2.001124,-1.581457 h -0.4054411 l -0.358021,0.540588 -0.362763,-0.540588 h -0.400699 l 0.538217,0.77057498 L -3.5636131,0 h 0.400699 l 0.398328,-0.57852401 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="m -1.2854895,-0.78954302 c 0,0.47657101 0.34853698,0.81799502 0.82510799,0.81799502 0.47894201,0 0.82747902,-0.34142401 0.82747902,-0.81799502 0,-0.47657098 -0.34853701,-0.81799498 -0.82747902,-0.81799498 -0.47657101,0 -0.82510799,0.341424 -0.82510799,0.81799498 z m 1.306421,0 c 0,0.29400401 -0.18968,0.51924901 -0.48131301,0.51924901 -0.29163301,0 -0.47894201,-0.225245 -0.47894201,-0.51924901 0,-0.29637498 0.187309,-0.51924898 0.47894201,-0.51924898 0.29163301,0 0.48131301,0.222874 0.48131301,0.51924898 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="m 0.60567936,-0.63068601 c 0,0.388844 0.22524501,0.65913801 0.70892904,0.65913801 0.478942,0 0.704187,-0.26792301 0.704187,-0.66150901 V -1.581457 h -0.341424 v 0.93891599 c 0,0.220503 -0.120921,0.372247 -0.362763,0.372247 -0.246584,0 -0.36750503,-0.151744 -0.36750503,-0.372247 V -1.581457 H 0.60567936 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="M 2.698124,0 H 3.037177 V -1.285082 H 3.497151 V -1.581457 H 2.235779 v 0.296375 h 0.462345 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-      </g>
+    <line x1="7.982857142857143" y1="112" x2="47.89714285714286" y2="112" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 7.2726203,106.82845 c 0.3603413,0 0.5594773,-0.19202 0.6732693,-0.38879 l -0.2892213,-0.13987 c -0.066379,0.13039 -0.2086187,0.22996 -0.384048,0.22996 -0.2749974,0 -0.483616,-0.22047 -0.483616,-0.51918 0,-0.2987 0.2086186,-0.51917 0.483616,-0.51917 0.1754293,0 0.3176693,0.10193 0.384048,0.22995 l 0.2892213,-0.14224 c -0.1114213,-0.19677 -0.312928,-0.38642 -0.6732693,-0.38642 -0.46228,0 -0.8297334,0.33189 -0.8297334,0.81788 0,0.48599 0.3674534,0.81788 0.8297334,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 8.5826359,106.8 h 0.4219786 l 0.6092614,-1.58123 h -0.384048 l -0.4362027,1.21615 -0.4385733,-1.21615 H 7.9710038 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <line x1="7.983" y1="112.000" x2="47.897" y2="112.000" stroke="#7f00ff" stroke-width="0.350"/>
-    <g transform="translate(7.983,106.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.7103368,0.028452 c 0.36039201,0 0.55955602,-0.192051 0.67336402,-0.38884401 l -0.28926201,-0.139889 c -0.066388,0.130405 -0.208648,0.229987 -0.38410201,0.229987 -0.275036,0 -0.483684,-0.220503 -0.483684,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.483684,-0.51924898 0.17545401,0 0.31771401,0.101953 0.38410201,0.229987 l 0.28926201,-0.14226 c -0.111437,-0.196793 -0.31297201,-0.386473 -0.67336402,-0.386473 -0.462345,0 -0.82985,0.33194 -0.82985,0.81799498 0,0.48605501 0.367505,0.81799502 0.82985,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.59986305,0 H 1.0219011 l 0.609347,-1.581457 H 1.2471461 L 0.81088205,-0.36513401 0.37224704,-1.581457 h -0.384102 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 18.525273,106.01057 c 0,0.49784 0.379307,0.82025 0.841587,0.82025 0.286851,0 0.512064,-0.11853 0.673269,-0.2987 v -0.60452 h -0.753872 v 0.28922 h 0.421979 v 0.19202 c -0.06875,0.0616 -0.196765,0.12091 -0.341376,0.12091 -0.286851,0 -0.495469,-0.22047 -0.495469,-0.51918 0,-0.2987 0.208618,-0.51917 0.495469,-0.51917 0.165947,0 0.301075,0.0877 0.374565,0.19913 l 0.279739,-0.15172 c -0.120904,-0.18728 -0.327152,-0.34612 -0.654304,-0.34612 -0.46228,0 -0.841587,0.31767 -0.841587,0.81788 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 21.398262,106.8 h 0.367453 l -0.609261,-1.58123 H 20.734475 L 20.122843,106.8 h 0.369824 l 0.09957,-0.27262 h 0.706459 z m -0.452797,-1.28964 0.260773,0.72542 h -0.523917 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 21.911733,106.8 h 0.336635 v -1.58123 h -0.336635 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 23.65047,106.8 h 0.324781 v -1.58123 h -0.336635 v 1.02413 L 22.90608,105.21877 H 22.559963 V 106.8 h 0.336635 v -1.06206 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(21.288,106.800)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -2.7627337,-0.78954302 c 0,0.49791001 0.37936,0.82036602 0.841705,0.82036602 0.286891,0 0.512136,-0.11855 0.673364,-0.29874601 v -0.60460501 h -0.753978 v 0.28926201 h 0.422038 v 0.192051 c -0.068759,0.061646 -0.196793,0.120921 -0.341424,0.120921 -0.286891,0 -0.495539,-0.220503 -0.495539,-0.51924901 0,-0.29874598 0.208648,-0.51924898 0.495539,-0.51924898 0.16597,0 0.301117,0.087727 0.374618,0.199164 l 0.279778,-0.151744 c -0.120921,-0.187309 -0.327198,-0.346166 -0.654396,-0.346166 -0.462345,0 -0.841705,0.317714 -0.841705,0.81799498 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.11065906,0 H 0.47816407 L -0.13118295,-1.581457 H -0.55322096 L -1.164939,0 h 0.36987604 l 0.099582,-0.27266501 h 0.70655802 z m -0.45286101,-1.289824 0.26081,0.72552599 h -0.52399101 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 0.62420301,0 h 0.336682 v -1.581457 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 2.3631832,0 h 0.324827 v -1.581457 h -0.336682 v 1.02427199 L 1.6186892,-1.581457 H 1.2725232 V 0 h 0.336682 v -1.062208 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff">
+      <path d="m 33.63991,117.6089 h 0.858181 c 0.301075,0 0.459909,-0.18966 0.459909,-0.42672 0,-0.19914 -0.135128,-0.36272 -0.303445,-0.38879 0.149352,-0.0308 0.272627,-0.16358 0.272627,-0.36272 0,-0.21099 -0.154094,-0.40301 -0.455168,-0.40301 H 33.63991 Z m 0.336634,-0.9459 v -0.34849 h 0.421979 c 0.113792,0 0.184912,0.0759 0.184912,0.17306 0,0.10194 -0.07112,0.17543 -0.184912,0.17543 z m 0,0.65904 v -0.37219 h 0.433832 c 0.132758,0 0.203878,0.0853 0.203878,0.18491 0,0.11379 -0.07586,0.18728 -0.203878,0.18728 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.20955,117.6089 h 0.336635 v -1.58124 H 35.20955 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,116.000)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff">
-        <path d="m -0.95260484,1.609472 h 0.85830202 c 0.301117,0 0.45997401,-0.18968 0.45997401,-0.42678 0,-0.19916404 -0.13514701,-0.36276304 -0.30348801,-0.38884404 0.149373,-0.030823 0.27266501,-0.163599 0.27266501,-0.36276301 0,-0.211019 -0.15411501,-0.40307001 -0.45523201,-0.40307001 H -0.95260484 Z M -0.61592283,0.66344296 V 0.31490595 h 0.42203801 c 0.113808,0 0.184938,0.075872 0.184938,0.173083 0,0.101953 -0.07113,0.17545401 -0.184938,0.17545401 z m 0,0.65913804 V 0.95033396 h 0.43389301 c 0.132776,0 0.203906,0.085356 0.203906,0.18493804 0,0.113808 -0.075872,0.187309 -0.203906,0.187309 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.61725657,1.609472 H 0.95393858 V 0.02801494 H 0.61725657 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:hanging;text-anchor:middle;fill:#7f00ff"/>
-      </g>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff">
+      <path d="m 32.697662,107.3694 c 0,0.38879 0.225214,0.65905 0.70883,0.65905 0.478874,0 0.704088,-0.26789 0.704088,-0.66142 v -0.94826 h -0.341376 v 0.93878 c 0,0.22047 -0.120904,0.37219 -0.362712,0.37219 -0.24655,0 -0.367454,-0.15172 -0.367454,-0.37219 v -0.93878 h -0.341376 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 35.515237,108 h 0.324781 v -1.58123 h -0.336635 v 1.02412 l -0.732536,-1.02412 H 34.42473 V 108 h 0.336635 v -1.06206 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
+      <path d="m 36.151798,108 h 0.336634 v -1.58123 h -0.336634 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#8000ff"/>
     </g>
-    <g transform="translate(34.592,108.000)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff">
-        <path d="m -1.8949847,-0.63068601 c 0,0.388844 0.225245,0.65913801 0.708929,0.65913801 0.47894198,0 0.70418699,-0.26792301 0.70418699,-0.66150901 V -1.581457 h -0.34142401 v 0.93891599 c 0,0.220503 -0.120921,0.372247 -0.36276298,0.372247 -0.246584,0 -0.367505,-0.151744 -0.367505,-0.372247 V -1.581457 h -0.341424 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="M 0.92298582,0 H 1.2478128 V -1.581457 H 0.91113082 v 1.02427199 L 0.1784918,-1.581457 H -0.16767421 V 0 H 0.1690078 v -1.062208 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-        <path d="m 1.5596363,0 h 0.336682 v -1.581457 h -0.336682 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#7f00ff"/>
-      </g>
-    </g>
-    <rect x="42.697" y="105.470" width="10.400" height="12.980" fill="#7f00ff" stroke="#7f00ff" stroke-width="0.350" rx="1.000" ry="1.000"/>
-    <g transform="translate(47.897,108.050)">
-      <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc">
-        <path d="m -2.9312229,0 h 0.336682 v -0.64728301 l 0.604605,-0.93417399 h -0.384102 l -0.388844,0.63542798 -0.393586,-0.63542798 h -0.384102 l 0.609347,0.93417399 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="m -1.3132747,-0.78954302 c 0,0.47657101 0.34853697,0.81799502 0.82510798,0.81799502 0.47894201,0 0.82747902,-0.34142401 0.82747902,-0.81799502 0,-0.47657098 -0.34853701,-0.81799498 -0.82747902,-0.81799498 -0.47657101,0 -0.82510798,0.341424 -0.82510798,0.81799498 z m 1.30642099,0 c 0,0.29400401 -0.18968,0.51924901 -0.48131301,0.51924901 -0.291633,0 -0.47894201,-0.225245 -0.47894201,-0.51924901 0,-0.29637498 0.18730901,-0.51924898 0.47894201,-0.51924898 0.29163301,0 0.48131301,0.222874 0.48131301,0.51924898 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="m 0.57789415,-0.63068601 c 0,0.388844 0.22524501,0.65913801 0.70892905,0.65913801 0.478942,0 0.704187,-0.26792301 0.704187,-0.66150901 V -1.581457 h -0.341424 v 0.93891599 c 0,0.220503 -0.120921,0.372247 -0.362763,0.372247 -0.246584,0 -0.36750504,-0.151744 -0.36750504,-0.372247 V -1.581457 H 0.57789415 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-        <path d="m 2.6703386,0 h 0.339053 v -1.285082 h 0.459974 v -0.296375 h -1.261372 v 0.296375 h 0.462345 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
-      </g>
+    <rect x="42.69714285714286" y="105.46955555555556" width="10.4" height="12.980444444444444" rx="1" ry="1" fill="#8000ff" stroke="#8000ff" stroke-width="0.35"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc">
+      <path d="m 44.966333,108.05 h 0.336635 v -0.64719 l 0.60452,-0.93404 H 45.52344 l -0.388789,0.63534 -0.393531,-0.63534 h -0.384048 l 0.609261,0.93404 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 46.584054,107.26057 c 0,0.47651 0.348488,0.81788 0.824992,0.81788 0.478875,0 0.827363,-0.34137 0.827363,-0.81788 0,-0.4765 -0.348488,-0.81788 -0.827363,-0.81788 -0.476504,0 -0.824992,0.34138 -0.824992,0.81788 z m 1.306238,0 c 0,0.29396 -0.189654,0.51918 -0.481246,0.51918 -0.291592,0 -0.478875,-0.22522 -0.478875,-0.51918 0,-0.29633 0.187283,-0.51917 0.478875,-0.51917 0.291592,0 0.481246,0.22284 0.481246,0.51917 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 48.474957,107.41941 c 0,0.38879 0.225214,0.65904 0.70883,0.65904 0.478874,0 0.704088,-0.26788 0.704088,-0.66141 v -0.94827 h -0.341376 v 0.93878 c 0,0.22047 -0.120904,0.3722 -0.362712,0.3722 -0.24655,0 -0.367454,-0.15173 -0.367454,-0.3722 v -0.93878 h -0.341376 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
+      <path d="m 50.567108,108.05 h 0.339005 v -1.2849 h 0.45991 v -0.29633 h -1.261195 v 0.29633 h 0.46228 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:alphabetic;text-anchor:middle;fill:#f7f2fc"/>
     </g>
   </g>
   <g>
-    <g transform="translate(7.983,25.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 25.000000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,25.000)">
-      <circle cx="0" cy="0" r="3.500" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#f7f2fc" stroke-width="0.438" stroke-linecap="round"/>
+    <g transform="translate(21.287619 25.000000)">
+      <circle r="3.5" fill="#8000ff"/>
+      <line y2="-3.0625" stroke="#f7f2fc" stroke-width="0.4375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,25.000)">
-      <circle cx="0" cy="0" r="6.350" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-5.556" stroke="#f7f2fc" stroke-width="0.794" stroke-linecap="round"/>
+    <g transform="translate(34.592381 25.000000)">
+      <circle r="6.35" fill="#8000ff"/>
+      <line y2="-5.5562499999999995" stroke="#f7f2fc" stroke-width="0.79375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(7.983,43.500)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 43.500000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,43.500)">
-      <circle cx="0" cy="0" r="3.500" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#f7f2fc" stroke-width="0.438" stroke-linecap="round"/>
+    <g transform="translate(21.287619 43.500000)">
+      <circle r="3.5" fill="#8000ff"/>
+      <line y2="-3.0625" stroke="#f7f2fc" stroke-width="0.4375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,43.500)">
-      <circle cx="0" cy="0" r="6.350" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-5.556" stroke="#f7f2fc" stroke-width="0.794" stroke-linecap="round"/>
+    <g transform="translate(34.592381 43.500000)">
+      <circle r="6.35" fill="#8000ff"/>
+      <line y2="-5.5562499999999995" stroke="#f7f2fc" stroke-width="0.79375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(47.897,43.500)">
-      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#f7f2fc" stroke="#7f00ff" stroke-width="0.375" rx="0.188" ry="0.188"/>
-      <line x1="-0.812" y1="-2.250" x2="0.812" y2="-2.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="-1.750" x2="0.812" y2="-1.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="-1.250" x2="0.812" y2="-1.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="-0.750" x2="0.812" y2="-0.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="-0.250" x2="0.812" y2="-0.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
+    <g transform="translate(47.897143 43.500000)">
+      <rect x="-1.3125" y="-2.8125" width="2.625" height="5.625" rx="0.1875" ry="0.1875" fill="#f7f2fc" stroke="#8000ff" stroke-width="0.375"/>
+      <g transform="translate(0.000000 -1.250000)">
+        <line x1="-0.8125" y1="-1" x2="0.8125" y2="-1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="-0.5" x2="0.8125" y2="-0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" x2="0.8125" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="0.5" x2="0.8125" y2="0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="1" x2="0.8125" y2="1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+      </g>
     </g>
-    <g transform="translate(7.983,62.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 62.000000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,62.000)">
-      <circle cx="0" cy="0" r="3.500" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#f7f2fc" stroke-width="0.438" stroke-linecap="round"/>
+    <g transform="translate(21.287619 62.000000)">
+      <circle r="3.5" fill="#8000ff"/>
+      <line y2="-3.0625" stroke="#f7f2fc" stroke-width="0.4375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,62.000)">
-      <circle cx="0" cy="0" r="6.350" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-5.556" stroke="#f7f2fc" stroke-width="0.794" stroke-linecap="round"/>
+    <g transform="translate(34.592381 62.000000)">
+      <circle r="6.35" fill="#8000ff"/>
+      <line y2="-5.5562499999999995" stroke="#f7f2fc" stroke-width="0.79375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(47.897,62.000)">
-      <rect x="-1.312" y="-4.312" width="2.625" height="8.625" fill="#f7f2fc" stroke="#7f00ff" stroke-width="0.375" rx="0.188" ry="0.188"/>
-      <line x1="-0.812" y1="-1.000" x2="0.812" y2="-1.000" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="-0.500" x2="0.812" y2="-0.500" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="0.000" x2="0.812" y2="0.000" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="0.500" x2="0.812" y2="0.500" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="1.000" x2="0.812" y2="1.000" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
+    <g transform="translate(47.897143 62.000000)">
+      <rect x="-1.3125" y="-4.3125" width="2.625" height="8.625" rx="0.1875" ry="0.1875" fill="#f7f2fc" stroke="#8000ff" stroke-width="0.375"/>
+      <g transform="translate(0.000000 0.000000)">
+        <line x1="-0.8125" y1="-1" x2="0.8125" y2="-1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="-0.5" x2="0.8125" y2="-0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" x2="0.8125" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="0.5" x2="0.8125" y2="0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="1" x2="0.8125" y2="1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+      </g>
     </g>
-    <g transform="translate(7.983,80.500)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 80.500000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,80.500)">
-      <circle cx="0" cy="0" r="3.500" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.062" stroke="#f7f2fc" stroke-width="0.438" stroke-linecap="round"/>
+    <g transform="translate(21.287619 80.500000)">
+      <circle r="3.5" fill="#8000ff"/>
+      <line y2="-3.0625" stroke="#f7f2fc" stroke-width="0.4375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,80.500)">
-      <circle cx="0" cy="0" r="6.350" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-5.556" stroke="#f7f2fc" stroke-width="0.794" stroke-linecap="round"/>
+    <g transform="translate(34.592381 80.500000)">
+      <circle r="6.35" fill="#8000ff"/>
+      <line y2="-5.5562499999999995" stroke="#f7f2fc" stroke-width="0.79375" stroke-linecap="round"/>
     </g>
-    <g transform="translate(7.983,97.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 97.000000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,97.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.675" stroke="#f7f2fc" stroke-width="0.525" stroke-linecap="round"/>
+    <g transform="translate(21.287619 97.000000)">
+      <circle r="4.2" fill="#8000ff"/>
+      <line y2="-3.6750000000000003" stroke="#f7f2fc" stroke-width="0.525" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,97.000)">
-      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#f7f2fc" stroke="#7f00ff" stroke-width="0.375" rx="0.188" ry="0.188"/>
-      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
+    <g transform="translate(34.592381 97.000000)">
+      <rect x="-1.3125" y="-2.8125" width="2.625" height="5.625" rx="0.1875" ry="0.1875" fill="#f7f2fc" stroke="#8000ff" stroke-width="0.375"/>
+      <g transform="translate(0.000000 1.250000)">
+        <line x1="-0.8125" y1="-1" x2="0.8125" y2="-1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="-0.5" x2="0.8125" y2="-0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" x2="0.8125" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="0.5" x2="0.8125" y2="0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="1" x2="0.8125" y2="1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+      </g>
     </g>
-    <g transform="translate(47.897,98.250)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(47.897143 98.250000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(7.983,112.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(7.982857 112.000000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
-    <g transform="translate(21.288,112.000)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <line x1="0" y1="0" x2="0" y2="-3.675" stroke="#f7f2fc" stroke-width="0.525" stroke-linecap="round"/>
+    <g transform="translate(21.287619 112.000000)">
+      <circle r="4.2" fill="#8000ff"/>
+      <line y2="-3.6750000000000003" stroke="#f7f2fc" stroke-width="0.525" stroke-linecap="round"/>
     </g>
-    <g transform="translate(34.592,112.000)">
-      <rect x="-1.312" y="-2.812" width="2.625" height="5.625" fill="#f7f2fc" stroke="#7f00ff" stroke-width="0.375" rx="0.188" ry="0.188"/>
-      <line x1="-0.812" y1="0.250" x2="0.812" y2="0.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="0.750" x2="0.812" y2="0.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="1.250" x2="0.812" y2="1.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="1.750" x2="0.812" y2="1.750" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
-      <line x1="-0.812" y1="2.250" x2="0.812" y2="2.250" stroke="#7f00ff" stroke-width="0.250" stroke-linecap="round"/>
+    <g transform="translate(34.592381 112.000000)">
+      <rect x="-1.3125" y="-2.8125" width="2.625" height="5.625" rx="0.1875" ry="0.1875" fill="#f7f2fc" stroke="#8000ff" stroke-width="0.375"/>
+      <g transform="translate(0.000000 1.250000)">
+        <line x1="-0.8125" y1="-1" x2="0.8125" y2="-1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="-0.5" x2="0.8125" y2="-0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" x2="0.8125" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="0.5" x2="0.8125" y2="0.5" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+        <line x1="-0.8125" y1="1" x2="0.8125" y2="1" stroke="#8000ff" stroke-width="0.25" stroke-linecap="round"/>
+      </g>
     </g>
-    <g transform="translate(47.897,113.250)">
-      <circle cx="0" cy="0" r="4.200" fill="#7f00ff" stroke="none" stroke-width="0"/>
-      <circle cx="0" cy="0" r="3.500" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
-      <circle cx="0" cy="0" r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.950"/>
+    <g transform="translate(47.897143 113.250000)">
+      <circle r="4.2" fill="#8000ff" stroke="none"/>
+      <circle r="3.5" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
+      <circle r="2.325" fill="none" stroke="#f7f2fc" stroke-width="0.95"/>
     </g>
   </g>
 </svg>

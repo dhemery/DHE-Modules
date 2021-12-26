@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" width="9.250mm" height="3.830mm" viewBox="-4.625 -1.915 9.250 3.830">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" viewBox="-4.625000 -1.915222 9.250000 3.830444" height="3.830444mm" width="9.250000mm">
   <defs/>
-  <rect x="-4.500" y="-1.790" width="9.000" height="3.580" fill="#efedeb" stroke="#331a00" stroke-width="0.250" rx="0.500" ry="0.500"/>
-  <g style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00">
-    <path d="m -1.6704622,0.8565965 h 0.3390531 v -1.58145703 h -0.3390531 v 0.62120201 h -0.746865 v -0.62120201 h -0.336682 V 0.8565965 h 0.336682 V 0.19271649 h 0.746865 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m -1.0220677,0.8565965 h 0.33668199 V -0.72486053 H -1.0220677 Z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m -0.44961928,0.06705348 c 0,0.49791001 0.37936001,0.82036602 0.84170502,0.82036602 0.286891,0 0.51213601,-0.11855 0.67336406,-0.29874601 V -0.01593152 H 0.31147174 v 0.28926201 h 0.42203801 v 0.192051 c -0.068759,0.061646 -0.19679301,0.120921 -0.34142401,0.120921 -0.28689101,0 -0.49553901,-0.220503 -0.49553901,-0.51924901 0,-0.298746 0.208648,-0.51924901 0.49553901,-0.51924901 0.16597,0 0.301117,0.087727 0.37461801,0.19916401 L 1.0464818,-0.40477553 c -0.12092105,-0.187309 -0.32719806,-0.34616601 -0.65439606,-0.34616601 -0.46234501,0 -0.84170502,0.31771401 -0.84170502,0.81799502 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
-    <path d="m 2.4185867,0.8565965 h 0.339053 v -1.58145703 h -0.339053 v 0.62120201 H 1.6717217 V -0.72486053 H 1.3350397 V 0.8565965 h 0.336682 V 0.19271649 h 0.746865 z" style="font-weight:bold;font-size:2.371px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#331a00"/>
+  <g>
+    <rect x="-4.5" y="-1.7902222222222222" width="9" height="3.5804444444444443" rx="0.5" ry="0.5" fill="#efedeb" stroke="#18191c" stroke-width="0.25"/>
+    <g style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c">
+      <path d="M -1.6702273,0.85699603 H -1.331222 V -0.72423869 H -1.6702273 V -0.103124 h -0.74676 V -0.72423869 H -2.753622 v 1.58123472 h 0.3366347 V 0.19320934 h 0.74676 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="m -1.0219241,0.85699603 h 0.33663467 V -0.72423869 H -1.0219241 Z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="m -0.4495562,0.067564 c 0,0.49784002 0.37930668,0.8202507 0.84158669,0.8202507 0.28685068,0 0.51206402,-0.11853334 0.67326931,-0.29870401 V -0.01540933 H 0.31142782 V 0.27381201 H 0.7334065 v 0.19202401 c -0.0687493,0.0616373 -0.19676534,0.120904 -0.34137601,0.120904 -0.28685068,0 -0.49546935,-0.22047201 -0.49546935,-0.51917602 0,-0.29870401 0.20861867,-0.51917601 0.49546935,-0.51917601 0.16594667,0 0.30107468,0.0877147 0.37456535,0.199136 L 1.0463345,-0.40419868 c -0.12090399,-0.18728267 -0.327152,-0.34611734 -0.65430401,-0.34611734 -0.46228001,0 -0.84158669,0.31766934 -0.84158669,0.81788002 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+      <path d="M 2.4182465,0.85699603 H 2.7572518 V -0.72423869 H 2.4182465 V -0.103124 H 1.6714864 V -0.72423869 H 1.3348518 V 0.85699603 H 1.6714864 V 0.19320934 h 0.7467601 z" style="font-weight:bold;font-size:2.37067px;font-family:'Proxima Nova';dominant-baseline:middle;text-anchor:middle;fill:#18191c"/>
+    </g>
   </g>
 </svg>
