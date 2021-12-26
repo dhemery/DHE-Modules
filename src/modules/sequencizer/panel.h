@@ -10,8 +10,10 @@
 #include "controls/duration-controls.h"
 #include "controls/knobs.h"
 #include "controls/ports.h"
+#include "controls/shape-controls.h"
 #include "controls/step-selection-controls.h"
 #include "controls/switches.h"
+#include "controls/voltage-controls.h"
 #include "panels/dimensions.h"
 #include "panels/panel-widget.h"
 #include "signals/voltage-signals.h"
@@ -93,7 +95,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     Button::install<Toggle>(this, ParamId::Loop,
                             sequence_controls_x + button_port_distance, loop_y);
 
-    auto constexpr progress_light_y = top - light_diameter * 2.F;
+    auto constexpr progress_light_y = top - light_diameter * 1.5F;
 
     auto const positions = SelectionMarkerPositions{
         step_block_left + step_width / 2.F, progress_light_y, step_width};
