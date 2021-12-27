@@ -3,7 +3,7 @@
 namespace dhe {
 namespace swave {
 struct ParamId {
-  enum { Curvature, Shape, CurvatureAv, Count };
+  enum { Curvature, Shape, CurvatureAv, Level, Count };
 };
 
 struct InputId {

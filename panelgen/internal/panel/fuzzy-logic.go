@@ -25,24 +25,24 @@ func (fl fuzzyLogic) build() *Panel {
 	p := NewPanel(string(fl), hp, fg, bg, "fuzzy-logic")
 
 	const (
-		width              = float64(hp) * mmPerHp
-		top                = 4.0 * mmPerHp
-		dy                 = 3.0 * mmPerHp
-		abPortX            = 1.5 * mmPerHp
-		abNegateButtonX    = 3.0 * mmPerHp
-		abNegatePortX      = 3.25 * mmPerHp
-		acInputY           = top
-		bdInputY           = top + 1.0*dy
-		cdPortX            = width - abPortX
-		cdNegateButtonX    = width - abNegateButtonX
-		cdNegatePortX      = width - abNegatePortX
-		andY               = top + 2.0*dy
-		orY                = top + 3.0*dy
-		xorY               = top + 4.0*dy
-		implicationY       = top + 5.0*dy
-		contraImplicationY = top + 6.0*dy
-		levelRangeSwitchY  = top + 0.5*dy
-		levelRangeSwitchX  = width / 2.0
+		width                = float64(hp) * mmPerHp
+		top                  = 4.0 * mmPerHp
+		dy                   = 3.0 * mmPerHp
+		abPortX              = 1.5 * mmPerHp
+		abNegateButtonX      = 3.0 * mmPerHp
+		abNegatePortX        = 3.25 * mmPerHp
+		acInputY             = top
+		bdInputY             = top + 1.0*dy
+		cdPortX              = width - abPortX
+		cdNegateButtonX      = width - abNegateButtonX
+		cdNegatePortX        = width - abNegatePortX
+		andY                 = top + 2.0*dy
+		orY                  = top + 3.0*dy
+		xorY                 = top + 4.0*dy
+		implicationY         = top + 5.0*dy
+		converseImplicationY = top + 6.0*dy
+		levelRangeSwitchY    = top + 0.5*dy
+		levelRangeSwitchX    = width / 2.0
 	)
 	p.LevelRangeSwitch(levelRangeSwitchX, levelRangeSwitchY, 1)
 	p.Port(abPortX, acInputY, "A", fg)
@@ -74,10 +74,10 @@ func (fl fuzzyLogic) build() *Panel {
 	p.OutPort(cdNegatePortX, implicationY, "¬")
 	p.OutPort(cdPortX, implicationY, "C &#x22B2; D")
 
-	p.OutPort(abPortX, contraImplicationY, "A &#x22B3; B")
-	p.OutPort(abNegatePortX, contraImplicationY, "¬")
-	p.OutPort(cdNegatePortX, contraImplicationY, "¬")
-	p.OutPort(cdPortX, contraImplicationY, "C &#x22B3; D")
+	p.OutPort(abPortX, converseImplicationY, "A &#x22B3; B")
+	p.OutPort(abNegatePortX, converseImplicationY, "¬")
+	p.OutPort(cdNegatePortX, converseImplicationY, "¬")
+	p.OutPort(cdPortX, converseImplicationY, "C &#x22B3; D")
 
 	return p
 }

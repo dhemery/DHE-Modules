@@ -27,7 +27,7 @@ template <typename TEngine> struct Module : public rack::engine::Module {
     configInput(InputId::B + 1, "D");
     Button::config(this, ParamId::NegateB + 1, "Negate D");
 
-    VoltageRangeSwitch::config(this, ParamId::LevelRange, "Level Range",
+    VoltageRangeSwitch::config(this, ParamId::LevelRange, "Voltage range",
                                VoltageRangeId::Unipolar);
 
     configOutput(OutputId::And + 0, "A AND B");
