@@ -89,10 +89,15 @@ clean-stage:
 	rm -rf $(STAGING_DIRNAME)
 
 run: stage
+	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
+
+run-unhidden: stage-unhidden
+	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
+
+stage-unhidden: stage
 	cd $(STAGING_PLUGIN_DIR) && tar xf $(PLUGIN_ZIP_NAME)
 	rm $(STAGING_PLUGIN_ZIP)
 	jq '.modules[].hidden=false' plugin.json > $(STAGING_PLUGIN_MANIFEST)
-	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
 
 clean: clean-stage
 
