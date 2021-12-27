@@ -33,7 +33,7 @@ Each channel includes the following controls.
 
     The ranges depend on the function selected by the _ADD / MULT_ switch.
     For each function,
-    this button cycles through four ranges.
+    this button cycles through several ranges.
 
     - _ADD_ ranges:
         - 0–5
@@ -45,6 +45,10 @@ Each channel includes the following controls.
         - ±1 (attenuverter)
         - 0–2 (gain)
         - ±2
+        - 0–5
+        - ±5
+        - 0–10
+        - ±10
 
 ## Ports
 Each channel includes the following ports.

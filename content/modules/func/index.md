@@ -9,7 +9,7 @@ Offsets or scales its input signal by a selectable amount.
 - **ADD / MULT:**
     Selects the function to apply to the input signal.
 
-    - _ADD_ offsets the signal by adding the selected amount to it.
+    - _ADD_ offsets the signal by adding the selected voltage to it.
     - _MULT_ scales the signal by multiplying it by the selected amount.
 
     This switch also selects
@@ -27,7 +27,7 @@ Offsets or scales its input signal by a selectable amount.
 
     The ranges depend on the function selected by the _ADD / MULT_ switch.
     For each function,
-    this button cycles through four ranges.
+    this button cycles through several ranges.
 
     - _ADD_ ranges:
         - 0–5
@@ -39,6 +39,10 @@ Offsets or scales its input signal by a selectable amount.
         - ±1 (attenuverter)
         - 0–2 (gain)
         - ±2
+        - 0–5
+        - ±5
+        - 0–10
+        - ±10
 
 ## Ports
 - **IN:**

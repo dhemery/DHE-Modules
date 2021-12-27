@@ -2,6 +2,15 @@
 title: Release Notes
 ---
 
+# Version 2.0.1
+December 2021
+
+-   Added four new multiplier ranges to [_Func_](/modules/func/) and [_Func 6_](/modules/func-6):
+    0–5, ±5, 0–10, and ±10.
+-   Added a signal level range to [_Swave_](/modules/swave/),
+    so it can now operate on unipolar signals
+    in addition to bipolar signals.
+
 # Version 2.0.0
 November 2021
 
