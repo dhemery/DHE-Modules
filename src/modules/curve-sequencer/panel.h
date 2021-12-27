@@ -68,9 +68,10 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     Button::install<Toggle>(this, ParamId::Loop, left + button_port_distance,
                             loop_y);
 
-    auto const positions = SelectionMarkerPositions{step_x, active_y, step_dx};
-    auto *start_marker = SelectionStartMarker::install(this, positions);
-    auto *end_marker = SelectionEndMarker::install(this, positions);
+    auto *start_marker = SelectionStartMarker::install(
+        this, step_x - light_diameter, active_y, step_dx);
+    auto *end_marker = SelectionEndMarker::install(
+        this, step_x + light_diameter, active_y, step_dx);
 
     SelectionStartKnob::install<Small>(this, ParamId::SelectionStart, left,
                                        selection_y, start_marker, end_marker);

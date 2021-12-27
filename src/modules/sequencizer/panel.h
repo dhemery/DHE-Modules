@@ -97,10 +97,11 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr progress_light_y = top - light_diameter * 1.5F;
 
-    auto const positions = SelectionMarkerPositions{
-        step_block_left + step_width / 2.F, progress_light_y, step_width};
-    auto *start_marker = SelectionStartMarker::install(this, positions);
-    auto *end_marker = SelectionEndMarker::install(this, positions);
+    auto constexpr step_x = step_block_left + step_width / 2.F;
+    auto *start_marker = SelectionStartMarker ::install(
+        this, step_x - light_diameter, progress_light_y, step_width);
+    auto *end_marker = SelectionEndMarker::install(
+        this, step_x + light_diameter, progress_light_y, step_width);
 
     auto constexpr selection_y = global_controls_y(2);
     SelectionStartKnob::install<Small>(this, ParamId::SelectionStart,

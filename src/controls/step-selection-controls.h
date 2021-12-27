@@ -8,53 +8,30 @@
 
 namespace dhe {
 
-// All measurements in mm
-struct SelectionMarkerPositions {
-  SelectionMarkerPositions(float xmm, float ymm, float dxmm)
-      : x_{xmm}, y_{ymm}, dx_{dxmm} {}
-
-  auto start_x() const -> float { return x_ + start_dx; }
-  auto end_x() const -> float { return x_ + end_dx; }
-  auto dx() const -> float { return dx_; }
-  auto y() const -> float { return y_; }
-
-private:
-  static auto constexpr start_dx = -2.F * light_diameter;
-  static auto constexpr end_dx = 0.F;
-  float x_;  // NOLINT
-  float y_;  // NOLINT
-  float dx_; // NOLINT
-};
-
 struct SelectionStartMarker {
   template <typename Panel> struct Widget : public rack::widget::SvgWidget {
     Widget() { setSvg(load_svg(Panel::svg_dir, "marker-start")); }
 
-    void initialize(float x, float step_width) {
-      x_ = x;
-      step_width_ = step_width;
-      set_start(0);
+    void set_start(int index) {
+      this->box.pos.x = x_px_ + static_cast<float>(index) * step_width_px_;
     }
 
-    void set_start(int index) {
-      auto const xmm = x_ + step_width_ * static_cast<float>(index);
-      this->box.pos.x = mm2px(xmm);
+    void initialize(float step_width) {
+      step_width_px_ = mm2px(step_width);
+      // Assumes that curent position is step 1 (index 0)
+      x_px_ = this->box.pos.x;
     }
 
   private:
-    float x_{};
-    float step_width_{};
+    float x_px_{};
+    float step_width_px_{};
   };
 
   template <typename P>
-  static inline auto install(P *panel,
-                             SelectionMarkerPositions const &positions)
+  static inline auto install(P *panel, float xmm, float ymm, float step_width)
       -> Widget<P> * {
-    auto const x = positions.start_x();
-    auto const y = positions.y();
-    auto const dx = positions.dx();
-    auto w = rack::createWidgetCentered<Widget<P>>(mm2px(x, y));
-    w->initialize(x, dx);
+    auto w = rack::createWidgetCentered<Widget<P>>(mm2px(xmm, ymm));
+    w->initialize(step_width);
     panel->addChild(w);
     return w;
   }
@@ -65,46 +42,42 @@ struct SelectionEndMarker {
 
     Widget() { setSvg(load_svg(Panel::svg_dir, "marker-end")); }
 
-    void initialize(float x, float step_width) {
-      x_ = x;
-      step_width_ = step_width;
-      move();
-    }
-
     void set_start(int index) {
       this->start_index_ = index;
       move();
     }
 
     void set_length(int length) {
-      this->end_offset_ = length - 1;
+      this->length_ = length;
       move();
+    }
+
+    void initialize(float step_width) {
+      step_width_px_ = mm2px(step_width);
+      // Assumes that curent position is step 1 (index 0)
+      x_px_ = this->box.pos.x;
+      set_length(Panel::N);
     }
 
   private:
     static auto constexpr index_mask{Panel::N - 1};
 
     void move() {
-      auto const index = (start_index_ + end_offset_) & index_mask;
-      auto const xmm = x_ + step_width_ * static_cast<float>(index);
-      this->box.pos.x = mm2px(xmm);
+      auto const index = (start_index_ + length_ - 1) & index_mask;
+      this->box.pos.x = x_px_ + step_width_px_ * static_cast<float>(index);
     }
 
-    float x_{};
-    float step_width_{};
+    float x_px_{};
+    float step_width_px_{};
     int start_index_{0};
-    int end_offset_{Panel::N - 1};
+    int length_{Panel::N - 1};
   };
 
   template <typename Panel>
-  static inline auto install(Panel *panel,
-                             SelectionMarkerPositions const &positions)
-      -> Widget<Panel> * {
-    auto const x = positions.end_x();
-    auto const y = positions.y();
-    auto const dx = positions.dx();
-    auto w = rack::createWidgetCentered<Widget<Panel>>(mm2px(x, y));
-    w->initialize(x, dx);
+  static inline auto install(Panel *panel, float xmm, float ymm,
+                             float step_width) -> Widget<Panel> * {
+    auto w = rack::createWidgetCentered<Widget<Panel>>(mm2px(xmm, ymm));
+    w->initialize(step_width);
     panel->addChild(w);
     return w;
   }
@@ -120,6 +93,7 @@ struct SelectionStartKnob {
 
     Widget() { this->snap = true; }
 
+    // NOLINTNEXTLINE
     void onChange(rack::widget::Widget::ChangeEvent const &e) override {
       rack::app::SvgKnob::onChange(e);
       auto const position =
@@ -170,6 +144,7 @@ struct SelectionLengthKnob {
 
     Widget() { this->snap = true; }
 
+    // NOLINTNEXTLINE
     void onChange(rack::widget::Widget::ChangeEvent const &e) override {
       rack::app::SvgKnob::onChange(e);
       end_marker_->set_length(
