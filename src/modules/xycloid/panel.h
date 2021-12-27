@@ -20,7 +20,7 @@ namespace xycloid {
 struct Panel : public PanelWidget<Panel> {
   static auto constexpr hp = 11;
   static auto constexpr panel_file = "xycloid";
-  static auto constexpr svg_dir = "xycloid";
+  static auto constexpr svg_dir = "xylfo";
 
   explicit Panel(rack::engine::Module *module) : PanelWidget<Panel>{module} {
     auto constexpr width = hp2mm(hp);
