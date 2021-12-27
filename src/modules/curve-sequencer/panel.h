@@ -74,10 +74,15 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto *end_marker = SelectionEndMarker::install(
         this, step_x + light_diameter, active_y, step_dx);
 
-    SelectionStartKnob::install<Small>(this, ParamId::SelectionStart, left,
-                                       selection_y, start_marker, end_marker);
+    auto constexpr selection_start_x =
+        left - port_radius - padding + small_knob_radius;
+    SelectionStartKnob::install<Small>(this, ParamId::SelectionStart,
+                                       selection_start_x, selection_y,
+                                       start_marker, end_marker);
 
-    auto constexpr selection_length_x = left + hp2mm(2.F);
+    auto constexpr selection_length_x = left + port_radius + padding +
+                                        button_diameter + padding -
+                                        small_knob_radius;
     SelectionLengthKnob::install<Small>(this, ParamId::SelectionLength,
                                         selection_length_x, selection_y,
                                         end_marker);

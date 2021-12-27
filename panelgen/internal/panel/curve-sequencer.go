@@ -45,8 +45,8 @@ func (cs curveSequencer) build() *Panel {
 		selectionY             = sequenceControlsTop + 2.0*sequenceControlsDy
 		gateY                  = sequenceControlsTop + 3.0*sequenceControlsDy
 		resetY                 = sequenceControlsTop + 4.0*sequenceControlsDy
-		selectionStartX        = left - 0.2*mmPerHp
-		selectionLengthX       = left + 1.63*mmPerHp
+		selectionStartX        = left - control.PortRadius - padding + control.SmallKnobRadius
+		selectionLengthX       = left + control.PortRadius + padding + control.ButtonDiameter + padding - control.SmallKnobRadius
 	)
 	p.InButtonPort(left, runY, "RUN")
 	p.InButtonPort(left, gateY, "GATE")
