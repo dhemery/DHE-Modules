@@ -28,21 +28,22 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
-  static auto constexpr N = TSize::step_count; // NOLINT
-  using ParamId = ParamIds<N>;
-  using InputId = InputIds<N>;
-  using LightId = LightIds<N>;
+  static auto constexpr step_count = TSize::step_count; // NOLINT
 
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "curve-sequencer";
   static auto constexpr step_width_hp = 2.25F;
   static auto constexpr sequence_controls_width_hp = 13.F;
   static auto constexpr hp =
-      static_cast<int>(sequence_controls_width_hp + N * step_width_hp);
+      static_cast<int>(sequence_controls_width_hp + step_count * step_width_hp);
   static auto constexpr step_x = hp2mm(10.F);
   static auto constexpr step_dx = hp2mm(step_width_hp);
 
   Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
+    using ParamId = ParamIds<step_count>;
+    using InputId = InputIds<step_count>;
+    using LightId = LightIds<step_count>;
+
     auto constexpr left = hp2mm(2.F);
     auto constexpr right = hp2mm(hp - 2.F);
     auto constexpr top = hp2mm(4.F);
@@ -104,7 +105,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto const advance_mode_labels =
         std::vector<std::string>{"time", "rise", "fall", "edge", "high", "low"};
 
-    for (auto step = 0; step < N; step++) {
+    for (auto step = 0; step < step_count; step++) {
       auto const x = step_x + step_dx * static_cast<float>(step);
       this->addChild(rack::createLightCentered<ProgressLight>(
           mm2px(x, active_y), module, LightId::StepProgress + step + step));

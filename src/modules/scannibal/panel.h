@@ -62,15 +62,17 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
-  static auto constexpr N = TSize::step_count;
-  using InputId = InputIds<N>;
-  using ParamId = ParamIds<N>;
-  using LightId = LightIds<N>;
+  static auto constexpr step_count = TSize::step_count;
+  using InputId = InputIds<step_count>;
+  using ParamId = ParamIds<step_count>;
+  using LightId = LightIds<step_count>;
 
-  static auto constexpr hp = base_width_hp + mm2hp(step_block_width(N));
+  static auto constexpr hp =
+      base_width_hp + mm2hp(step_block_width(step_count));
   static auto constexpr panel_file = TSize::panel_file;
   static auto constexpr svg_dir = "scannibal";
-  static auto constexpr excess_width = hp2mm(hp) - padding - content_width(N);
+  static auto constexpr excess_width =
+      hp2mm(hp) - padding - content_width(step_count);
   static auto constexpr progress_light_y = top - light_diameter * 1.5F;
 
   static auto constexpr margin =
@@ -80,7 +82,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                                           global_inputs_width + margin +
                                           labels_width + padding;
   static auto constexpr global_outputs_left =
-      step_block_left + step_block_width(N) + margin;
+      step_block_left + step_block_width(step_count) + margin;
 
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
@@ -151,7 +153,7 @@ private:
                                    (small_knob_diameter + port_diameter) / 2.F +
                                    intra_section_glue;
 
-    for (auto step = 0; step < N; step++) {
+    for (auto step = 0; step < step_count; step++) {
       auto const step_left =
           step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;

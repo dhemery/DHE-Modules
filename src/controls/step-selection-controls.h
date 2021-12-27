@@ -56,11 +56,11 @@ struct SelectionEndMarker {
       step_width_px_ = mm2px(step_width);
       // Assumes that curent position is step 1 (index 0)
       x_px_ = this->box.pos.x;
-      set_length(Panel::N);
+      set_length(Panel::step_count);
     }
 
   private:
-    static auto constexpr index_mask{Panel::N - 1};
+    static auto constexpr index_mask{Panel::step_count - 1};
 
     void move() {
       auto const index = (start_index_ + length_ - 1) & index_mask;
@@ -70,7 +70,7 @@ struct SelectionEndMarker {
     float x_px_{};
     float step_width_px_{};
     int start_index_{0};
-    int length_{Panel::N - 1};
+    int length_{Panel::step_count - 1};
   };
 
   template <typename Panel>

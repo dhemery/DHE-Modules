@@ -60,10 +60,10 @@ using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
 
 template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
-  static auto constexpr N = TSize::step_count;
-  static auto constexpr step_block_width_hp = N * step_width_hp;
-  static auto constexpr hp = base_width_hp + step_block_width_hp;
+  static auto constexpr step_count = TSize::step_count;
   static auto constexpr panel_file = TSize::panel_file;
+  static auto constexpr step_block_width_hp = step_count * step_width_hp;
+  static auto constexpr hp = base_width_hp + step_block_width_hp;
   static auto constexpr svg_dir = "sequencizer";
   static auto constexpr content_width = sequence_controls_width +
                                         global_controls_width + labels_width +
@@ -79,11 +79,10 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr sequence_controls_x =
       sequence_controls_left + padding + port_radius;
 
-  using ParamId = ParamIds<N>;
-  using LightId = LightIds<N>;
-
   explicit Panel(rack::engine::Module *module)
       : PanelWidget<Panel<TSize>>{module} {
+    using ParamId = ParamIds<step_count>;
+    using LightId = LightIds<step_count>;
 
     auto constexpr run_y = global_controls_y(0);
     InPort::install(this, InputId::Run, sequence_controls_x, run_y);
@@ -213,7 +212,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr enabled_y = bottom - button_radius;
 
-    for (auto step = 0; step < N; step++) {
+    for (auto step = 0; step < step_count; step++) {
       auto const step_left =
           step_block_left + static_cast<float>(step) * step_width;
       auto const step_x = step_left + step_width / 2.F;
