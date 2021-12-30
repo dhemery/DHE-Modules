@@ -45,16 +45,12 @@ static auto constexpr global_controls_width =
 static auto constexpr labels_width = 10.F;
 
 static auto constexpr port_box_ascent =
-    padding + small_label_size + port_radius + 0.22F;
-static auto constexpr port_box_descent = padding + port_radius;
+    port_radius + padding + small_font_ascent + padding;
+static auto constexpr port_box_descent = port_radius + padding;
 static auto constexpr global_controls_top_y = top + port_box_ascent;
 static auto constexpr global_controls_bottom_y = bottom - port_box_descent;
 static auto constexpr global_controls_dy =
     (global_controls_bottom_y - global_controls_top_y) / 4.F;
-
-static inline auto constexpr global_controls_y(int row) -> float {
-  return global_controls_top_y + static_cast<float>(row) * global_controls_dy;
-}
 
 using ProgressLight =
     rack::componentlibrary::SmallLight<rack::componentlibrary::GreenRedLight>;
@@ -84,12 +80,18 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     using ParamId = ParamIds<step_count>;
     using LightId = LightIds<step_count>;
 
-    auto constexpr run_y = global_controls_y(0);
+    auto static constexpr run_y =
+        global_controls_top_y + 0.F * global_controls_dy;
+    auto constexpr loop_y = global_controls_top_y + 1.F * global_controls_dy;
+    auto constexpr selection_y =
+        global_controls_top_y + 2.F * global_controls_dy;
+    auto constexpr gate_y = global_controls_top_y + 3.F * global_controls_dy;
+    auto constexpr reset_y = global_controls_top_y + 4.F * global_controls_dy;
+
     InPort::install(this, InputId::Run, sequence_controls_x, run_y);
     Button::install<Toggle>(this, ParamId::Run,
                             sequence_controls_x + button_port_distance, run_y);
 
-    auto constexpr loop_y = global_controls_y(1);
     InPort::install(this, InputId::Loop, sequence_controls_x, loop_y);
     Button::install<Toggle>(this, ParamId::Loop,
                             sequence_controls_x + button_port_distance, loop_y);
@@ -102,7 +104,6 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
     auto *end_marker = SelectionEndMarker::install(
         this, step_x + light_diameter, progress_light_y, step_width);
 
-    auto constexpr selection_y = global_controls_y(2);
     SelectionStartKnob::install<Small>(this, ParamId::SelectionStart,
                                        sequence_controls_x - hp2mm(0.2F),
                                        selection_y, start_marker, end_marker);
@@ -114,23 +115,22 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                                         selection_length_x, selection_y,
                                         end_marker);
 
-    auto constexpr gate_y = global_controls_y(3);
     InPort::install(this, InputId::Gate, sequence_controls_x, gate_y);
     Button::install<Momentary>(this, ParamId::Gate,
                                sequence_controls_x + button_port_distance,
                                gate_y);
 
-    auto constexpr reset_y = global_controls_y(4);
     InPort::install(this, InputId::Reset, sequence_controls_x, reset_y);
     Button::install<Momentary>(this, ParamId::Reset,
                                sequence_controls_x + button_port_distance,
                                reset_y);
 
-    auto constexpr level_y = global_controls_y(0);
-    auto constexpr global_duration_y = global_controls_y(1);
-    auto constexpr in_y = global_controls_y(2);
-    auto constexpr state_y = global_controls_y(3);
-    auto constexpr out_y = global_controls_y(4);
+    auto constexpr level_y = global_controls_top_y + 0.F * global_controls_dy;
+    auto constexpr global_duration_y =
+        global_controls_top_y + 1.F * global_controls_dy;
+    auto constexpr in_y = global_controls_top_y + 2.F * global_controls_dy;
+    auto constexpr state_y = global_controls_top_y + 3.F * global_controls_dy;
+    auto constexpr out_y = global_controls_top_y + 4.F * global_controls_dy;
 
     auto constexpr global_controls_left_x =
         global_controls_left + global_control_width / 2.F;
@@ -172,7 +172,7 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;
-    auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
+    auto constexpr stepper_ascent = small_font_ascent / 2.F + padding;
     auto constexpr stepper_height = stepper_ascent * 2.F;
 
     auto constexpr trigger_y = top + stepper_ascent;

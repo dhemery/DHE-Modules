@@ -34,17 +34,12 @@ func (s sequencizer) build() *Panel {
 		stepWidth = stepWidthHp * mmPerHp
 
 		portBoxWidth       = padding + control.PortDiameter + padding
-		portBoxAscent      = control.PortRadius + padding + svg.SmallFontSize + padding
 		portBoxDescent     = control.PortRadius + padding
 		buttonPortBoxWidth = padding + control.PortDiameter + padding + control.ButtonDiameter + padding
 
 		sequenceBlockWidth           = buttonPortBoxWidth
 		globalStepControlsBlockWidth = portBoxWidth + padding + portBoxWidth + padding + portBoxWidth
 		stepBlockLabelsWidth         = 10.0 + padding
-
-		globalControlsTop    = top + portBoxAscent
-		globalControlsBottom = bottom - portBoxDescent
-		globalControlsDy     = (globalControlsBottom - globalControlsTop) / 4.0
 	)
 	var (
 		width          = hp.toMM()
@@ -54,6 +49,11 @@ func (s sequencizer) build() *Panel {
 	)
 
 	var (
+		portBoxAscent        = control.PortRadius + padding + svg.SmallFont.Ascent() + padding
+		globalControlsTop    = top + portBoxAscent
+		globalControlsBottom = bottom - portBoxDescent
+		globalControlsDy     = (globalControlsBottom - globalControlsTop) / 4.0
+
 		sequenceBlockLeft  = margin
 		sequenceBlockRight = sequenceBlockLeft + sequenceBlockWidth
 		sequenceControlsX  = sequenceBlockLeft + padding + control.PortRadius

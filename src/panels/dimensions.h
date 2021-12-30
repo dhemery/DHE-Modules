@@ -23,6 +23,9 @@ static auto constexpr small_knob_radius = small_knob_diameter / 2.F;
 static auto constexpr tiny_knob_diameter = 7.F;
 static auto constexpr tiny_knob_radius = tiny_knob_diameter / 2.F;
 
-static auto constexpr small_label_size = 7.0F / px_per_mm;
+static auto constexpr proxima_nova_ascent_ratio = 2.F / 3.F;
+static auto constexpr small_font_size = 7.0F / px_per_mm;
+static auto constexpr small_font_ascent =
+    small_font_size * proxima_nova_ascent_ratio;
 
 } // namespace dhe

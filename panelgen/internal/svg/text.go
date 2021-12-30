@@ -7,6 +7,11 @@ type Font struct {
 	AscentRatio float64 `xml:"-"`
 }
 
+func (f Font) Ascent() float64 {
+	// The panels use only uppercase text, so the entire height of a <text> is its ascent
+	return f.FontSize * f.AscentRatio
+}
+
 type TextAlignment struct {
 	DominantBaseline string  `xml:"dominant-baseline,attr"`
 	TextAnchor       string  `xml:"text-anchor,attr"`
@@ -143,8 +148,7 @@ func (t Text) Width() float64 {
 	return 0.1
 }
 func (t Text) Height() float64 {
-	// The panels use only uppercase text, so the entire height of a <text> is its ascent
-	return t.FontSize * t.AscentRatio
+	return t.Ascent()
 }
 func (t Text) Translate(dx, dy float64) Element {
 	t.X += dx

@@ -35,12 +35,8 @@ func (s scannibal) build() *Panel {
 		stepBlockLabelsWidth = 10.0 + padding
 		stepWidth            = stepWidthHp * mmPerHp
 
-		portBoxAscent  = padding + svg.SmallFontSize + control.PortRadius + 0.22
-		portBoxDescent = padding + control.PortRadius
-
-		globalControlsTop    = top + portBoxAscent
+		portBoxDescent       = control.PortRadius + padding
 		globalControlsBottom = bottom - portBoxDescent
-		globalControlsDy     = (globalControlsBottom - globalControlsTop) / 4.0
 	)
 	var (
 		width              = hp.toMM()
@@ -48,16 +44,19 @@ func (s scannibal) build() *Panel {
 		globalOutputsWidth = globalInputsWidth
 		contentWidth       = globalInputsWidth + stepBlockLabelsWidth + stepBlockWidth + globalOutputsWidth
 		margin             = (width - contentWidth) / 4.0
+
+		smallKnobAscent   = control.SmallKnobRadius + padding + svg.SmallFont.Ascent()
+		globalControlsTop = top + smallKnobAscent
+		globalControlsDy  = (globalControlsBottom - globalControlsTop) / 4.0
 	)
 
-	const (
+	var (
 		sequenceLengthY = globalControlsTop + 0.0*globalControlsDy
 		aInputY         = globalControlsTop + 1.0*globalControlsDy
 		bInputY         = globalControlsTop + 2.0*globalControlsDy
 		cInputY         = globalControlsTop + 3.0*globalControlsDy
 		phaseInY        = globalControlsTop + 4.0*globalControlsDy
-	)
-	var (
+
 		globalInputsLeft  = margin
 		globalInputsRight = globalInputsLeft + globalInputsWidth
 		globalInputsX     = (globalInputsLeft + globalInputsRight) / 2.0

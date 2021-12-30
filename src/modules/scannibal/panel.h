@@ -36,10 +36,10 @@ static auto constexpr global_outputs_width = global_control_width;
 
 static auto constexpr labels_width = 10.F;
 
-static auto constexpr port_box_ascent =
-    padding + small_label_size + port_radius + 0.22F;
-static auto constexpr port_box_descent = padding + port_radius;
-static auto constexpr global_controls_top_y = top + port_box_ascent;
+static auto constexpr small_knob_ascent =
+    small_knob_radius + padding + small_font_ascent;
+static auto constexpr port_box_descent = port_radius + padding;
+static auto constexpr global_controls_top_y = top + small_knob_ascent;
 static auto constexpr global_controls_bottom_y = bottom - port_box_descent;
 static auto constexpr global_controls_dy =
     (global_controls_bottom_y - global_controls_top_y) /
@@ -109,8 +109,8 @@ private:
   void add_step_block() {
     auto constexpr intra_section_glue = 0.15F;
     auto constexpr inter_section_glue = 2.F;
-    auto constexpr stepper_ascent = small_label_size / 2.F + padding - 0.25F;
-    auto constexpr stepper_height = stepper_ascent * 2.F;
+    auto constexpr stepper_height = padding + small_font_ascent + padding;
+    auto constexpr stepper_ascent = stepper_height / 2.F;
 
     auto constexpr phase_0_anchor_mode_y = top + stepper_ascent;
     auto constexpr phase_0_anchor_source_y =
