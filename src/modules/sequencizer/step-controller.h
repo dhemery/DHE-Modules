@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/latch.h"
+#include "generator.h"
 
 namespace dhe {
 namespace sequencizer {
