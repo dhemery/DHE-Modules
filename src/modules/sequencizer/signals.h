@@ -40,12 +40,12 @@ struct Signals {
   auto anchor_level(AnchorType type, int step) const -> float {
     auto const base = type == AnchorType::Start ? ParamId::StepStartAnchorLevel
                                                 : ParamId::StepEndAnchorLevel;
-    auto const rotation =
-        rotation_of(params_[base + step], inputs_[InputId::LevelAttenuationCV],
-                    params_[ParamId::LevelMultiplier]);
+    auto const multiplier = rotation_of(params_[ParamId::LevelMultiplier],
+                                        inputs_[InputId::LevelAttenuationCV]);
+    auto const rotation = rotation_of(params_[base + step]);
     auto const range_id =
         value_of<VoltageRangeId>(params_[ParamId::LevelRange]);
-    return Voltage::scale(rotation, range_id);
+    return multiplier * Voltage::scale(rotation, range_id);
   }
 
   auto anchor_source(AnchorType type, int step) const -> AnchorSource {
