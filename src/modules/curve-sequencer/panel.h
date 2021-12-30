@@ -39,7 +39,8 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
   static auto constexpr step_x = hp2mm(10.F);
   static auto constexpr step_dx = hp2mm(step_width_hp);
 
-  Panel(rack::engine::Module *module) : PanelWidget<Panel<TSize>>{module} {
+  explicit Panel(rack::engine::Module *module)
+      : PanelWidget<Panel<TSize>>{module} {
     using ParamId = ParamIds<step_count>;
     using InputId = InputIds<step_count>;
     using LightId = LightIds<step_count>;

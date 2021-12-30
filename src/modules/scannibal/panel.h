@@ -45,15 +45,15 @@ static auto constexpr global_controls_dy =
     (global_controls_bottom_y - global_controls_top_y) /
     static_cast<float>(global_control_rows - 1);
 
-static inline auto constexpr global_controls_y(int row) -> float {
+inline auto constexpr global_controls_y(int row) -> float {
   return global_controls_top_y + static_cast<float>(row) * global_controls_dy;
 }
 
-static inline auto constexpr step_block_width(int steps) -> float {
+inline auto constexpr step_block_width(int steps) -> float {
   return static_cast<float>(steps) * step_width;
 }
 
-static inline auto constexpr content_width(int steps) -> float {
+inline auto constexpr content_width(int steps) -> float {
   return global_inputs_width + labels_width + step_block_width(steps) +
          global_outputs_width;
 }
