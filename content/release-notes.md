@@ -2,6 +2,17 @@
 title: Release Notes
 ---
 
+# Version 2.0.2
+January 2022
+
+-   [_Sequencizer_](/modules/sequencizer/)
+    now correctly uses the global _LEVEL_ knob
+    to attenuate the current step's _START_ and _END_ levels.
+-   [_Sequencizer_](/modules/sequencizer/)
+    and [_Scannibal_](/modules/scannibal/)
+    controls and panel elements
+    are now properly aligned.
+
 # Version 2.0.1
 December 2021
 

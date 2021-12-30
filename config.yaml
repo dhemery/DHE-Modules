@@ -4,7 +4,7 @@ title: DHE Modules
 params:
     SubTitle: VCV Rack modules from Dale Emery
     Repository: "https://github.com/dhemery/DHE-Modules/"
-copyright: © 2017–2021 Dale H. Emery
+copyright: © 2017–2022 Dale H. Emery
 canonifyUrls: true
 disableKinds:
     - sections
