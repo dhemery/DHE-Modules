@@ -5,7 +5,7 @@ title: The Buttons Module
 
 8 toggle buttons with momentary negation.
 
-## Controls
+# Controls
 -   **Toggle Button (A–H):**
     Toggles between true (10V) and false (0V).
 

@@ -3,7 +3,6 @@ title: DHE Modules
 type: page
 ---
 
-# The Modules
 The DHE-Modules suite includes
 [sequencers](#sequencers),
 [envelope generators](#envelope-generators),
@@ -13,7 +12,7 @@ The DHE-Modules suite includes
 and
 [waveshapers](#waveshapers).
 
-## Sequencers
+# Sequencers
 
 <a href="/modules/sequencizer/"><img height="350px" src="/modules/sequencizer/sequencizer.svg" /></a>
 <a href="/modules/scannibal/" ><img height="350px" src="/modules/scannibal/scannibal.svg" /></a>
@@ -35,7 +34,7 @@ is an earlier version of _Sequencizer._
 _Sequencizer_, _Scannibal_, and _Curve Sequencer_
 each come in three sizes: 4 steps, 8 steps, and 16 steps.
 
-## Envelope Generators
+# Envelope Generators
 
 <a href="/modules/stage/"><img height="350" src="/modules/stage/stage.svg" /></a>
 <a href="/modules/booster-stage/"><img height="350" src="/modules/booster-stage/booster-stage.svg" /></a>
@@ -66,7 +65,7 @@ suppress retriggers,
 set an envelope's starting voltage,
 and more.
 
-## Logic
+# Logic
 
 <a href="/modules/fuzzy-logic-h/"><img height="350" src="/modules/fuzzy-logic-h/fuzzy-logic-h.svg" /></a>
 <a href="/modules/fuzzy-logic-z/"><img height="350" src="/modules/fuzzy-logic-z/fuzzy-logic-z.svg" /></a>
@@ -89,7 +88,7 @@ for up to 16 inputs.
 is a customizable truth table
 with 2, 3, or 4 inputs.
 
-## Low Frequency Oscillators
+# Low Frequency Oscillators
 
 <a href="/modules/blossom/"><img height="350" src="/modules/blossom/blossom.svg" /></a>
 <a href="/modules/xycloid/"><img height="350" src="/modules/xycloid/xycloid.svg" /></a>
@@ -108,7 +107,7 @@ of another circle.
 Each draws a pleasing, two-dimensional shape,
 generating a pair of complex, evolving, pulsing LFO signals.
 
-## Utilities
+# Utilities
 
 <a href="/modules/buttons/"><img height="350" src="/modules/buttons/buttons.svg" /></a>
 <a href="/modules/cubic/"><img height="350" src="/modules/cubic/cubic.svg" /></a>
@@ -135,7 +134,7 @@ is a modulatable knob with an adjustable, modulatable range.
 **[_Tapers_](/modules/tapers/)**
 is a pair of modulatable knobs with adjustable, modulatable tapers.
 
-## Waveshapers
+# Waveshapers
 
 <a href="/modules/swave/"><img height="350" src="/modules/swave/swave.svg" /></a>
 

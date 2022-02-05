@@ -5,7 +5,7 @@ title: The Ranger Module
 
 A modulatable knob with an adjustable, modulatable range.
 
-## Controls
+# Controls
 - **LEVEL:**
     Interpolates between the values
     set by the _CCW_ and _CW_ panels.
@@ -21,7 +21,7 @@ A modulatable knob with an adjustable, modulatable range.
     0 to 10V (UNI)
     or -5 to 5V (BI).
 
-## Ports
+# Ports
 - **OUT:**
     The output voltage,
     selected by the _LEVEL_ knob
@@ -33,6 +33,6 @@ A modulatable knob with an adjustable, modulatable range.
     
     Note that control voltage can drive any of Ranger's knobs beyond its normal limit.
 
-## Using Ranger
+# Using Ranger
 
 TBD

@@ -16,7 +16,7 @@ title: Normalized Tunable Sigmoid Function
     Watch Dino Dini improve his original normalized tunable sigmoid function.
     _DHE Modules_ uses the improved version.
 
-## <span id="function">The</span> Function
+# <span id="function">The</span> Function
 
 As I looked for a way
 to shape envelope stages,
@@ -57,7 +57,7 @@ from -0.95 (red) to 0.95 (violet):
 
 <img src="sigmoid.png" />
 
-### Normalized
+## Normalized
 
 The function is _normalized_ in two interesting ways:
 - Given an input in the range [-1,1],
@@ -82,7 +82,7 @@ create curved
 [envelope stages](#stages)
 and [waveshaper transfer functions](#waveshaping).
 
-### Tunable
+## Tunable
 
 The normalized tunable sigmoid function
 has a parameter,
@@ -124,7 +124,7 @@ so that turning the _CURVE_ knob clockwise
 gives an S curve
 instead of an inverted S curve.
 
-### Sigmoid
+## Sigmoid
 
 Originally I sought a function
 that could produce useful, symmetrical "logarithmic" curves
@@ -149,7 +149,7 @@ And just like that, the idea for
 [_Swave_](/modules/swave/)
 was born.
 
-## <span id="stages">Curved</span> Envelope Stages
+# <span id="stages">Curved</span> Envelope Stages
 
 [_Stage_](/modules/stage/)
 and
@@ -189,7 +189,7 @@ it applies the shaping function in three steps:
 1. Map the shaped signal back to [0,1]
     before scaling it to the desired output range
 
-## <span id="waveshaping">Waveshaping</span>
+# <span id="waveshaping">Waveshaping</span>
 
 [_Swave_](/modules/swave/)
 uses the normalized tunable sigmoid function
@@ -215,7 +215,7 @@ _Swave:_
     back to the range [-5V,5V]
     for output
 
-## <span id="other">Other</span> Uses
+# <span id="other">Other</span> Uses
 
 In addition to shaping signals and generating envelope stages,
 _DHE Modules_ use the sigmoid function

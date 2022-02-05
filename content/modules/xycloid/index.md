@@ -18,7 +18,7 @@ See:
 - **[The v0.6.1 manual](v0.6.1/):**
     More fun and less helpful than the current manual.
 
-## Controls
+# Controls
 - **SPEED:**
     The throb cycle frequency.
 
@@ -88,7 +88,7 @@ See:
     produced when the wobble and throb cycles
     peak.
 
-## Ports
+# Ports
 - **X OUT** and **Y OUT:**
     The output signals.
 
@@ -106,7 +106,7 @@ See:
     A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter.  Some CV signals have attenuverters.
 
-## Using Xycloid
+# Using Xycloid
 
 - Adjust the _SPEED_ knob to control the frequency of the throb cycle, and
   therefore the frequency of the overall pattern.
@@ -131,7 +131,7 @@ between parameters:
 - Modulate two parameters that have nothing to do with each other.
 - Modulate the same parameter on different modules.
 
-## Plotting Xycloid
+# Plotting Xycloid
 
 When plotted on a two-dimensional graph,
 Xycloid's _X_ and _Y_ signals

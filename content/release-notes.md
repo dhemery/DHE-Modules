@@ -2,6 +2,14 @@
 title: Release Notes
 ---
 
+# Version 2.0.3
+February 2022
+
+-   [_Sequencizer_](/modules/sequencizer/)
+    controls and panel elements
+    are now properly positioned.
+    (This time I really mean it.)
+
 # Version 2.0.2
 January 2022
 

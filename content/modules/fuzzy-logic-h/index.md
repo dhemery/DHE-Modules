@@ -19,7 +19,7 @@ if the input voltages
 are above or below the selected range.
 Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
 
-## Controls
+# Controls
 - **¬ button:**
   Negates the corresponding input
   by applying the _NOT_ unary operator
@@ -38,7 +38,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
     above or below the selected range
     **[can produce very large output voltages](#warnings).**
 
-## Ports
+# Ports
 - **A** and **B**:
     The inputs to the operators.
 
@@ -61,7 +61,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   Emits the negation of the operator it is grouped with.
   _NOT(x)_ is defined as _1-x_.
 
-## Usage Ideas
+# Usage Ideas
 
 - **Disconnected inputs.**
   Leave one input disconnected.
@@ -93,7 +93,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   For fuzzy logic based on Lofti Zadeh's more standard definitions of the same operators,
   try **[_Fuzzy Logic Z_](/modules/fuzzy-logic-z/).**  
 
-## Voltage and Truth
+# Voltage and Truth
 
 - **Scaling the Inputs.**
   Before applying the operators,
@@ -118,7 +118,7 @@ Please ***[READ THE WARNINGS CAREFULLY](#warnings)!***
   If you connect input signals outside the selected range,
   be sure to heed the warnings below.
 
-## Warnings
+# Warnings
 
 **_Fuzzy Logic H_ can produce _VERY_ large output voltages
 if the input voltages are above or below

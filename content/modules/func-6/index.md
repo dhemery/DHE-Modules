@@ -9,7 +9,7 @@ Each row of controls is a channel that applies a selected function to its input 
 
 Each channel's input is normaled to the output of the channel above it.
 
-## Controls
+# Controls
 Each channel includes the following controls.
 
 - **ADD / MULT:**
@@ -50,7 +50,7 @@ Each channel includes the following controls.
         - 0–10
         - ±10
 
-## Ports
+# Ports
 Each channel includes the following ports.
 
 - **IN:**

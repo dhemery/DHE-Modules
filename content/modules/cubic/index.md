@@ -28,7 +28,7 @@ can generate
 a **very large DC bias.**
 See the [usage guide](#using-cubic) for details.
 
-## Controls
+# Controls
 - **IN:**
     The gain to apply to the **IN** signal
     to produce the value of *x* for the equation.
@@ -65,7 +65,7 @@ See the [usage guide](#using-cubic) for details.
     before sending it to the **OUT** port.
     The range is 0 to 2.
 
-## Ports
+# Ports
 - **IN:**
     The input signal to transform.
 
@@ -76,7 +76,7 @@ See the [usage guide](#using-cubic) for details.
     A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter.
 
-## Using Cubic
+# Using Cubic
 
 - Cubic excels at transforming a simple modulation signal,
     such as a sawtooth or triangle wave,

@@ -152,9 +152,22 @@ h1, h2, h3, h4 {
     color: $dark;
 }
 
+
+section {
+    h1, h2 {
+        font-variant: small-caps;
+    }
+    h1, h2, h3, h4 {
+        margin-top: $leading*1rem;
+    }
+}
+
 h1 { font-size: $heading-1-size; }
 h2 { font-size: $heading-2-size; }
-h3 { font-size: $heading-3-size; }
+h3 {
+    font-size: $heading-3-size;
+    font-style: italic;
+}
 
 hr { margin: 0; }
 
@@ -169,7 +182,10 @@ ol, ul { list-style: none; }
 
 p, li, dt, dd { line-height: $leading; }
 
-p, ul, ol, blockquote { padding: 0; }
+p, ul, ol, blockquote {
+    padding: 0;
+    margin-top: 2*$inter-paragraph-space;
+}
 
 sup {
     font-size: smaller;

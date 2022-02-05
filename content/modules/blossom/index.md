@@ -11,7 +11,7 @@ as the radius of the circle varies.
 The resulting two-dimensional shape
 generates a pair of complex, evolving, pulsing LFO signals.
 
-## Controls
+# Controls
 - **SPEED:**
     The speed at which the point
     traces around the circle.
@@ -48,7 +48,7 @@ generates a pair of complex, evolving, pulsing LFO signals.
     of shifting where the accents
     occur on each rotation.
 
-## Ports
+# Ports
 - **X OUT** and **Y OUT:**
     The output signals.
 
@@ -66,7 +66,7 @@ generates a pair of complex, evolving, pulsing LFO signals.
     A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter.  Some CV signals have attenuverters.
 
-## Plotting Blossom
+# Plotting Blossom
 
 When plotted on a two-dimensional graph,
 Blossom's _X_ and _Y_ signals

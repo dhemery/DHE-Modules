@@ -5,7 +5,7 @@ title: Modulation
 Many modules' parameter knobs can be modulated by control voltage (CV) signals.
 CV input ports may be accompanied by [attenuverters](#attenuverters).
 
-## Calibration
+# Calibration
 
 In DHE-Modules, modulation by CV is calibrated to expect a CV signal in the
 range [-5V,5V].
@@ -25,7 +25,7 @@ For example:
 - With a knob fully clockwise, positive CV signals produce values higher than
   the knob's normal range.
 
-## Attenuverters
+# Attenuverters
 
 A CV input port may be accompanied by a small *attenuverter* (**- +**) knob.
 This knob can attenuate and invert the effect of the CV signal on the modulated

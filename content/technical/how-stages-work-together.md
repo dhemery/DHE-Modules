@@ -36,7 +36,7 @@ _Precedence_ and _Sequence._
     to its successor
     to start the next stage.
 
-## Coordinating Precedence
+# Coordinating Precedence
 
 Modules coordinate precedence
 through their _DEFER_ and _ACTIVE_ ports.
@@ -78,7 +78,7 @@ the highest precedence module
 assumes control
 of the entire chain's output.
 
-## Coordinating Sequence
+# Coordinating Sequence
 
 Modules coordinate sequence
 through their _TRIG_ and _EOC_ ports.

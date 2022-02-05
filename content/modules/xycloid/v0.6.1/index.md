@@ -9,7 +9,7 @@ Check the [usage guide](#using-xycloid).
 
 Or better yet, just **play with the knobs.**
 
-## Controls
+# Controls
 - **RATIO:**
     Determines the number of "lobes" or "cusps" or "nodes" in the shape.
 
@@ -42,7 +42,7 @@ Or better yet, just **play with the knobs.**
     can also affect the speed
     in counterintuitive ways.
 
-## Ports
+# Ports
 - **X OUT** and **Y OUT:**
     The output signals.
 
@@ -75,7 +75,7 @@ Or better yet, just **play with the knobs.**
         of the the _CV_ signal's effect
         on the modulated knob.
 
-## Using Xycloid
+# Using Xycloid
 
 1. Choose one or two Rack modules that you want to modulate.
 1. Choose two parameters that have CV modulation.
@@ -110,9 +110,9 @@ Then **play with the knobs.**
     modulate the _PWM_ input on two Fundamental VCO-1s.
     Or the _FM_ inputs.
 
-## Examples
+# Examples
 
-### The Default Settings
+## The Default Settings
 
 The default settings
 draw a shape
@@ -120,7 +120,7 @@ with eight lobes that touch in the center:
 
 <img class="xycloid" src="r12-d12-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
 
-### Adjusting the Ratio
+## Adjusting the Ratio
 
 With the switch _IN_ or _OUT_,
 the center position on the ratio knob draws eight lobes:
@@ -135,7 +135,7 @@ A higher ratio draws more lobes:
 
 <img class="xycloid" src="r05-d10-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
 
-### Adjusting the Depth
+## Adjusting the Depth
 
 With a lower depth,
 the lobes never stray far
@@ -163,7 +163,7 @@ each lobe loops around the center of the shape:
 
 <img class="xycloid" src="r12-d02-out.png" height="auto" max-width="100px" alt="Xycloid Default Settings" />
 
-### Adjusting the Curl Direction (the IN / OUT Switch)
+## Adjusting the Curl Direction (the IN / OUT Switch)
 
 
 With the switch _OUT_,
@@ -180,7 +180,7 @@ With the switch in the center,
 the _RATIO_ knob determines
 which way the lobes curl.
 
-## My Inspiration
+# My Inspiration
 
 Okay, so remember when you were a kid,
 and [you had a toy](https://en.wikipedia.org/wiki/Spirograph)
@@ -200,7 +200,7 @@ But, seriously, don't worry about that.
 
 Just **play with the knobs.**
 
-## The Name
+# The Name
 
 There is a kind of shape called a _cycloid._
 Technically,

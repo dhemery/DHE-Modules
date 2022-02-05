@@ -28,7 +28,7 @@ uninterruptible envelopes,
 looping envelopes,
 and other interesting variations.
 
-## <span id="ar">AR:</span> Attack-Release Envelopes
+# <span id="ar">AR:</span> Attack-Release Envelopes
 
 <img class="envelope" src="ar.png" alt="Attack-Release Envelope" />
 
@@ -41,7 +41,7 @@ and other interesting variations.
     adjust the attack stage's _LEVEL._
 - Set the release stage's _LEVEL_ to 0V.
 
-## <span id="ahr">AHR: <span> Attack-Hold-Release Envelopes
+# <span id="ahr">AHR: <span> Attack-Hold-Release Envelopes
 
 <img class="envelope" src="ahr.png" alt="Attack-Hold-Release Envelope" />
 
@@ -57,7 +57,7 @@ and other interesting variations.
     _This also sets the hold level._
 - Set the release _Stage's_ _LEVEL_ to 0V.
 
-## <span id="adhr">ADHR:<span> Attack-Decay-Hold-Release Envelopes
+# <span id="adhr">ADHR:<span> Attack-Decay-Hold-Release Envelopes
 
 <img class="envelope" src="adhr.png" alt="Attack-Decay-Hold-Release Envelope" />
 
@@ -65,7 +65,7 @@ To generate an Attack-Decay-Hold-Release (ADHR) envelope,
 start with an [Attack-Hold-Release envelope](#ahr)
 and insert another _Stage_ before the _Hostage:_
 
-## <span id="adsr">ADSR: <span> Attack-Decay-Sustain-Release Envelopes
+# <span id="adsr">ADSR: <span> Attack-Decay-Sustain-Release Envelopes
 
 <img class="envelope" src="adsr.png" alt="Attack-Decay-Sustain-Release Envelope" />
 
@@ -96,7 +96,7 @@ Note that the envelope uses the LFO's square wave
 both to _trigger the envelope_
 and to _sustain it._
 
-## <span id="multi-stage">More</span> Stages Than You Can Count…
+# <span id="multi-stage">More</span> Stages Than You Can Count…
 
 … unless you can count to eighteen.
 

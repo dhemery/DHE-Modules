@@ -16,7 +16,7 @@ title: Techniques and Variations
 - [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes).
 - [Generating Single-Stage Envelopes](/guides/generating-multi-stage-envelopes).
 
-## <span id="wiring">Wiring</span> a Multi-Stage Envelope
+# <span id="wiring">Wiring</span> a Multi-Stage Envelope
 
 The usual way to wire
 [_Stage_](/modules/stage/),
@@ -67,7 +67,7 @@ so that the usual wiring scheme —
 usually applies.
 See the examples below for details and exceptions.
 
-## <span id="levels">Setting</span> Levels
+# <span id="levels">Setting</span> Levels
 
 - Each module's _LEVEL_ knob
     determines the _ending_ level
@@ -86,7 +86,7 @@ See the examples below for details and exceptions.
     set the previous stage's
     ending level.
 
-## <span id="hold">Adding</span> a Hold Stage
+# <span id="hold">Adding</span> a Hold Stage
 
 The _Hostage_ module is designed specifically
 to create hold and sustain stages.
@@ -113,7 +113,7 @@ at the level where the previous stage ended.
 It offers a knob, a range switch, and _CV_ modulation
 to set the duration of the hold stage.
 
-## <span id="sustain">Adding</span> a Sustain Stage
+# <span id="sustain">Adding</span> a Sustain Stage
 
 The _Hostage_ module is designed specifically
 to create hold and sustain stages.
@@ -144,7 +144,7 @@ _Hostage_ sustains the voltage
 at the level where the previous stage ended
 as long as the gate remains up.
 
-## <span id="retriggerable">Making</span> Envelopes Retriggerable
+# <span id="retriggerable">Making</span> Envelopes Retriggerable
 
 Each multi-stage envelope shown in
 [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes)
@@ -180,7 +180,7 @@ while the release stage is still in progress,
 the trigger interrupts the release stage
 and starts a new envelope.
 
-## <span id="uninterruptible">Making</span> Envelopes Uninterruptible
+# <span id="uninterruptible">Making</span> Envelopes Uninterruptible
 
 If you want to prevent incoming triggers
 from interrupting in-progress envelopes:
@@ -208,7 +208,7 @@ tells _Upstage_ to suppress incoming triggers.
 When the envelope finishes,
 _Upstage_ resumes forwarding incoming triggers to the first stage.
 
-## <span id="loops">Looping</span> Envelopes
+# <span id="loops">Looping</span> Envelopes
 
 To generate a looping envelope,
 we need to
@@ -222,7 +222,7 @@ And we might want a way to stop or retrigger a looping envelope.
 [_Upstage_](#upstage-loops) and [_Booster Stage_](#booster-stage-loops)
 offer ways to control looping envelopes.
 
-### <span id="upstage-loops">Controlling</span> Loops With _Upstage_
+# <span id="upstage-loops">Controlling</span> Loops With _Upstage_
 
 - [Configure](#wiring) a non-looping envelope in the usual way.
 - Add an _Upstage_ before the first stage.
@@ -252,7 +252,7 @@ by pressing the _TRIG_ button
 (causing the loop to restart)
 and holding it until the final stage finishes.
 
-### <span id="booster-stage-loops">Controlling</span> Loops With _Booster Stage_
+# <span id="booster-stage-loops">Controlling</span> Loops With _Booster Stage_
 
 - [Configure](#wiring) a non-looping envelope in the usual way,
     **using a _Booster Stage_ as the first stage.**
@@ -283,7 +283,7 @@ If you want a gentler, more controlled stop,
 [use _Upstage_ and its _WAIT_ button](#upstage-loops)
 to control the loop.
 
-## Variations
+# Variations
 - For additional versatility,
     replace any _Stage_ module with a
     [_Booster Stage_](/modules/booster-stage/).

@@ -33,7 +33,7 @@ For details, see:
 - [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
 - [How Stages Work Together](/technical/how-stages-work-together)
 
-## Controls
+# Controls
 
 - **LEVEL:**
     The voltage sent to the _OUT_ output.
@@ -56,7 +56,7 @@ For details, see:
     if the _WAIT_ gate signal is high
     or the _WAIT_ button is pressed.
 
-### Ports
+## Ports
 
 - **WAIT:**
     A gate signal that, when high,

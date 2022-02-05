@@ -27,7 +27,7 @@ uninterruptible envelopes,
 looping envelopes,
 and other interesting variations.
 
-## <span id="ah">Attack-and-Hold</span> Envelopes
+# <span id="ah">Attack-and-Hold</span> Envelopes
 
 <img class="envelope" src="ah.png" alt="Attack and Hold Envelope" />
 
@@ -35,7 +35,7 @@ and other interesting variations.
 - Leave the *IN* input disconnected.
 - Set the _LEVEL_ knob to the desired _hold_ voltage.
 
-## <span id="dh">Decay-and-Hold</span> Envelopes
+# <span id="dh">Decay-and-Hold</span> Envelopes
 
 This is very useful for plucks:
 

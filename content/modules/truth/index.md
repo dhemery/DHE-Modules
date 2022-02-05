@@ -9,9 +9,9 @@ _Truth 3_ is shown, and described below.
 _Truth 2_ and _Truth 4_ offer similar functionality,
 with 2 and 4 inputs, respectively.
 
-## Controls
+# Controls
 
-### Inputs
+## Inputs
 - **A**, **B**, and **C/GATE:**
     The input signals for the truth table.
     A voltage above 0.5V (half a volt)
@@ -22,9 +22,9 @@ with 2 and 4 inputs, respectively.
     Beside each input is an override button
     that sets the input signal high while pressed.
 
-### The Truth Table
+## The Truth Table
 
-#### Columns
+### Columns
 
 -   The **A** and **B** columns
     represent the **A** and **B** inputs.
@@ -50,7 +50,7 @@ with 2 and 4 inputs, respectively.
     selects the result of the truth table
     for each possible state of the inputs.
 
-#### Rows
+### Rows
 
 -   Below the dark header row,
     the truth table has eight more rows,
@@ -70,7 +70,7 @@ with 2 and 4 inputs, respectively.
     -   _Q:_ Leave the output unchanged.
     -   _¬Q:_ Toggle the output.
 
-### Outputs
+## Outputs
 
 -   The **Q** output
     emits the result of the truth table
@@ -84,9 +84,9 @@ with 2 and 4 inputs, respectively.
     that momentarily sets the output to true
     and the other output to false.
 
-## Usage Notes
+# Usage Notes
 
-### Level-Triggered vs Edge-Triggered
+## Level-Triggered vs Edge-Triggered
 
 **Level-Sensitive.**
 The _HIGH_ and _LOW_ conditions
@@ -108,7 +108,7 @@ when the clock rises or falls.
 Note that _RISE_, _FALL_, and _EDGE_
 are _single sample_ events.
 
-### Caution: Selecting the ¬Q Result
+## Caution: Selecting the ¬Q Result
 
 Because the _¬Q_ result
 causes the table's output to toggle,

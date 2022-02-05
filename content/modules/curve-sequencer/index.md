@@ -21,12 +21,12 @@ See:
     for explanations of several non-intuitive aspects of these modules.
 - [J and S Curves](/technical/curves/)
 
-## Controls
+# Controls
 
 Each _Curve Sequencer_ has controls for the overall sequence
 and controls for each step in the sequence. 
 
-### Sequence Controls
+## Sequence Controls
 - **RUN:**
     Determines whether the sequencer is running.
 
@@ -75,7 +75,7 @@ and controls for each step in the sequence.
 - **OUT:**
     The output signal from the curve sequencer.
 
-### Step Controls
+## Step Controls
 
 - **ACTIVITY** lights
     indicate which step is active (if any),
@@ -182,7 +182,7 @@ and controls for each step in the sequence.
     When _ENABLED_ is off,
     the sequencer bypasses this step when advancing.
 
-## Factory Presets
+# Factory Presets
 
 The _Curve Sequencer 4_ module
 includes these factory presets:
@@ -200,7 +200,7 @@ includes these factory presets:
 - **Batman:**
     Calls for help.
 
-## Usage Notes
+# Usage Notes
 
 **To create a traditional sequencer step.**
 Select _LEVEL_ mode
@@ -277,7 +277,7 @@ _pauses_ the sequence.
 When _RUN_ turns on,
 the sequence resumes from the point where it was paused.
 
-## Details
+# Details
 
 Several aspects of the _Curve Sequencer_ modules,
 though purposefully designed,

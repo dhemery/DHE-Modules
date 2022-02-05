@@ -5,7 +5,7 @@ title: The Func Module
 
 Offsets or scales its input signal by a selectable amount.
 
-## Controls
+# Controls
 - **ADD / MULT:**
     Selects the function to apply to the input signal.
 
@@ -44,7 +44,7 @@ Offsets or scales its input signal by a selectable amount.
         - 0–10
         - ±10
 
-## Ports
+# Ports
 - **IN:**
     The input to the function.
 

@@ -39,10 +39,10 @@ in your VCV Rack patches.
         - [Timer-Controlled Sample and Hold Sequencer](#timer-controlled-sample-and-hold-sequencer)
 
 
-## How Sequencizer Works
+# How Sequencizer Works
 
 
-### Step Phases: Generate and Sustain
+## Step Phases: Generate and Sustain
 
 1. **Generate Phase.**
     Each step starts by generating a signal
@@ -62,7 +62,7 @@ in your VCV Rack patches.
     determines whether a step
     executes its sustain phase.
 
-### Step Anchors: Start and End Voltages
+## Step Anchors: Start and End Voltages
 
 A step _generates_
 by interpolating
@@ -114,7 +114,7 @@ This means that the voltages
 between which the step interpolates
 can both be moving targets.
 
-### Advancing from One Step to the Next
+## Advancing from One Step to the Next
 
 The _advancement_ controls
 determine when the sequence advances
@@ -164,9 +164,9 @@ and the sequence immediately advances to the next step.
 
 
 
-## Techniques
+# Techniques
 
-### Controlling Advancement
+## Controlling Advancement
 
 _Sequencizer_ offers great flexibility and control
 over how a sequence
@@ -252,7 +252,7 @@ advances from one step to the next.
 
 
 
-### Controlling Voltages
+## Controlling Voltages
 
 A step's anchors
 define the voltages between which
@@ -363,7 +363,7 @@ Experiment!
 
 
 
-### Controlling Sequences
+## Controlling Sequences
 
 **Pausing a Sequence.**
 To pause a sequence,
@@ -391,11 +391,11 @@ interrupts even an "uninterruptible" step.
 
 
 
-## Examples
+# Examples
 
-### Envelope Generator Steps
+## Envelope Generator Steps
 
-#### Attack Stage
+### Attack Stage
 
 <table>
     <tr>
@@ -444,7 +444,7 @@ interrupts even an "uninterruptible" step.
     </tr>
 </table>
 
-#### Hold Stage
+### Hold Stage
 
 <table>
     <tr>
@@ -491,7 +491,7 @@ interrupts even an "uninterruptible" step.
     </tr>
 </table>
 
-#### Decay Stage
+### Decay Stage
 
 <table>
     <tr>
@@ -537,7 +537,7 @@ interrupts even an "uninterruptible" step.
     </tr>
 </table>
 
-#### Sustain Stage
+### Sustain Stage
 
 <table>
     <tr>
@@ -580,7 +580,7 @@ interrupts even an "uninterruptible" step.
 </table>
 
 
-#### Release Stage
+### Release Stage
 
 <table>
     <tr>
@@ -629,9 +629,9 @@ interrupts even an "uninterruptible" step.
 
 
 
-### Step Sequencers
+## Step Sequencers
 
-#### Externally Clocked Step Sequencer
+### Externally Clocked Step Sequencer
 
 To create a traditional,
 **externally-clocked step sequencer**
@@ -688,7 +688,7 @@ the step is executing.
 This puts advancement
 entirely under the control of the _GATE_.
 
-#### Timer-Controlled Step Sequencer
+### Timer-Controlled Step Sequencer
 
 To create a **timer-controlled step sequencer**
 that holds each level for a specified duration,
@@ -737,9 +737,9 @@ of the step's **DUR** timer.
 
 
 
-### Sample and Hold Sequencers
+## Sample and Hold Sequencers
 
-#### Externally-Clocked Sample and Hold Sequencer
+### Externally-Clocked Sample and Hold Sequencer
 
 To create a multi-step, externally-clocked
 sample-and-hold sequencer
@@ -791,7 +791,7 @@ the step is executing.
 This puts advancement
 entirely under the control of the _GATE_.
 
-#### Timer-Controlled Sample and Hold Sequencer
+### Timer-Controlled Sample and Hold Sequencer
 
 To create a multi-step, timer-controlled sample-and-hold sequencer
 where each step holds for a different duration,
@@ -837,5 +837,3 @@ The **INT** and **SUST** settings
 cause the step to ignore the GATE,
 putting advancement entirely under the control
 of the step's **DUR** timer.
-
-

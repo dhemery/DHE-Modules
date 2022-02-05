@@ -22,7 +22,7 @@ See also:
 - [How Stages Work Together](/technical/how-stages-work-together)
 - [J and S Curves](/technical/curves/)
 
-## Controls
+# Controls
 
 - **LEVEL:**
     The voltage level at which each generated envelope stage ends.
@@ -40,7 +40,7 @@ See also:
     with the center position
     giving a duration of 1s.
 
-## Ports
+# Ports
 
 - **DEFER:**
     When the _DEFER_ gate signal is high,
@@ -82,7 +82,7 @@ See also:
     The generated envelope stage signal
     or (when deferring) the _IN_ signal.
 
-## Notes
+# Notes
 
 - While an envelope stage is in progress,
   all of the knobs are "live."
@@ -101,11 +101,11 @@ See also:
   it "tracks" the _LEVEL_ knob
   by sending the _LEVEL_ voltage to the _OUT_ port.
 
-## State Model
+# State Model
 
 ![Stage State Model](stage-state-model.png)
 
-### TrackingInput Mode
+## TrackingInput Mode
 _Stage_ starts in _TrackingInput_ mode.
 While _Stage_ is _TrackingInput_:
 - it is inactive
@@ -113,7 +113,7 @@ While _Stage_ is _TrackingInput_:
 - if _DEFER_ rises, _Stage_ enters _Deferring_ mode 
 - if _TRIG_ rises, _Stage_ enters _Generating_ mode
 
-### Deferring Mode
+## Deferring Mode
 
 Whatever mode _Stage_ is in,
 whenever its _DEFER_ gate rises,
@@ -127,7 +127,7 @@ While _Stage_ is _Deferring:
 When the _DEFER_ gate falls,
 _Stage_ resumes _TrackingInput_.
 
-### Generating Mode
+## Generating Mode
 
 If the _TRIG_ port rises
 while _Stage_ is not _Deferring_,
@@ -143,7 +143,7 @@ While _Stage_ is _Generating_:
 - if _TRIG_ rises, _Stage_ abandons the stage it is generating and begins a new one
 
 
-### TrackingLevel Mode
+## TrackingLevel Mode
 
 While _Stage_ is _TrackingLevel_:
 

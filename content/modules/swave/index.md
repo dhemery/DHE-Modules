@@ -15,7 +15,7 @@ See also:
     that _Swave_ applies
     to shape its input signals.
 
-## Controls
+# Controls
 -   **CURVE:**
     The curvature of the transfer function.
     The shape switch **(S / J)**
@@ -29,7 +29,7 @@ See also:
     _Swave_ clamps the input signal to the selected range
     before shaping it.
 
-## Ports
+# Ports
 
 -   **IN:**
     The input signal to be shaped

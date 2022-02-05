@@ -22,7 +22,7 @@ See also:
 - [Generating Multi-Stage Envelopes](/guides/generating-multi-stage-envelopes/)
 - [How Stages Work Together](/technical/how-stages-work-together)
 
-## Modes
+# Modes
 
 - In **SUSTAIN** mode,
     the _GATE_ signal acts as a sustain gate.
@@ -40,7 +40,7 @@ See also:
     at the sampled voltage
     for the specified duration.
 
-## Controls
+# Controls
 
 - **SUSTAIN / HOLD:**
     Selects _Hostage's_ operating mode.
@@ -65,7 +65,7 @@ See also:
     In _GATE_ mode,
     _Hostage_ ignores the _DURATION_ controls.
 
-## Ports
+# Ports
 
 - **DEFER:**
     When the _DEFER_ gate is up,
@@ -123,7 +123,7 @@ See also:
     A [control voltage](/technical/modulation/)
     signal to modulate the duration.
 
-## Notes
+# Notes
 
 - While a stage is in progress,
     the _DURATION_ knob, switch, and _CV_ input

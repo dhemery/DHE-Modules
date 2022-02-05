@@ -7,14 +7,14 @@ Computes eight common logic functions
 for up to 16 inputs.
 
 
-## Controls
+# Controls
 - **Negate Buttons:**
   Beside each input is a _negate_ button
   that negates the input
   before computing the logic functions.
 
 
-## Ports
+# Ports
 - **Input ports:**
     The 16 logic inputs.
     A voltage above 0.5V (half a volt)
@@ -49,7 +49,7 @@ for up to 16 inputs.
 - **XNOR:**
   _True_ if the number of _true_ inputs is other than one.
 
-## Notes
+# Notes
 
 - **Inputs:**
   _Gator_ considers any input above 0.5V (half a volt)
@@ -66,7 +66,7 @@ for up to 16 inputs.
   if the corresponding logic function is _true_
   and 0V if the function is _false_.
 
-## The Meaning of XOR
+# The Meaning of XOR
 
 Opinions differ about the definition of "exclusive or" (XOR)
 for more than two inputs:

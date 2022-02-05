@@ -23,7 +23,7 @@ Modulating a _LEVEL_ knob beyond its normal range can generate outputs far
 outside the knob's normal range.  This is especially true as the _CURVE_ knob
 approaches either extreme.
 
-## Controls
+# Controls
 - **LEVEL:**
     Selects a position
     along the transfer function
@@ -50,7 +50,7 @@ approaches either extreme.
     0 to 10V (UNI)
     or -5 to 5V (BI).
 
-## Ports
+# Ports
 - **OUT:**
     The output voltage,
     determined by applying the transfer function
@@ -60,6 +60,6 @@ approaches either extreme.
     A [control voltage](/technical/modulation/) signal
     to modulate the associated parameter. Each CV input has an attenuverter.
 
-## Using Tapers
+# Using Tapers
 
 TBD
