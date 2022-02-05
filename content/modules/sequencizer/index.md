@@ -179,7 +179,7 @@ Each anchor has three controls:
 <img class="controls" style="width: 35mm;" src="level-controls.png" alt="Global Level Controls" />
 
 - The global **LEVEL** knob
-    sets a global multiplier (from -1 to 1)
+    sets a global multiplier (0–1)
     applied to every anchor's _LEVEL_ source.
     This knob is modulated
     by the [control voltage](/technical/modulation/) at the _CV_ port.

@@ -41,7 +41,6 @@ in your VCV Rack patches.
 
 # How Sequencizer Works
 
-
 ## Step Phases: Generate and Sustain
 
 1. **Generate Phase.**

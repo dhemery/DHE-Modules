@@ -12,7 +12,12 @@ DHE Modules includes three _Curve Sequencer_ modules:
 
 The three modules operate identically, except for the number of steps.
 
-See:
+**Note:**
+The Curve Sequencer modules are deprecated.
+New patches should use [Sequencizer](/modules/sequencizer/) instead.
+See [How to Convert Curve Sequencer Presets to Sequencizer Presets](/modules/curve-sequencer/conversion-guide/).
+
+See also:
 - [Factory Presets](#factory-presets)
     for descriptions of the presets included with the modules.
 - [Usage Notes](#usage-notes)
