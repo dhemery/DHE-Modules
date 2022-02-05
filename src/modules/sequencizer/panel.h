@@ -170,10 +170,12 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
                      global_controls_center_x, out_y);
     OutPort::install(this, OutputId::Out, global_controls_right_x, out_y);
 
+    auto constexpr stepper_stroke_width = 0.25F;
     auto constexpr intra_section_glue = 0.5F;
     auto constexpr inter_section_glue = 4.F;
-    auto constexpr stepper_ascent = small_font_ascent / 2.F + padding;
-    auto constexpr stepper_height = stepper_ascent * 2.F;
+    auto constexpr stepper_height =
+        small_font_ascent + 2.F * padding + stepper_stroke_width;
+    auto constexpr stepper_ascent = stepper_height / 2.F;
 
     auto constexpr trigger_y = top + stepper_ascent;
     auto constexpr interrupt_y =
@@ -183,32 +185,30 @@ template <typename TSize> struct Panel : public PanelWidget<Panel<TSize>> {
 
     auto constexpr start_anchor_mode_y =
         sustain_y + stepper_height + inter_section_glue;
-    auto constexpr start_anchor_level_y =
-        start_anchor_mode_y + (stepper_height + small_knob_diameter) / 2.F +
-        intra_section_glue;
     auto constexpr start_anchor_source_y =
-        start_anchor_level_y + (stepper_height + small_knob_diameter) / 2.F +
+        start_anchor_mode_y + stepper_height + intra_section_glue;
+    auto constexpr start_anchor_level_y =
+        start_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
         intra_section_glue;
 
     auto constexpr end_anchor_mode_y =
-        start_anchor_source_y + stepper_height + inter_section_glue;
-    auto constexpr end_anchor_level_y =
-        end_anchor_mode_y + (stepper_height + small_knob_diameter) / 2.F +
-        intra_section_glue;
+        start_anchor_level_y + (small_knob_diameter + stepper_height) / 2.F +
+        inter_section_glue;
     auto constexpr end_anchor_source_y =
-        end_anchor_level_y + (stepper_height + small_knob_diameter) / 2.F +
+        end_anchor_mode_y + stepper_height + intra_section_glue;
+    auto constexpr end_anchor_level_y =
+        end_anchor_source_y + (stepper_height + small_knob_diameter) / 2.F +
         intra_section_glue;
 
-    auto constexpr duration_y = end_anchor_source_y +
-                                (stepper_height + small_knob_diameter) / 2.F +
-                                inter_section_glue;
-
-    auto constexpr shape_y = duration_y +
-                             (stepper_height + small_knob_diameter) / 2.F +
+    auto constexpr shape_y = end_anchor_level_y +
+                             (small_knob_diameter + stepper_height) / 2.F +
                              inter_section_glue;
     auto constexpr curvature_y = shape_y +
-                                 (stepper_height + small_knob_diameter) / 2.F +
+                                 (small_knob_diameter + stepper_height) / 2.F +
                                  intra_section_glue;
+
+    auto constexpr duration_y =
+        curvature_y + small_knob_diameter + inter_section_glue;
 
     auto constexpr enabled_y = bottom - button_radius;
 
