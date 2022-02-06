@@ -33,7 +33,7 @@
 <li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Multi-Stage Envelopes</a>.</li>
 <li><a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Single-Stage Envelopes</a>.</li>
 </ul>
-<h2 id=span-idwiringwiringspan-a-multi-stage-envelope><span id=wiring>Wiring</span> a Multi-Stage Envelope</h2>
+<h1 id=span-idwiringwiringspan-a-multi-stage-envelope><span id=wiring>Wiring</span> a Multi-Stage Envelope</h1>
 <p>The usual way to wire
 <a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>,
 <a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>,
@@ -78,7 +78,7 @@ so that the usual wiring scheme —
 &ldquo;connect each module&rsquo;s outputs to its successor&rsquo;s inputs&rdquo; —
 usually applies.
 See the examples below for details and exceptions.</p>
-<h2 id=span-idlevelssettingspan-levels><span id=levels>Setting</span> Levels</h2>
+<h1 id=span-idlevelssettingspan-levels><span id=levels>Setting</span> Levels</h1>
 <ul>
 <li>
 <p>Each module&rsquo;s <em>LEVEL</em> knob
@@ -102,7 +102,7 @@ set the previous stage&rsquo;s
 ending level.</p>
 </li>
 </ul>
-<h2 id=span-idholdaddingspan-a-hold-stage><span id=hold>Adding</span> a Hold Stage</h2>
+<h1 id=span-idholdaddingspan-a-hold-stage><span id=hold>Adding</span> a Hold Stage</h1>
 <p>The <em>Hostage</em> module is designed specifically
 to create hold and sustain stages.</p>
 <p>A <em>hold stage</em>
@@ -124,7 +124,7 @@ in the position where you want the the hold stage</li>
 at the level where the previous stage ended.
 It offers a knob, a range switch, and <em>CV</em> modulation
 to set the duration of the hold stage.</p>
-<h2 id=span-idsustainaddingspan-a-sustain-stage><span id=sustain>Adding</span> a Sustain Stage</h2>
+<h1 id=span-idsustainaddingspan-a-sustain-stage><span id=sustain>Adding</span> a Sustain Stage</h1>
 <p>The <em>Hostage</em> module is designed specifically
 to create hold and sustain stages.</p>
 <p>A <em>sustain stage</em>
@@ -149,7 +149,7 @@ that triggers the envelope.</strong></li>
 <p><em>Hostage</em> sustains the voltage
 at the level where the previous stage ended
 as long as the gate remains up.</p>
-<h2 id=span-idretriggerablemakingspan-envelopes-retriggerable><span id=retriggerable>Making</span> Envelopes Retriggerable</h2>
+<h1 id=span-idretriggerablemakingspan-envelopes-retriggerable><span id=retriggerable>Making</span> Envelopes Retriggerable</h1>
 <p>Each multi-stage envelope shown in
 <a href=https://dhemery.github.io/DHE-Modules/guides/generating-multi-stage-envelopes>Generating Multi-Stage Envelopes</a>
 is <em>retriggerable.</em>
@@ -179,7 +179,7 @@ The magenta trace shows the incoming triggers.</p>
 while the release stage is still in progress,
 the trigger interrupts the release stage
 and starts a new envelope.</p>
-<h2 id=span-iduninterruptiblemakingspan-envelopes-uninterruptible><span id=uninterruptible>Making</span> Envelopes Uninterruptible</h2>
+<h1 id=span-iduninterruptiblemakingspan-envelopes-uninterruptible><span id=uninterruptible>Making</span> Envelopes Uninterruptible</h1>
 <p>If you want to prevent incoming triggers
 from interrupting in-progress envelopes:</p>
 <ul>
@@ -202,7 +202,7 @@ the final stage&rsquo;s <em>ACTIVE</em> signal
 tells <em>Upstage</em> to suppress incoming triggers.
 When the envelope finishes,
 <em>Upstage</em> resumes forwarding incoming triggers to the first stage.</p>
-<h2 id=span-idloopsloopingspan-envelopes><span id=loops>Looping</span> Envelopes</h2>
+<h1 id=span-idloopsloopingspan-envelopes><span id=loops>Looping</span> Envelopes</h1>
 <p>To generate a looping envelope,
 we need to</p>
 <ul>
@@ -214,7 +214,7 @@ when it finishes</li>
 <p>And we might want a way to stop or retrigger a looping envelope.</p>
 <p><a href=#upstage-loops><em>Upstage</em></a> and <a href=#booster-stage-loops><em>Booster Stage</em></a>
 offer ways to control looping envelopes.</p>
-<h3 id=span-idupstage-loopscontrollingspan-loops-with-_upstage_><span id=upstage-loops>Controlling</span> Loops With <em>Upstage</em></h3>
+<h1 id=span-idupstage-loopscontrollingspan-loops-with-_upstage_><span id=upstage-loops>Controlling</span> Loops With <em>Upstage</em></h1>
 <ul>
 <li><a href=#wiring>Configure</a> a non-looping envelope in the usual way.</li>
 <li>Add an <em>Upstage</em> before the first stage.</li>
@@ -241,7 +241,7 @@ You an also stop the loop
 by pressing the <em>TRIG</em> button
 (causing the loop to restart)
 and holding it until the final stage finishes.</p>
-<h3 id=span-idbooster-stage-loopscontrollingspan-loops-with-_booster-stage_><span id=booster-stage-loops>Controlling</span> Loops With <em>Booster Stage</em></h3>
+<h1 id=span-idbooster-stage-loopscontrollingspan-loops-with-_booster-stage_><span id=booster-stage-loops>Controlling</span> Loops With <em>Booster Stage</em></h1>
 <ul>
 <li><a href=#wiring>Configure</a> a non-looping envelope in the usual way,
 <strong>using a <em>Booster Stage</em> as the first stage.</strong></li>
@@ -268,7 +268,7 @@ each button stops the envelope.</p>
 <p>If you want a gentler, more controlled stop,
 <a href=#upstage-loops>use <em>Upstage</em> and its <em>WAIT</em> button</a>
 to control the loop.</p>
-<h2 id=variations>Variations</h2>
+<h1 id=variations>Variations</h1>
 <ul>
 <li>For additional versatility,
 replace any <em>Stage</em> module with a

@@ -26,7 +26,11 @@
 <li><em>Curve Sequencer 16.</em></li>
 </ul>
 <p>The three modules operate identically, except for the number of steps.</p>
-<p>See:</p>
+<p><strong>Note:</strong>
+The Curve Sequencer modules are deprecated.
+New patches should use <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/>Sequencizer</a> instead.
+See <a href=https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/conversion-guide/>How to Convert Curve Sequencer Presets to Sequencizer Presets</a>.</p>
+<p>See also:</p>
 <ul>
 <li><a href=#factory-presets>Factory Presets</a>
 for descriptions of the presets included with the modules.</li>
@@ -36,10 +40,10 @@ for basic ideas about how to use these modules.</li>
 for explanations of several non-intuitive aspects of these modules.</li>
 <li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
 </ul>
-<h2 id=controls>Controls</h2>
+<h1 id=controls>Controls</h1>
 <p>Each <em>Curve Sequencer</em> has controls for the overall sequence
 and controls for each step in the sequence.</p>
-<h3 id=sequence-controls>Sequence Controls</h3>
+<h2 id=sequence-controls>Sequence Controls</h2>
 <ul>
 <li>
 <p><strong>RUN:</strong>
@@ -91,7 +95,7 @@ The input signal to the curve sequencer.</p>
 The output signal from the curve sequencer.</p>
 </li>
 </ul>
-<h3 id=step-controls>Step Controls</h3>
+<h2 id=step-controls>Step Controls</h2>
 <ul>
 <li>
 <p><strong>ACTIVITY</strong> lights
@@ -222,7 +226,7 @@ When <em>ENABLED</em> is off,
 the sequencer bypasses this step when advancing.</p>
 </li>
 </ul>
-<h2 id=factory-presets>Factory Presets</h2>
+<h1 id=factory-presets>Factory Presets</h1>
 <p>The <em>Curve Sequencer 4</em> module
 includes these factory presets:</p>
 <ul>
@@ -239,7 +243,7 @@ Generates an Attack Sustain Release envelope.</li>
 <li><strong>Batman:</strong>
 Calls for help.</li>
 </ul>
-<h2 id=usage-notes>Usage Notes</h2>
+<h1 id=usage-notes>Usage Notes</h1>
 <p><strong>To create a traditional sequencer step.</strong>
 Select <em>LEVEL</em> mode
 and set the step to <em>ADVANCE</em> on <em>RISE.</em>
@@ -308,7 +312,7 @@ while a sequence is in progress
 <em>pauses</em> the sequence.
 When <em>RUN</em> turns on,
 the sequence resumes from the point where it was paused.</p>
-<h2 id=details>Details</h2>
+<h1 id=details>Details</h1>
 <p>Several aspects of the <em>Curve Sequencer</em> modules,
 though purposefully designed,
 may be unexpected:</p>

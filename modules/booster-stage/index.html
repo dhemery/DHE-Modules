@@ -42,7 +42,7 @@ with any number of stages.</p>
 <li><a href=https://dhemery.github.io/DHE-Modules/technical/how-stages-work-together>How Stages Work Together</a></li>
 <li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
 </ul>
-<h2 id=controls>Controls</h2>
+<h1 id=controls>Controls</h1>
 <ul>
 <li>
 <p><strong>LEVEL:</strong>
@@ -89,7 +89,7 @@ each button injects 10V into the associated signal
 (unless the signal exceeds 10V).</p>
 </li>
 </ul>
-<h2 id=ports>Ports</h2>
+<h1 id=ports>Ports</h1>
 <ul>
 <li>
 <p><strong>DEFER:</strong>
@@ -140,7 +140,7 @@ A <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control vo
 signal to modulate the associated parameter.</p>
 </li>
 </ul>
-<h2 id=notes>Notes</h2>
+<h1 id=notes>Notes</h1>
 <ul>
 <li>
 <p>While an envelope stage is in progress,
@@ -163,9 +163,9 @@ it &ldquo;tracks&rdquo; the <em>LEVEL</em> knob
 by sending the <em>LEVEL</em> voltage to the <em>OUT</em> port.</p>
 </li>
 </ul>
-<h2 id=state-model>State Model</h2>
+<h1 id=state-model>State Model</h1>
 <p><img src=https://dhemery.github.io/DHE-Modules/modules/stage/stage-state-model.png alt="Stage State Model"></p>
-<h3 id=trackinginput-mode>TrackingInput Mode</h3>
+<h2 id=trackinginput-mode>TrackingInput Mode</h2>
 <p><em>Booster Stage</em> starts in <em>TrackingInput</em> mode.
 While <em>Booster Stage</em> is <em>TrackingInput</em>:</p>
 <ul>
@@ -174,7 +174,7 @@ While <em>Booster Stage</em> is <em>TrackingInput</em>:</p>
 <li>if <em>DEFER</em> rises, <em>Booster Stage</em> enters <em>Deferring</em> mode</li>
 <li>if <em>TRIG</em> rises, <em>Booster Stage</em> enters <em>Generating</em> mode</li>
 </ul>
-<h3 id=deferring-mode>Deferring Mode</h3>
+<h2 id=deferring-mode>Deferring Mode</h2>
 <p>Whatever mode <em>Booster Stage</em> is in,
 whenever its <em>DEFER</em> gate rises,
 it enters <em>Deferring</em> mode.
@@ -186,7 +186,7 @@ While <em>Booster Stage</em> is _Deferring:</p>
 </ul>
 <p>When the <em>DEFER</em> gate falls,
 <em>Booster Stage</em> resumes <em>TrackingInput</em>.</p>
-<h3 id=generating-mode>Generating Mode</h3>
+<h2 id=generating-mode>Generating Mode</h2>
 <p>If the <em>TRIG</em> port rises
 while <em>Booster Stage</em> is not <em>Deferring</em>,
 it begins <em>Generating</em> a stage.
@@ -200,7 +200,7 @@ and enters <em>TrackingLevel</em> mode</li>
 <li>if <em>DEFER</em> rises, <em>Booster Stage</em> enters <em>Deferring</em> mode</li>
 <li>if <em>TRIG</em> rises, <em>Booster Stage</em> abandons the stage it is generating and begins a new one</li>
 </ul>
-<h3 id=trackinglevel-mode>TrackingLevel Mode</h3>
+<h2 id=trackinglevel-mode>TrackingLevel Mode</h2>
 <p>While <em>Booster Stage</em> is <em>TrackingLevel</em>:</p>
 <ul>
 <li>it is inactive</li>

@@ -37,14 +37,14 @@ for ideas about how to use the <em>Sequencizer</em> modules.</li>
 for descriptions of the presets included with the modules.</li>
 <li><a href=https://dhemery.github.io/DHE-Modules/technical/curves/>J and S Curves</a></li>
 </ul>
-<h2 id=controls>Controls</h2>
+<h1 id=controls>Controls</h1>
 <ul>
 <li><a href=#sequence-controls>Sequence controls</a></li>
 <li><a href=#step-controls>Step controls</a></li>
 <li><a href=#inputs>Inputs</a></li>
 <li><a href=#outputs>Outputs</a></li>
 </ul>
-<h3 id=sequence-controls>Sequence Controls</h3>
+<h2 id=sequence-controls>Sequence Controls</h2>
 <img class=controls style=width:20mm src=sequence-controls.png alt="Sequence Controls">
 <ul>
 <li>
@@ -90,12 +90,12 @@ or becomes idle,
 depending on <em>RUN.</em></p>
 </li>
 </ul>
-<h3 id=step-controls>Step Controls</h3>
-<h4 id=advancement-controls>Advancement Controls</h4>
+<h2 id=step-controls>Step Controls</h2>
+<h3 id=advancement-controls>Advancement Controls</h3>
 <img class=controls style=width:25mm src=advancement-controls.png alt="Advancement Controls">
-The advancement controls
+<p>The advancement controls
 determine when the sequencer advances
-from this step to the next:
+from this step to the next:</p>
 <ul>
 <li>
 <p><strong>TRIG</strong>
@@ -168,15 +168,15 @@ it emits the voltage reported by its <em>END</em> anchor.</p>
 </ul>
 </li>
 </ul>
-<h4 id=anchor-controls>Anchor Controls</h4>
+<h3 id=anchor-controls>Anchor Controls</h3>
 <img class=controls style=width:25mm src=anchor-controls.png alt="Anchor Controls">
-The step generates a curve
+<p>The step generates a curve
 that interpolates between the voltages
-reported by the _START_ and _END_ anchors.
-Each anchor has three controls:
+reported by the <em>START</em> and <em>END</em> anchors.
+Each anchor has three controls:</p>
 <ul>
 <li>
-<p>The <strong>MODE</strong> button (above the knob)
+<p>The <strong>MODE</strong> button (the top button in each section)
 determines whether the anchor reports
 a sampled voltage or the current voltage.</p>
 <ul>
@@ -195,6 +195,16 @@ of its source.</p>
 </ul>
 </li>
 <li>
+<p>The <strong>SOURCE</strong> button (just above the knob)
+specifies where the anchor gets the voltage it reports.
+The possible sources are:</p>
+<ul>
+<li>The anchor&rsquo;s <em>LEVEL</em> knob.</li>
+<li>The <em>A</em>, <em>B</em>, or <em>C</em> input port.</li>
+<li>The <em>OUT</em> port.</li>
+</ul>
+</li>
+<li>
 <p>The anchor <strong>LEVEL</strong> knob
 sets the voltage
 of the anchor&rsquo;s <em>level</em> source.
@@ -204,22 +214,12 @@ This knob is used
 only when <em>LEVEL</em>
 is selected as the anchor&rsquo;s <em>SOURCE.</em></p>
 </li>
-<li>
-<p>The <strong>SOURCE</strong> button (below the knob)
-specifies where the anchor gets the voltage it reports.
-The possible sources are:</p>
-<ul>
-<li>The anchor&rsquo;s <em>LEVEL</em> knob.</li>
-<li>The <em>A</em>, <em>B</em>, or <em>C</em> input port.</li>
-<li>The <em>OUT</em> port.</li>
-</ul>
-</li>
 </ul>
 <img class=controls style=width:35mm src=level-controls.png alt="Global Level Controls">
 <ul>
 <li>
 <p>The global <strong>LEVEL</strong> knob
-sets a global attenuation factor (0–1)
+sets a global multiplier (0–1)
 applied to every anchor&rsquo;s <em>LEVEL</em> source.
 This knob is modulated
 by the <a href=https://dhemery.github.io/DHE-Modules/technical/modulation/>control voltage</a> at the <em>CV</em> port.</p>
@@ -230,15 +230,9 @@ selects the voltage range
 for every anchor <em>LEVEL</em> source.</p>
 </li>
 </ul>
-<h4 id=curve-controls>Curve Controls</h4>
+<h3 id=curve-controls>Curve Controls</h3>
 <img class=controls style=width:25mm src=curve-controls.png alt="Curve Controls">
 <ul>
-<li>
-<p>The step <strong>DUR</strong> knob
-sets the duration of the step&rsquo;s curve.
-The global duration multiplier knob and range switch (below)
-affect the value of this knob.</p>
-</li>
 <li>
 <p><strong>SHAPE</strong>
 selects the shape of the curve
@@ -247,6 +241,12 @@ selects the shape of the curve
 <li>
 <p><strong>CURVE</strong>
 sets the curvature of the curve.</p>
+</li>
+<li>
+<p>The step <strong>DUR</strong> knob
+sets the duration of the step&rsquo;s curve.
+The global duration multiplier knob and range switch (below)
+affect the value of this knob.</p>
 </li>
 </ul>
 <img class=controls style=width:35mm src=duration-controls.png alt="Global Duration Controls">
@@ -275,7 +275,7 @@ For each range:</p>
 </ul>
 </li>
 </ul>
-<h4 id=execution-controls>Execution Controls</h4>
+<h3 id=execution-controls>Execution Controls</h3>
 <img class=controls style=width:36mm src=progress-lights.png alt="Progress Lights">
 <ul>
 <li>
@@ -303,13 +303,13 @@ Three input signals
 that each <em>START</em> and <em>END</em> anchor
 can sample or track.</li>
 </ul>
-<h3 id=outputs>Outputs</h3>
+<h2 id=outputs>Outputs</h2>
 <img class=controls style=width:35mm src=step-state-outputs.png alt="Step State Outputs">
 <ul>
 <li>
 <p><strong>STEP #</strong>
 identifies the current step,
-represented as \(\frac{10s}{N}\) volts,
+represented as <em>10s/N</em> volts,
 where</p>
 <ul>
 <li><em>s</em> is the number of the current step</li>
@@ -351,7 +351,7 @@ when the sequence starts or loops.</p>
 emits the voltage generated by the current step.</p>
 </li>
 </ul>
-<h2 id=factory-presets>Factory Presets</h2>
+<h1 id=factory-presets>Factory Presets</h1>
 <p><em>Sequencizer 4</em>
 includes a suite of
 envelope generator presets:</p>

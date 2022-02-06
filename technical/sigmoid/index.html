@@ -32,7 +32,7 @@ a fun interactive graphing website.</li>
 Watch Dino Dini improve his original normalized tunable sigmoid function.
 <em>DHE Modules</em> uses the improved version.</li>
 </ul>
-<h2 id=span-idfunctionthespan-function><span id=function>The</span> Function</h2>
+<h1 id=span-idfunctionthespan-function><span id=function>The</span> Function</h1>
 <p>As I looked for a way
 to shape envelope stages,
 I stumbled across Dino Dini&rsquo;s beautiful
@@ -69,7 +69,7 @@ for inputs from -1 to 1,
 with each line representing a different curvature,
 from -0.95 (red) to 0.95 (violet):</p>
 <img src=sigmoid.png>
-<h3 id=normalized>Normalized</h3>
+<h2 id=normalized>Normalized</h2>
 <p>The function is <em>normalized</em> in two interesting ways:</p>
 <ul>
 <li>Given an input in the range [-1,1],
@@ -93,7 +93,7 @@ to shape the signal.</p>
 create curved
 <a href=#stages>envelope stages</a>
 and <a href=#waveshaping>waveshaper transfer functions</a>.</p>
-<h3 id=tunable>Tunable</h3>
+<h2 id=tunable>Tunable</h2>
 <p>The normalized tunable sigmoid function
 has a parameter,
 <em>k,</em>
@@ -129,7 +129,7 @@ negate the tuning parameter <em>k</em>
 so that turning the <em>CURVE</em> knob clockwise
 gives an S curve
 instead of an inverted S curve.</p>
-<h3 id=sigmoid>Sigmoid</h3>
+<h2 id=sigmoid>Sigmoid</h2>
 <p>Originally I sought a function
 that could produce useful, symmetrical &ldquo;logarithmic&rdquo; curves
 for envelope stages.
@@ -150,7 +150,7 @@ Might this function work well as a
 And just like that, the idea for
 <a href=https://dhemery.github.io/DHE-Modules/modules/swave/><em>Swave</em></a>
 was born.</p>
-<h2 id=span-idstagescurvedspan-envelope-stages><span id=stages>Curved</span> Envelope Stages</h2>
+<h1 id=span-idstagescurvedspan-envelope-stages><span id=stages>Curved</span> Envelope Stages</h1>
 <p><a href=https://dhemery.github.io/DHE-Modules/modules/stage/><em>Stage</em></a>
 and
 <a href=https://dhemery.github.io/DHE-Modules/modules/booster-stage/><em>Booster Stage</em></a>
@@ -186,7 +186,7 @@ it applies the shaping function in three steps:</p>
 <li>Map the shaped signal back to [0,1]
 before scaling it to the desired output range</li>
 </ol>
-<h2 id=span-idwaveshapingwaveshapingspan><span id=waveshaping>Waveshaping</span></h2>
+<h1 id=span-idwaveshapingwaveshapingspan><span id=waveshaping>Waveshaping</span></h1>
 <p><a href=https://dhemery.github.io/DHE-Modules/modules/swave/><em>Swave</em></a>
 uses the normalized tunable sigmoid function
 to shape its input signal.</p>
@@ -209,7 +209,7 @@ to shape the signal</li>
 back to the range [-5V,5V]
 for output</li>
 </ol>
-<h2 id=span-idotherotherspan-uses><span id=other>Other</span> Uses</h2>
+<h1 id=span-idotherotherspan-uses><span id=other>Other</span> Uses</h1>
 <p>In addition to shaping signals and generating envelope stages,
 <em>DHE Modules</em> use the sigmoid function
 to give some knobs a <em>taper,</em>
