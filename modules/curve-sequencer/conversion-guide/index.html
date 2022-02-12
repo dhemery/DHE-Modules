@@ -1,0 +1,104 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta viewport="width=device-width">
+<meta viewport="initial-scale=1">
+<meta viewport="user-scalable=yes">
+<title>How to Convert Curve Sequencer Presets to Sequencizer Presets</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon>
+<link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css>
+</head>
+<body>
+<header class="banner centered title">
+<h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1>
+<h2>VCV Rack modules from Dale Emery</h2>
+</header>
+<main>
+<header class=boxed>
+<h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/curve-sequencer/conversion-guide/>How to Convert Curve Sequencer Presets to Sequencizer Presets</a></h1>
+</header>
+<section><p>The Curve Sequencer modules are deprecated.
+This guide explains how to convert a Curve Sequencer preset
+to use a <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a> instead.</p>
+<p>The key differences between Curve Sequencer and Sequencizer:</p>
+<ul>
+<li>Curve Sequencer uses <a href=#converting-generate-modes>&ldquo;generate modes&rdquo;</a> to specify the starting and ending voltages for each step. Sequencizer uses two flexible voltage sources called &ldquo;anchors,&rdquo; one defining the step&rsquo;s starting voltage and the other defining the ending voltage.</li>
+<li>Curve sequencer uses <a href=#converting-advance-modes>&ldquo;advance modes&rdquo;</a> to define the conditions under which the sequence exits the current step and advances to the next. Sequencizer uses a flexible combination of trigger, interrupt, and sustain controls to determine when the sequence advances.</li>
+</ul>
+<p>See:</p>
+<ul>
+<li><a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/>The Sequencizer Modules</a> for detailed descriptions of Sequencizer&rsquo;s controls.</li>
+<li><a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/user-guide>Sequencizer User Guide</a> for ideas about how to use the Sequencizer modules.</li>
+</ul>
+<h1 id=converting-generate-modes>Converting Generate Modes</h1>
+<p>In Curve Sequencer, the generate mode determines what kind of curve the step produces. In Sequencizer, the curve is determined by the START and END anchors, each of which has a source (LEVEL, A, B, C, or OUT) and a mode (SMPL or TRACK).</p>
+<h2 id=generate-mode-curve>Generate Mode: CURVE</h2>
+<p>In Curve Sequencer, curve mode generates a curve starting from whatever voltage the sequencer was emitting when the step started, and prograssing to the voltage set by the <em>LEVEL</em> knob.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=curve-mode.png alt="Curve Mode"></p>
+<ul>
+<li>Set the <strong>START</strong> anchor to SMPL OUT. When the step starts, it samples the voltage at the OUT port, and progresses from the sampled voltage.</li>
+<li>Set the <strong>END</strong> anchor to TRACK LEVEL, and set the end LEVEL knob to the desired voltage. The step progresses to the voltage set by the LEVEL knob.</li>
+</ul>
+<h2 id=generate-mode-hold>Generate Mode: HOLD</h2>
+<p>In Curve Sequencer, hold mode emits whatever voltage the sequencer was emitting when the step started.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=hold-mode.png alt="Hold Mode"></p>
+<ul>
+<li>Set the <strong>START</strong> and <strong>END</strong> anchors to SMPL OUT. When the step starts, it samples the voltage at the OUT port, and emits the sampled voltage throughout.</li>
+<li>Turn <strong>INT</strong> Off. The step ignores the GATE input, and continues for the step&rsquo;s full duration.</li>
+<li>Turn <strong>SUST</strong> Off. When the current step&rsquo;s duration elapses, the sequence automatically advances to the next step.</li>
+</ul>
+<h2 id=generate-mode-sust>Generate Mode: SUST</h2>
+<p>In Curve Sequencer, sust mode emits whatever voltage the sequencer was emitting when the step started.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=sust-mode.png alt="Sustain Mode"></p>
+<ul>
+<li>Set <strong>TRIG</strong> to the desired gate condition. When the GATE input matches the condition, the step generates an internal trigger. For a traditional sustain mode, set this to LOW. But you can choose to advance on another GATE condition.</li>
+<li>Turn <strong>INT</strong> On. When the step generates an internal trigger, Sequencizer interrupts the step and advances to the next.</li>
+<li>Turn <strong>SUST</strong> On. When the current step&rsquo;s duration elapses, the step continues to emit the sampled voltage until interrupted.</li>
+<li>Set the <strong>START</strong> and <strong>END</strong> anchors to SMPL OUT. When the step starts, it samples the voltage at the OUT port, and emits the sampled voltage throughout.</li>
+</ul>
+<h2 id=generate-mode-input>Generate Mode: INPUT</h2>
+<p>In Curve Sequencer, input mode emits the voltage at the IN port.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=input-mode.png alt="Input Mode"></p>
+<ul>
+<li>
+<p>Set the <strong>START</strong> and <strong>END</strong> anchors to TRACK A. The step emits the voltage at the A input port.</p>
+<p>You can also use the B or C input ports. Just set both the START and END anchors to TRACK the same input.</p>
+</li>
+</ul>
+<h2 id=generate-mode-chase>Generate Mode: CHASE</h2>
+<p>In Curve Sequencer, chase mode &ldquo;chases&rdquo; the input by progressing from the sequence&rsquo;s current voltage to the voltage at the IN port.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=chase-mode.png alt="Chase Mode"></p>
+<ul>
+<li>Set the <strong>START</strong> anchor to SMPL OUT. When the step starts, it samples the voltage at the OUT port, and progresses from the sampled voltage.</li>
+<li>Set the <strong>END</strong> anchor to TRACK A. The step progresses toward the voltage at the A input port. You can also use the B or C input ports.</li>
+</ul>
+<h1 id=converting-advance-modes>Converting Advance Modes</h1>
+<p>In Curve Sequencer, each step&rsquo;s advance mode determines when the sequence advances from the current step to the next. In Sequencizer, advancement is controlled by the TRIG, INT, and SUST controls.</p>
+<h2 id=advance-mode-time>Advance Mode: TIME</h2>
+<p>In Curve Sequencer, time mode causes the step to proceed for its full duration, regardless of what happens at the <em>GATE</em> input. The sequence then automatically advances to the next step.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=time-mode.png alt="Time Mode"></p>
+<ul>
+<li>Turn <strong>INT</strong> Off. The step ignores the <em>GATE</em> input, and continues for the step&rsquo;s full duration.</li>
+<li>Turn <strong>SUST</strong> Off. When the step&rsquo;s duration elapses, the sequence automatically advances to the next step.</li>
+</ul>
+<h2 id=advance-mode-rise-fall-edge-high-and-low>Advance Mode: RISE, FALL, EDGE, HIGH, and LOW</h2>
+<p>In Curve Sequencer, when the <em>GATE</em> condition matches the selected advance mode, the current step is interrupted, and the sequence advances to the next step.</p>
+<p>To achieve the same effect in <a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer>Sequencizer</a>:
+<img class=controls style=width:20mm src=interrupt-mode.png alt="Interrupt Mode"></p>
+<ul>
+<li>Set <strong>TRIG</strong> to the desired condition. When the <em>GATE</em> input matches the condition, the step generates an internal trigger.</li>
+<li>Turn <strong>INT</strong> On. When the current step generates an internal trigger, Sequencizer interrupts the step and advances to the next.</li>
+</ul>
+</section>
+</main>
+<footer class="centered chrome">
+<p role=copyright>© 2017–2022 Dale H. Emery</p>
+</footer>
+</body>
+</html>
