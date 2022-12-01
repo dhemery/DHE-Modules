@@ -33,7 +33,7 @@ $(DHEUNIT_INCLUDE_DIR):
 
 RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 TEST_INCLUDES =  -Itest -I$(DHEUNIT_SRC)
-TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES) 
+TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES)
 
 TEST_SOURCES = $(shell find test -name "*.cpp")
 
@@ -65,7 +65,7 @@ vtest: $(TEST_RUNNER)
 #
 ########################################################################
 
-PLUGIN_ZIP_NAME := $(SLUG)-$(VERSION)-mac.vcvplugin
+PLUGIN_ZIP_NAME := $(SLUG)-$(VERSION)-$(ARCH_NAME).vcvplugin
 DIST_PLUGIN_ZIP := dist/$(PLUGIN_ZIP_NAME)
 
 STAGING_DIRNAME := .stage
