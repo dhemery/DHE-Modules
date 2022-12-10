@@ -127,7 +127,9 @@ private:
 static inline auto set_first(int s, StepEvent e) -> Change {
   return [s, e](Module &module) {
     module.step_selector_.first_ = s;
-    module.step_controller_.step_events_[s] = e;
+    if (s != no_step) {
+      module.step_controller_.step_events_[s] = e;
+    }
   };
 }
 
