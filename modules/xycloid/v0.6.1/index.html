@@ -1,0 +1,82 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta viewport='width=device-width'><meta viewport='initial-scale=1'><meta viewport='user-scalable=yes'><title>Obsolete v0.6.1 Xycloid Module</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon><link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css></head><body><header class='banner centered title'><h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1><h2>VCV Rack modules from Dale Emery</h2></header><main><header class=boxed><h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/xycloid/v0.6.1/>Obsolete v0.6.1 Xycloid Module</a></h1></header><section><img class=panel src=panel.svg alt="The Xycloid Panel"><p>Generates a <a href=#examples>cyclically related pair</a> of compound LFO signals.</p><p>Check the <a href=#using-xycloid>usage guide</a>.</p><p>Or better yet, just <strong>play with the knobs.</strong></p><h1 id=controls>Controls</h1><ul><li><p><strong>RATIO:</strong>
+Determines the number of &ldquo;lobes&rdquo; or &ldquo;cusps&rdquo; or &ldquo;nodes&rdquo; in the shape.</p></li><li><p><strong>DEPTH:</strong>
+How far the shape extends from its outer edge.</p><p>Note that with the knob at either extreme,
+the shape is a circle.</p></li><li><p><strong>IN / OUT:</strong>
+This &ldquo;curl direction&rdquo; switch
+determines whether the lobes curl
+toward the inside or the outside of the shape.</p><p>It also determines the range of the <em>RATIO</em> knob.
+With the switch set to <em>IN</em> or <em>OUT</em>,
+the <em>RATIO</em> knob ranges from 0 to 16 lobes.
+With the switch in the center,
+the <em>RATIO</em> knob ranges from 16 inward lobes
+(fully counterclockwise)
+to 16 outward lobes
+(fully clockwise).</p></li><li><p><strong>SPEED:</strong>
+The speed at which the shape is drawn.
+Turn the knob counterclockwise to reverse the shape&rsquo;s direction.</p><p>Note that the <strong>RATIO</strong> knob
+(and to some extent the <strong>DEPTH</strong> knob)
+can also affect the speed
+in counterintuitive ways.</p></li></ul><h1 id=ports>Ports</h1><ul><li><p><strong>X OUT</strong> and <strong>Y OUT:</strong>
+The output signals.</p><p>The polarity switch <strong>(UNI / BI)</strong>
+selects the nominal range of the signal:
+Either 0 to 10V (UNI)
+or -5 to 5V (BI).</p><p>The <strong>GAIN</strong> knob applies gain (from 0 to 2)
+to the signal.</p><p>The range is selected before gain is applied.</p></li><li><p><strong>CV:</strong>
+Control voltage signal that modulates the associated knob.
+The modulation is calibrated so that:</p><ul><li>A 0V <em>CV</em> signal yields the value of the knob.</li><li>A 5V <em>CV</em> signal yields the value
+as if the knob were rotated 50%
+clockwise
+of its actual position.</li><li>A -5V <em>CV</em> signal yields the value
+as if the knob were rotated 50%
+counterclockwise
+of its actual position.</li></ul><p>Some of the <em>CV</em> ports
+are accompanied by a small <em>attenuverter</em> (<strong>- +</strong>) knob.
+This knob adjusts the strength and direction
+of the the <em>CV</em> signal&rsquo;s effect
+on the modulated knob.</p></li></ul><h1 id=using-xycloid>Using Xycloid</h1><ol><li>Choose one or two Rack modules that you want to modulate.</li><li>Choose two parameters that have CV modulation.</li><li>Connect Xycloid&rsquo;s <em>X</em> output to one parameter&rsquo;s CV input
+and the <em>Y</em> output to the other&rsquo;s.</li><li>(Optional)
+To view the shape that Xycloid produces,
+connect its <em>X</em> and <em>Y</em> outputs to a Scope&rsquo;s <em>X</em> and <em>Y</em> inputs.
+Set the scope to <em>XxY</em> mode.
+(<em>X/Y</em> mode can also be interesting.)</li><li><strong>Play with the knobs.</strong></li><li>For extra chaos,
+modulate Xycloid&rsquo;s controls.</li><li>For extra, extra chaos,
+use Xycloid&rsquo;s outputs
+to modulate its own controls.</li></ol><p><strong>The Audible Instruments Macro Oscillator</strong>
+is a fantastic choice for exploring what Xycloid can do.
+Attach Xycloid&rsquo;s <em>X</em> and <em>Y</em> outputs
+to the Macro Oscillator&rsquo;s <em>TIMBRE</em> and <em>COLOR</em> inputs.
+Modulating <em>V/OCT</em> and <em>FM</em> is also fun.</p><p>Then <strong>play with the knobs.</strong></p><p><strong>More stuff to try:</strong></p><ul><li>Modulate two closely related parameters.</li><li>Modulate two parameters that have nothing to do with each other.</li><li>Modulate the same parameter on different modules.
+For example,
+modulate the <em>PWM</em> input on two Fundamental VCO-1s.
+Or the <em>FM</em> inputs.</li></ul><h1 id=examples>Examples</h1><h2 id=the-default-settings>The Default Settings</h2><p>The default settings
+draw a shape
+with eight lobes that touch in the center:</p><img class=xycloid src=r12-d12-out.png height=auto max-width=100px alt="Xycloid Default Settings"><h2 id=adjusting-the-ratio>Adjusting the Ratio</h2><p>With the switch <em>IN</em> or <em>OUT</em>,
+the center position on the ratio knob draws eight lobes:</p><img class=xycloid src=r12-d10-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>A lower ratio draws fewer lobes:</p><img class=xycloid src=r10-d10-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>A higher ratio draws more lobes:</p><img class=xycloid src=r05-d10-out.png height=auto max-width=100px alt="Xycloid Default Settings"><h2 id=adjusting-the-depth>Adjusting the Depth</h2><p>With a lower depth,
+the lobes never stray far
+from the outer edge of the shape:</p><img class=xycloid src=r12-d08-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>As depth increases,
+the lobes dip closer to the center of the shape:</p><img class=xycloid src=r12-d10-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>As the depth approaches the center position,
+the lobes approach the center of the shape:</p><img class=xycloid src=r12-d11-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>With the depth in the center position,
+each lobe touches the center of the shape:</p><img class=xycloid src=r12-d12-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>As depth increases,
+each lobe loops around the center of the shape:</p><img class=xycloid src=r12-d02-out.png height=auto max-width=100px alt="Xycloid Default Settings"><h2 id=adjusting-the-curl-direction-the-in--out-switch>Adjusting the Curl Direction (the IN / OUT Switch)</h2><p>With the switch <em>OUT</em>,
+the lobes curl outward:</p><img class=xycloid src=r12-d10-out.png height=auto max-width=100px alt="Xycloid Default Settings"><p>With the switch <em>IN</em>,
+the lobes curl inward:</p><img class=xycloid src=r12-d10-in.png height=auto max-width=100px alt="Xycloid Default Settings"><p>With the switch in the center,
+the <em>RATIO</em> knob determines
+which way the lobes curl.</p><h1 id=my-inspiration>My Inspiration</h1><p>Okay, so remember when you were a kid,
+and <a href=https://en.wikipedia.org/wiki/Spirograph>you had a toy</a>
+where you stuck a pen in a hole in a little plastic gear
+and you rolled the gear around inside a plastic ring
+to draw fun shapes?</p><p>That&rsquo;s what <em>Xycloid</em> does.</p><p>If you want to know the math,
+look up
+<a href=https://en.wikipedia.org/wiki/Epitrochoid>epitrochoid</a>
+and
+<a href=https://en.wikipedia.org/wiki/Hypotrochoid>hypotrochoid</a>.</p><p>But, seriously, don&rsquo;t worry about that.</p><p>Just <strong>play with the knobs.</strong></p><h1 id=the-name>The Name</h1><p>There is a kind of shape called a <em>cycloid.</em>
+Technically,
+<em>Xycloid</em> doesn&rsquo;t draw those.
+Well,
+technically,
+it does.
+Sort of.</p><p>But more preciesely,
+<em>Xycloid</em> draws <a href=https://en.wikipedia.org/wiki/Centered_trochoid>centered trochoids</a>.</p><p>So if the module draws centered trochoids,
+why, oh, why
+did I call <em>Xycloid?</em></p><p>Because would you load a module called <em>Centered Trochoid?</em></p><p>No.</p><p>No, you would not.</p><p>But don&rsquo;t worry about that.</p><p>Just <strong>play with the knobs.</strong></p></section></main><footer class='centered chrome'><p role=copyright>© 2017–2022 Dale H. Emery</p></footer></body></html>

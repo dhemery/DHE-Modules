@@ -1,0 +1,215 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta viewport='width=device-width'><meta viewport='initial-scale=1'><meta viewport='user-scalable=yes'><title>The Sequencizer User Guide</title>
+<link href=https://dhemery.github.io/DHE-Modules/favicon.ico rel=icon><link rel=stylesheet href=https://dhemery.github.io/DHE-Modules/css/screen.css></head><body><header class='banner centered title'><h1><a href=https://dhemery.github.io/DHE-Modules/>DHE Modules</a></h1><h2>VCV Rack modules from Dale Emery</h2></header><main><header class=boxed><h1 class=title><a href=https://dhemery.github.io/DHE-Modules/modules/sequencizer/user-guide/>The Sequencizer User Guide</a></h1></header><section><p><em>Sequencizer</em> may seem complex and daunting,
+but it operates on a small number of powerful, flexible ideas:
+<a href=#how-sequencizer-works>Phases, anchors, and advancement</a>.</p><p>The power of <em>Sequencizer</em>
+comes from the great flexibility it offers.
+You can combine these simple ideas
+to generate an enormous variety
+of precisely defined control signals
+to modulate the devices
+in your VCV Rack patches.</p><ul><li><p><a href=#how-sequencizer-works>How Sequencizer Works</a></p><ul><li><a href=#step-phases-generate-and-sustain>Step Phases: Generate and Sustain</a></li><li><a href=#step-anchors-start-and-end-voltages>Step Anchors: Start and End Voltages</a></li><li><a href=#advancing-from-one-step-to-the-next>Advancing from One Step to the Next</a></li></ul></li><li><p><a href=#techniques>Techniques</a></p><ul><li><a href=#controlling-advancement>Controlling Advancement</a></li><li><a href=#controlling-voltages>Controlling Voltages</a></li><li><a href=#controlling-sequences>Controlling Sequences</a></li></ul></li><li><p><a href=#examples>Examples</a></p><ul><li><a href=#envelope-generator-steps>Envelope Generator Steps</a><ul><li><a href=#attack-stage>Attack Stage</a></li><li><a href=#hold-stage>Hold Stage</a></li><li><a href=#decay-stage>Decay Stage</a></li><li><a href=#sustain-stage>Sustain Stage</a></li><li><a href=#release-stage>Release Stage</a></li></ul></li><li><a href=#step-sequencers>Step Sequencers</a><ul><li><a href=#externally-clocked-step-sequencer>Externally-Clocked Step Sequencer</a></li><li><a href=#timer-controlled-step-sequencer>Timer-Controlled Step Sequencer</a></li></ul></li><li><a href=#sample-and-hold-sequencers>Sample and Hold Sequencers</a><ul><li><a href=#externally-clocked-sample-and-hold-sequencer>Externally-Clocked Sample and Hold Sequencer</a></li><li><a href=#timer-controlled-sample-and-hold-sequencer>Timer-Controlled Sample and Hold Sequencer</a></li></ul></li></ul></li></ul><h1 id=how-sequencizer-works>How Sequencizer Works</h1><h2 id=step-phases-generate-and-sustain>Step Phases: Generate and Sustain</h2><ol><li><strong>Generate Phase.</strong>
+Each step starts by generating a signal
+that progresses
+from the <em>start anchor</em> voltage
+to the <em>end anchor</em> voltage.
+The generate phase always occurs,
+but may be interrupted
+by a trigger,
+depending on the <strong>INT</strong> control.</li><li><strong>Sustain Phase.</strong>
+When a step finishes generating,
+it optionally sustains
+at the <em>end anchor</em> voltage
+until a trigger occurs.
+The <strong>SUST</strong> control
+determines whether a step
+executes its sustain phase.</li></ol><h2 id=step-anchors-start-and-end-voltages>Step Anchors: Start and End Voltages</h2><p>A step <em>generates</em>
+by interpolating
+between the voltages
+of its <em>start</em> and <em>end anchor</em>
+over its duration.
+At any moment during the generate phase,
+the step emits a voltage
+that is part-way between the voltages
+reported by these anchors.</p><p>An anchor&rsquo;s voltage
+is determined by its <em>source</em> and its <em>mode.</em></p><p><strong>Anchor Sources.</strong>
+An anchor can acquire its voltage from several sources,
+selected by the <strong>SOURCE</strong> control
+(the unnamed button above the anchor&rsquo;s knob):</p><ul><li>The <em>A</em>, <em>B</em>, or <em>C</em> input port</li><li>The <em>LEVEL</em> controls</li><li>The <em>OUT</em> port
+(that is, <em>Sequencizer&rsquo;s</em> previous output voltage)</li></ul><p><strong>Anchor Modes.</strong>
+The <strong>MODE</strong> control
+(the unnamed button below the anchor&rsquo;s knob)
+determines <em>when</em> the anchor acquires its voltage.</p><p>In SMPL mode,
+the anchor <em>samples</em> its source
+exactly once,
+at the start of the step,
+and always reports
+this sampled voltage.
+Any changes in the source voltage
+are ignored by the anchor
+while the step generates.</p><p>In TRACK mode,
+the anchor <em>tracks</em> its source,
+and always reports
+the source&rsquo;s current voltage.</p><p><strong>Moving Targets.</strong>
+Note that if an anchor is tracking its source,
+the anchor&rsquo;s voltage
+can change while a step is active.
+This means that the voltages
+between which the step interpolates
+can both be moving targets.</p><h2 id=advancing-from-one-step-to-the-next>Advancing from One Step to the Next</h2><p>The <em>advancement</em> controls
+determine when the sequence advances
+from one step to the next.</p><p><strong>Triggers.</strong>
+While a step is active
+(whether generating or sustaining),
+it watches the state of the <em>GATE</em>,
+and generates an internal trigger
+whenever the <em>GATE</em>
+satisfies the condition
+specified by the <strong>TRIG</strong> setting.
+(RISE, FALL, EDGE, HIGH, or LOW)
+The <strong>INT</strong> and <strong>SUST</strong> controls
+determine how the step responds
+to these internal triggers.</p><p><strong>Interrupting the Generate Phase.</strong>
+The <strong>INT</strong> control
+specifies whether triggers interrupt the step.
+If <strong>INT</strong> is ON,
+a trigger that occurs while the step is generating:</p><ul><li>interrupts the generate phase</li><li>bypasses the step&rsquo;s sustain phase</li><li>advances to the next step</li></ul><p>If <strong>INT</strong> is OFF,
+the step ignores triggers during its generate phase.</p><p><strong>Sustaining.</strong>
+When a step finishes generating,
+it optionally sustains
+at the <em>end anchor</em> voltage
+until a trigger occurs.
+If <strong>SUST</strong> is ON
+when a step finishes generating,
+the step sustains until a trigger occurs.
+While it sustains,
+it emits its <em>end anchor</em> voltage.
+If <strong>SUST</strong> is OFF,
+the step skips its sustain phase,
+and the sequence immediately advances to the next step.</p><h1 id=techniques>Techniques</h1><h2 id=controlling-advancement>Controlling Advancement</h2><p><em>Sequencizer</em> offers great flexibility and control
+over how a sequence
+advances from one step to the next.</p><table class=techniques><tr><th>Technique</th><th>TRIG</th><th>INT</th><th>SUST</th><th>Image</th><th>Notes</th></tr><tr><td>Externally Clocked</td><td>any</td><td>ON</td><td>ON</td><td><img class=controls src=advancement-externally-clocked.png></td><td>Advance when the GATE condition is satisfied,
+regardless of what phase the step is executing.
+Useful for creating
+an externally-clocked step sequencer
+or a sample-and-hold step.</td></tr><tr><td>Uninterruptible: Fixed Duration</td><td>N/A</td><td>OFF</td><td>OFF</td><td><img class=controls src=advancement-uninterruptible.png></td><td>Advance when the generate phase completes,
+regardless of the condition of the GATE.
+Useful for hold stages.</td></tr><tr><td>Interruptible: Maximum Duration</td><td>any</td><td>ON</td><td>OFF</td><td><img class=controls src=advancement-interruptible.png></td><td>Advance when the generate phase completes
+or when the GATE condition is satisfied,
+which ever happens first.</td></tr><tr><td>Minimum Duration</td><td>any</td><td>OFF</td><td>ON</td><td><img class=controls src=advancement-minimum-duration.png></td><td>Complete the generate phase,
+then sustain until the GATE condition is satisfied.</td></tr><tr><td>Skippable</td><td>LOW</td><td>ON</td><td>OFF</td><td><img class=controls src=advancement-skippable.png></td><td>Advance if the GATE is low at the start of the step
+or becomes low while the step is active.
+Useful for configuring
+a sequence of attack, decay, and sustain stages
+to jump immediately to the release stage
+when the GATE falls.</td></tr><tr><td>Generate + Sustain</td><td>LOW</td><td>any</td><td>ON</td><td><img class=controls src=advancement-generate-and-sustain.png></td><td>Useful to combine decay and sustain in a single step.</td></tr></table><h2 id=controlling-voltages>Controlling Voltages</h2><p>A step&rsquo;s anchors
+define the voltages between which
+the step interpolates during its generate phase.
+Each anchor has two possible modes and five possible sources.
+This gives 100 possible combinations.</p><p>Here are some of the more common configurations.</p><table class=techniques><tr><th>Technique</th><th>Start Anchor</th><th>End Anchor</th><th>Image</th><th>Notes</th></tr><tr><td>Constant</td><td>SMPL LEVEL</td><td>TRACK OUT</td><td><img class=controls src=anchors-constant.png></td><td>Emit a specified constant voltage.
+Useful to create a step sequencer.</td></tr><tr><td>Hold</td><td>SMPL OUT</td><td>TRACK OUT</td><td><img class=controls src=anchors-hold.png></td><td>Hold at the the previous step's final voltage.
+Useful for envelope sustain and hold stages.</td></tr><tr><td>Sample and Hold</td><td>SMPL any input</td><td>TRACK OUT</td><td><img class=controls src=anchors-sample-and-hold.png></td><td>Hold at the voltage sampled from an input.</td></tr><tr><td>Fixed Ramp or Curve</td><td>SMPL LEVEL</td><td>SMPL LEVEL</td><td><img class=controls src=anchors-fixed-ramp.png></td><td>Progress from one specified voltage to another.
+Useful for an envelope attack stage (0V to 10V).</td></tr><tr><td>Continuation Ramp or Curve</td><td>SMPL OUT</td><td>SMPL LEVEL</td><td><img class=controls src=anchors-continuation-ramp.png></td><td>Progress from the previous step's final voltage
+to a specified voltage.
+Useful for an envelope decay stage (set LEVEL to sustain voltage)
+or release stage (set LEVEL to 0V).</td></tr><tr><td>Passthrough</td><td>TRACK any input</td><td>TRACK same input</td><td><img class=controls src=anchors-passthrough.png></td><td>Track and emit an input signal.</td></tr><tr><td>Fade In</td><td>SMPL any source</td><td>TRACK any input</td><td><img class=controls src=anchors-fade-in.png></td><td>Fade from the previous step's final voltage
+to the selected input signal.</td></tr><tr><td>Fade Out</td><td>TRACK any input</td><td>SMPL any source</td><td><img class=controls src=anchors-fade-out.png></td><td>Fade from the selected input signal
+to the specified voltage (or other source).</td></tr><tr><td>Crossfade</td><td>TRACK an input</td><td>TRACK another input</td><td><img class=controls src=anchors-crossfade.png></td><td>Fade from one input signal to another.</td></tr></table><p><strong>NOTE:</strong>
+If you&rsquo;re surprised by
+my advice to set the <em>end anchor</em> to TRACK OUT
+for the constant, hold, and sample and hold techniques,
+consider:
+This advice makes it easier to experiment with different start sources.
+Every time you select a new start source,
+the end anchor will automatically follow along.</p><p><strong>NOTE:</strong>
+If an anchor is set to TRACK its source,
+the anchor&rsquo;s voltage
+can change while the step is active.
+This means that the voltages
+between which the step interpolates
+can both be moving targets.
+This can create some very surprising, very creative results.
+Experiment!</p><h2 id=controlling-sequences>Controlling Sequences</h2><p><strong>Pausing a Sequence.</strong>
+To pause a sequence,
+turn <strong>RUN</strong> off.</p><p><strong>Resuming a Sequence.</strong>
+To resume a paused sequence,
+turn <strong>RUN</strong> on.</p><p><strong>Retriggering Envelopes.</strong>
+To retrigger an envelope
+(that is, to interrupt an in-progress envelope and restart it from the beginning):
+<strong>send a rising edge to both <em>RESET</em> and <em>GATE</em> simultaneously.</strong>
+The rising <em>RESET</em> interrupts the current step,
+even if it is ignoring the <em>GATE</em>.
+Then the rising <em>GATE</em> immediately restarts the sequence.</p><p>Note that a rising <em>RESET</em> signal
+takes priority
+over the steps&rsquo; <strong>INT</strong> settings.
+As a result,
+a rising <em>RESET</em> signal
+interrupts even an &ldquo;uninterruptible&rdquo; step.</p><h1 id=examples>Examples</h1><h2 id=envelope-generator-steps>Envelope Generator Steps</h2><h3 id=attack-stage>Attack Stage</h3><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>LOW</td><td>If INT or SUST are ON,
+experiment with other GATE conditions here.
+If INT and SUST are both off,
+this setting does not matter.</td><td rowspan=5><img class=controls src=envelope-attack.png></td></tr><tr><td>INT</td><td>ON</td><td>This makes the step interruptible.
+Set INT OFF to make it uninterruptible.</td></tr><tr><td>SUST</td><td>OFF</td><td>Variation:
+To combine the step with a sustain stage,
+turn SUST ON and set TRIG to LOW.</td></tr><tr><td>Start Anchor</td><td>SAMPL LEVEL</td><td>The most common start voltage is 0V.
+Alternatively,
+use SAMPL OUT to start the attack at the previous step's final voltage.</td></tr><tr><td>End Anchor</td><td>SMPL LEVEL</td><td>The most common start voltage is 10V.</td></tr></table><h3 id=hold-stage>Hold Stage</h3><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>LOW</td><td>If INT or SUST are ON,
+experiment with other GATE conditions here.
+If INT and SUST are both off,
+this setting does not matter.</td><td rowspan=6><img class=controls src=envelope-hold.png></td></tr><tr><td>INT</td><td>ON</td><td>This makes the step uninterruptible.
+Set INT ON to make it interruptible.</td></tr><tr><td>SUST</td><td>OFF</td><td>Variation:
+To combine the step with a sustain stage,
+turn SUST ON and set TRIG to LOW.
+This turns it into a "hold for at least the specified duration" stage.</td></tr><tr><td>Start Anchor</td><td>SAMPL OUT</td><td>To start the release at the previous step's final voltage.</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>To continue emitting the sampled voltage.</td></tr></table><h3 id=decay-stage>Decay Stage</h3><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>LOW</td><td>If INT or SUST are ON,
+experiment with other GATE conditions here.
+If INT and SUST are both off,
+this setting does not matter.</td><td rowspan=6><img class=controls src=envelope-decay.png></td></tr><tr><td>INT</td><td>ON</td><td>This makes the step interruptible.
+Set INT OFF to make it uninterruptible.</td></tr><tr><td>SUST</td><td>OFF</td><td>Variation:
+To combine the step with a sustain stage,
+turn SUST ON and set TRIG to LOW.</td></tr><tr><td>Start Anchor</td><td>SAMPL OUT</td><td>To start the decay at the previous step's final voltage.</td></tr><tr><td>End Anchor</td><td>SMPL LEVEL</td><td>Set the LEVEL to the desired sustain voltage.</td></tr></table><h3 id=sustain-stage>Sustain Stage</h3><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>LOW</td><td>The GATE condition that ends the sustain stage.</td><td rowspan=6><img class=controls src=envelope-sustain.png></td></tr><tr><td>INT</td><td>ON</td><td>Advance if the GATE is low
+at any point during the generate phase.</td></tr><tr><td>SUST</td><td>ON</td><td>If the generate phase completes,
+continue emitting the sampled voltage
+until the GATE falls.</td></tr><tr><td>Start Anchor</td><td>SAMPL OUT</td><td>Sample the previous step's final voltage.</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>To continue emitting the sampled voltage.</td></tr></table><h3 id=release-stage>Release Stage</h3><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>LOW</td><td>If INT or SUST are ON,
+experiment with other GATE conditions here.
+If INT and SUST are both off,
+this setting does not matter.</td><td rowspan=6><img class=controls src=envelope-release.png></td></tr><tr><td>INT</td><td>ON</td><td>This makes the step interruptible.
+Set INT OFF to make it uninterruptible.</td></tr><tr><td>SUST</td><td>OFF</td><td>Variation:
+To combine the step with a sustain stage,
+turn SUST ON and set TRIG to LOW.</td></tr><tr><td>Start Anchor</td><td>SAMPL OUT</td><td>To start the release at the previous step's final voltage.</td></tr><tr><td>End Anchor</td><td>SMPL LEVEL</td><td>The most common end voltage is 0V.</td></tr></table><h2 id=step-sequencers>Step Sequencers</h2><h3 id=externally-clocked-step-sequencer>Externally Clocked Step Sequencer</h3><p>To create a traditional,
+<strong>externally-clocked step sequencer</strong>
+that holds each level
+until the <em>GATE</em> rises,
+configure each step liks this:</p><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>RISE</td><td>RISE is the traditional GATE condition to use here,
+but you can tune your step sequencer
+by specifying any condition.
+And you can use different conditions
+for different steps.</td><td rowspan=6><img class=controls src=step-sequencer-externally-clocked.png></td></tr><tr><td>INT</td><td>ON</td><td>Advance if the GATE rises while generating.</td></tr><tr><td>SUST</td><td>ON</td><td>If the generate phase completes without interruption,
+sustain until the GATE rises.</td></tr><tr><td>Start Anchor</td><td>SMPL LEVEL</td><td>Set the LEVEL to the desired voltage.</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>To continue emitting the same voltage.</td></tr></table><p>The <strong>INT</strong> and <strong>SUST</strong> settings
+cause the step
+to advance <em>only</em> when the <em>GATE</em>
+satisfies the <strong>TRIG</strong> condition,
+regardless of what phase (generate or sustain)
+the step is executing.
+This puts advancement
+entirely under the control of the <em>GATE</em>.</p><h3 id=timer-controlled-step-sequencer>Timer-Controlled Step Sequencer</h3><p>To create a <strong>timer-controlled step sequencer</strong>
+that holds each level for a specified duration,
+configure each step like this:</p><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>INT</td><td>OFF</td><td>Emit the sampled voltage until the timer expires,
+ignoring the GATE condition.</td><td rowspan=6><img class=controls src=step-sequencer-timer-controlled.png></td></tr><tr><td>SUST</td><td>OFF</td><td>Advance automatically when the timer expires.</td></tr><tr><td>Start Anchor</td><td>SMPL LEVEL</td><td>Set the LEVEL to the desired voltage.</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>Emit a constant voltage.</td></tr><tr><td>DUR</td><td>desired duration</td><td>The duration of the step's timer.</td></tr></table><p>The <strong>INT</strong> and <strong>SUST</strong> settings
+cause the step to ignore the GATE,
+putting advancement entirely under the control
+of the step&rsquo;s <strong>DUR</strong> timer.</p><h2 id=sample-and-hold-sequencers>Sample and Hold Sequencers</h2><h3 id=externally-clocked-sample-and-hold-sequencer>Externally-Clocked Sample and Hold Sequencer</h3><p>To create a multi-step, externally-clocked
+sample-and-hold sequencer
+where each step advances on a different <em>GATE</em> condition,
+configure each step liks this:</p><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>TRIG</td><td>any</td><td>Different steps can advance on different GATE conditions.</td><td rowspan=6><img class=controls src=sample-and-hold-externally-clocked.png></td></tr><tr><td>INT</td><td>ON</td><td>Advance if the GATE condition is satisfied while generating.</td></tr><tr><td>SUST</td><td>ON</td><td>If the generate phase completes without interruption,
+sustain until the GATE condition is satisfied.</td></tr><tr><td>Start Anchor</td><td>SMPL any input</td><td>Different steps can sample different inputs.</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>To continue emitting the same voltage.</td></tr></table><p>The <strong>INT</strong> and <strong>SUST</strong> settings
+cause the step
+to advance <em>only</em> when the <em>GATE</em>
+satisfies the <strong>TRIG</strong> condition,
+regardless of what phase (generate or sustain)
+the step is executing.
+This puts advancement
+entirely under the control of the <em>GATE</em>.</p><h3 id=timer-controlled-sample-and-hold-sequencer>Timer-Controlled Sample and Hold Sequencer</h3><p>To create a multi-step, timer-controlled sample-and-hold sequencer
+where each step holds for a different duration,
+configure each step liks this:</p><table class=techniques><tr><th>Parameter</th><th>Value</th><th>Notes</th><th>Image</th></tr><tr><td>INT</td><td>OFF</td><td>Emit the sampled voltage until the timer expires,
+ignoring the GATE condition.</td><td rowspan=6><img class=controls src=sample-and-hold-timer-controlled.png></td></tr><tr><td>SUST</td><td>OFF</td><td>Advance automatically when the timer expires.</td></tr><tr><td>Start Anchor</td><td>SMPL any input</td><td>Different steps can sample different inputs</td></tr><tr><td>End Anchor</td><td>TRACK OUT</td><td>Emit a constant voltage.</td></tr><tr><td>DUR</td><td>desired duration</td><td>The duration of the step's timer.</td></tr></table><p>The <strong>INT</strong> and <strong>SUST</strong> settings
+cause the step to ignore the GATE,
+putting advancement entirely under the control
+of the step&rsquo;s <strong>DUR</strong> timer.</p></section></main><footer class='centered chrome'><p role=copyright>© 2017–2022 Dale H. Emery</p></footer></body></html>

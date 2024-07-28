@@ -18,13 +18,19 @@ body {
   font-family: Helvetica, sans-serif;
   font-size: 100%; }
 
-main p, main ul, main ol, main blockquote {
+main p,
+main ul,
+main ol,
+main blockquote {
   margin: 1rem auto; }
 
-main p, main ul, main ol {
+main p,
+main ul,
+main ol {
   padding: 0; }
 
-main ul, main ol {
+main ul,
+main ol {
   padding-left: 1rem; }
 
 main blockquote {
@@ -48,7 +54,9 @@ footer {
   background-color: #003366;
   padding: .5em;
   margin: 0; }
-  .banner h1, .banner h2, .banner a {
+  .banner h1,
+  .banner h2,
+  .banner a {
     font-weight: normal;
     color: #e7ebef; }
   .banner h1 {
@@ -56,7 +64,8 @@ footer {
   .banner h2 {
     font-size: 2rem; }
 
-.boxed, .chrome {
+.boxed,
+.chrome {
   border-color: #999999;
   border-width: 1px;
   background-color: #e7ebef; }
@@ -101,26 +110,36 @@ blockquote {
   border: 1px solid #999999;
   background-color: #fbfbfb;
   color: #003366; }
-  blockquote p, blockquote em em {
+  blockquote p,
+  blockquote em em {
     font-style: italic; }
-  blockquote em, blockquote em em em {
+  blockquote em,
+  blockquote em em em {
     font-style: normal; }
 
-em, em em em {
+em,
+em em em {
   font-style: italic; }
 
 em em {
   font-style: normal; }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   margin: 0;
   padding: 0;
   color: #003366; }
 
-section h1, section h2 {
+section h1,
+section h2 {
   font-variant: small-caps; }
 
-section h1, section h2, section h3, section h4 {
+section h1,
+section h2,
+section h3,
+section h4 {
   margin-top: 1.5rem; }
 
 h1 {
@@ -143,13 +162,20 @@ img {
 li {
   margin: 0; }
 
-ol, ul {
+ol,
+ul {
   list-style: none; }
 
-p, li, dt, dd {
+p,
+li,
+dt,
+dd {
   line-height: 1.5; }
 
-p, ul, ol, blockquote {
+p,
+ul,
+ol,
+blockquote {
   padding: 0;
   margin-top: 2rem; }
 
@@ -167,20 +193,14 @@ img.faceplate {
   float: right; }
 
 img.controls {
-  padding-left: 10px;
-  padding-bottom: 10px;
-  float: right; }
-
-img.td-controls {
-  margin: auto;
-  text-align: center;
-  vertical-align: top; }
+  padding-top: 10px; }
 
 img.envelope {
   height: auto;
   width: auto;
   max-height: 360px;
-  max-width: 100%; }
+  max-width: 100%;
+  padding-top: 10px; }
 
 img.envelope2 {
   height: auto;
@@ -194,20 +214,29 @@ img.xycloid {
   max-height: 360px;
   max-width: 100%; }
 
-table.curves td {
+table.curves td,
+table.techniques td {
   vertical-align: middle;
   text-align: center;
-  padding: 0;
+  padding: 5px;
   margin: 0; }
 
-table.curves th {
+table.curves th,
+table.techniques th {
   vertical-align: middle;
   text-align: center;
   padding: .5em; }
 
-table.curves svg {
+table.curves svg,
+table.techniques svg {
   width: 12.7mm;
   height: 12.7mm; }
 
-table.curves img {
-  height: 80px; }
+table.curves img,
+table.techniques img {
+  width: 40px; }
+
+table.techniques {
+  border-collapse: collapse; }
+  table.techniques td {
+    border: 1px solid black; }
