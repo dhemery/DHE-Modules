@@ -18,7 +18,7 @@ main {
 $leading: 1.5;
 $inter-paragraph-space: 1rem;
 
-$text-font:  Helvetica, sans-serif;
+$text-font: Helvetica, sans-serif;
 $text-size: 100%;
 $banner-title-size: 3rem;
 $banner-subtitle-size: 2rem;
@@ -50,25 +50,44 @@ body {
 }
 
 main {
-    p, ul, ol, blockquote {
+
+    p,
+    ul,
+    ol,
+    blockquote {
         margin: $inter-paragraph-space auto;
     }
-    p, ul, ol {
+
+    p,
+    ul,
+    ol {
         padding: 0;
     }
-    ul, ol {
+
+    ul,
+    ol {
         padding-left: $inter-paragraph-space;
     }
+
     blockquote {
         padding: 0 $inter-paragraph-space;
     }
-    ol { list-style-type: decimal; }
-    ul { list-style-type: disc; }
+
+    ol {
+        list-style-type: decimal;
+    }
+
+    ul {
+        list-style-type: disc;
+    }
 }
 
 header {
     margin: $inter-paragraph-space 0;
-    h1 { font-size: $page-title-size; }
+
+    h1 {
+        font-size: $page-title-size;
+    }
 }
 
 footer {
@@ -80,16 +99,25 @@ footer {
     padding: .5em;
     margin: 0;
 
-    h1, h2, a {
+    h1,
+    h2,
+    a {
         font-weight: normal;
         color: $light;
     }
-    h1 { font-size: $banner-title-size; }
-    h2 { font-size: $banner-subtitle-size; }
+
+    h1 {
+        font-size: $banner-title-size;
+    }
+
+    h2 {
+        font-size: $banner-subtitle-size;
+    }
 
 }
 
-.boxed, .chrome {
+.boxed,
+.chrome {
     border-color: $medium;
     border-width: 1px;
     background-color: $light;
@@ -100,7 +128,9 @@ footer {
     border-style: solid;
 }
 
-.centered { text-align: center; }
+.centered {
+    text-align: center;
+}
 
 .chrome {
     border-top-style: solid;
@@ -116,13 +146,16 @@ footer {
 .inline {
     margin-left: 0;
     display: inline;
+
     li {
         display: inline;
         margin-left: 0;
     }
 }
 
-.piped li + li::before { content: ' | '; }
+.piped li+li::before {
+    content: ' | ';
+}
 
 .title {
     font-weight: bold;
@@ -131,7 +164,11 @@ footer {
 
 a {
     text-decoration: none;
-    &:hover { text-decoration: underline; }
+
+    &:hover {
+        text-decoration: underline;
+    }
+
     color: $dark;
 }
 
@@ -139,14 +176,31 @@ blockquote {
     border: 1px solid $medium;
     background-color: $lightest;
     color: $dark;
-    p, em em { font-style: italic; }
-    em, em em em { font-style: normal; }
+
+    p,
+    em em {
+        font-style: italic;
+    }
+
+    em,
+    em em em {
+        font-style: normal;
+    }
 }
 
-em, em em em { font-style: italic; }
-em em { font-style: normal; }
+em,
+em em em {
+    font-style: italic;
+}
 
-h1, h2, h3, h4 {
+em em {
+    font-style: normal;
+}
+
+h1,
+h2,
+h3,
+h4 {
     margin: 0;
     padding: 0;
     color: $dark;
@@ -154,35 +208,62 @@ h1, h2, h3, h4 {
 
 
 section {
-    h1, h2 {
+
+    h1,
+    h2 {
         font-variant: small-caps;
     }
-    h1, h2, h3, h4 {
+
+    h1,
+    h2,
+    h3,
+    h4 {
         margin-top: $leading*1rem;
     }
 }
 
-h1 { font-size: $heading-1-size; }
-h2 { font-size: $heading-2-size; }
+h1 {
+    font-size: $heading-1-size;
+}
+
+h2 {
+    font-size: $heading-2-size;
+}
+
 h3 {
     font-size: $heading-3-size;
     font-style: italic;
 }
 
-hr { margin: 0; }
+hr {
+    margin: 0;
+}
 
 img {
     border: 0;
     max-width: 100%;
 }
 
-li { margin: 0; }
+li {
+    margin: 0;
+}
 
-ol, ul { list-style: none; }
+ol,
+ul {
+    list-style: none;
+}
 
-p, li, dt, dd { line-height: $leading; }
+p,
+li,
+dt,
+dd {
+    line-height: $leading;
+}
 
-p, ul, ol, blockquote {
+p,
+ul,
+ol,
+blockquote {
     padding: 0;
     margin-top: 2*$inter-paragraph-space;
 }
@@ -204,15 +285,7 @@ img.faceplate {
 }
 
 img.controls {
-    padding-left: 10px;
-    padding-bottom: 10px;
-    float: right;
-}
-
-img.td-controls {
-    margin: auto;
-    text-align: center;
-    vertical-align: top;
+    padding-top: 10px;
 }
 
 img.envelope {
@@ -220,6 +293,7 @@ img.envelope {
     width: auto;
     max-height: 360px;
     max-width: 100%;
+    padding-top: 10px;
 }
 
 img.envelope2 {
@@ -236,11 +310,12 @@ img.xycloid {
     max-width: 100%;
 }
 
-table.curves {
+table.curves,
+table.techniques {
     td {
         vertical-align: middle;
         text-align: center;
-        padding: 0;
+        padding: 5px;
         margin: 0;
     }
 
@@ -256,6 +331,14 @@ table.curves {
     }
 
     img {
-        height: 80px;
+        width: 40px;
+    }
+}
+
+table.techniques {
+    border-collapse: collapse;
+
+    td {
+        border: 1px solid black;
     }
 }

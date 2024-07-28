@@ -171,7 +171,7 @@ _Sequencizer_ offers great flexibility and control
 over how a sequence
 advances from one step to the next.
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Technique</th>
         <th>TRIG</th>
@@ -185,7 +185,7 @@ advances from one step to the next.
         <td>any</td>
         <td>ON</td>
         <td>ON</td>
-        <td><img class="td-controls" width="40" src="advancement-externally-clocked.png" /></td>
+        <td><img class="controls" src="advancement-externally-clocked.png" /></td>
         <td>Advance when the GATE condition is satisfied,
             regardless of what phase the step is executing.
             Useful for creating
@@ -198,7 +198,7 @@ advances from one step to the next.
         <td>N/A</td>
         <td>OFF</td>
         <td>OFF</td>
-        <td><img class="td-controls" width="40" src="advancement-uninterruptible.png" /></td>
+        <td><img class="controls" src="advancement-uninterruptible.png" /></td>
         <td>Advance when the generate phase completes,
             regardless of the condition of the GATE.
             Useful for hold stages.</td>
@@ -208,7 +208,7 @@ advances from one step to the next.
         <td>any</td>
         <td>ON</td>
         <td>OFF</td>
-        <td><img class="td-controls" width="40" src="advancement-interruptible.png" /></td>
+        <td><img class="controls" src="advancement-interruptible.png" /></td>
         <td>Advance when the generate phase completes
             or when the GATE condition is satisfied,
             which ever happens first.
@@ -219,7 +219,7 @@ advances from one step to the next.
         <td>any</td>
         <td>OFF</td>
         <td>ON</td>
-        <td><img class="td-controls" width="40" src="advancement-minimum-duration.png" /></td>
+        <td><img class="controls" src="advancement-minimum-duration.png" /></td>
         <td>Complete the generate phase,
             then sustain until the GATE condition is satisfied.
         </td>
@@ -229,7 +229,7 @@ advances from one step to the next.
         <td>LOW</td>
         <td>ON</td>
         <td>OFF</td>
-        <td><img class="td-controls" width="40" src="advancement-skippable.png" /></td>
+        <td><img class="controls" src="advancement-skippable.png" /></td>
         <td>Advance if the GATE is low at the start of the step
             or becomes low while the step is active.
             Useful for configuring
@@ -243,7 +243,7 @@ advances from one step to the next.
         <td>LOW</td>
         <td>any</td>
         <td>ON</td>
-        <td><img class="td-controls" width="40" src="advancement-generate-and-sustain.png" /></td>
+        <td><img class="controls" src="advancement-generate-and-sustain.png" /></td>
         <td>Useful to combine decay and sustain in a single step.</td>
     </tr>
 </table>
@@ -261,7 +261,7 @@ This gives 100 possible combinations.
 
 Here are some of the more common configurations.
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Technique</th>
         <th>Start Anchor</th>
@@ -273,7 +273,7 @@ Here are some of the more common configurations.
         <td>Constant</td>
         <td>SMPL LEVEL</td>
         <td>TRACK OUT</td>
-        <td><img class="td-controls" width="40" src="anchors-constant.png" /></td>
+        <td><img class="controls" src="anchors-constant.png" /></td>
         <td>Emit a specified constant voltage.
             Useful to create a step sequencer.</td>
     </tr>
@@ -281,7 +281,7 @@ Here are some of the more common configurations.
         <td>Hold</td>
         <td>SMPL OUT</td>
         <td>TRACK OUT</td>
-        <td><img class="td-controls" width="40" src="anchors-hold.png" /></td>
+        <td><img class="controls" src="anchors-hold.png" /></td>
         <td>Hold at the the previous step's final voltage.
             Useful for envelope sustain and hold stages.</td>
     </tr>
@@ -289,14 +289,14 @@ Here are some of the more common configurations.
         <td>Sample and Hold</td>
         <td>SMPL any input</td>
         <td>TRACK OUT</td>
-        <td><img class="td-controls" width="40" src="anchors-sample-and-hold.png" /></td>
+        <td><img class="controls" src="anchors-sample-and-hold.png" /></td>
         <td>Hold at the voltage sampled from an input.</td>
     </tr>
     <tr>
         <td>Fixed Ramp or Curve</td>
         <td>SMPL LEVEL</td>
         <td>SMPL LEVEL</td>
-        <td><img class="td-controls" width="40" src="anchors-fixed-ramp.png" /></td>
+        <td><img class="controls" src="anchors-fixed-ramp.png" /></td>
         <td>Progress from one specified voltage to another.
             Useful for an envelope attack stage (0V to 10V).</td>
     </tr>
@@ -304,7 +304,7 @@ Here are some of the more common configurations.
         <td>Continuation Ramp or Curve</td>
         <td>SMPL OUT</td>
         <td>SMPL LEVEL</td>
-        <td><img class="td-controls" width="40" src="anchors-continuation-ramp.png" /></td>
+        <td><img class="controls" src="anchors-continuation-ramp.png" /></td>
         <td>Progress from the previous step's final voltage
             to a specified voltage.
             Useful for an envelope decay stage (set LEVEL to sustain voltage)
@@ -315,27 +315,29 @@ Here are some of the more common configurations.
         <td>Passthrough</td>
         <td>TRACK any input</td>
         <td>TRACK same input</td>
-        <td><img class="td-controls" width="40" src="anchors-passthrough.png" /></td>
+        <td><img class="controls" src="anchors-passthrough.png" /></td>
         <td>Track and emit an input signal.</td>
     </tr><tr>
         <td>Fade In</td>
         <td>SMPL any source</td>
         <td>TRACK any input</td>
-        <td><img class="td-controls" width="40" src="anchors-fade-in.png" /></td>
-        <td>Fade from the sampled voltage to the selected input signal.</td>
+        <td><img class="controls" src="anchors-fade-in.png" /></td>
+        <td>Fade from the previous step's final voltage
+            to the selected input signal.</td>
     </tr>
     <tr>
         <td>Fade Out</td>
         <td>TRACK any input</td>
         <td>SMPL any source</td>
-        <td><img class="td-controls" width="40" src="anchors-fade-out.png" /></td>
-        <td>Fade from the selected input signal to the sampled voltage.</td>
+        <td><img class="controls" src="anchors-fade-out.png" /></td>
+        <td>Fade from the selected input signal
+            to the specified voltage (or other source).</td>
     </tr>
     <tr>
         <td>Crossfade</td>
         <td>TRACK an input</td>
         <td>TRACK another input</td>
-        <td><img class="td-controls" width="40" src="anchors-crossfade.png" /></td>
+        <td><img class="controls" src="anchors-crossfade.png" /></td>
         <td>Fade from one input signal to another.</td>
     </tr>
 </table>
@@ -396,7 +398,7 @@ interrupts even an "uninterruptible" step.
 
 ### Attack Stage
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -411,7 +413,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
-        <td rowspan="5"><img class="td-controls" width="40" src="envelope-attack.png" /></td>
+        <td rowspan="5"><img class="controls" src="envelope-attack.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -445,7 +447,7 @@ interrupts even an "uninterruptible" step.
 
 ### Hold Stage
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -460,7 +462,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
-        <td rowspan="6"><img class="td-controls" width="40" src="envelope-hold.png" /></td>
+        <td rowspan="6"><img class="controls" src="envelope-hold.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -492,7 +494,7 @@ interrupts even an "uninterruptible" step.
 
 ### Decay Stage
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -507,7 +509,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
-        <td rowspan="6"><img class="td-controls" width="40" src="envelope-decay.png" /></td>
+        <td rowspan="6"><img class="controls" src="envelope-decay.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -538,7 +540,7 @@ interrupts even an "uninterruptible" step.
 
 ### Sustain Stage
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -549,7 +551,7 @@ interrupts even an "uninterruptible" step.
         <td>TRIG</td>
         <td>LOW</td>
         <td>The GATE condition that ends the sustain stage.</td>
-        <td rowspan="6"><img class="td-controls" width="40" src="envelope-sustain.png" /></td>
+        <td rowspan="6"><img class="controls" src="envelope-sustain.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -581,7 +583,7 @@ interrupts even an "uninterruptible" step.
 
 ### Release Stage
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -596,7 +598,7 @@ interrupts even an "uninterruptible" step.
             If INT and SUST are both off,
             this setting does not matter.
         </td>
-        <td rowspan="6"><img class="td-controls" width="40" src="envelope-release.png" /></td>
+        <td rowspan="6"><img class="controls" src="envelope-release.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -638,7 +640,7 @@ that holds each level
 until the _GATE_ rises,
 configure each step liks this:
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -653,7 +655,7 @@ configure each step liks this:
             by specifying any condition.
             And you can use different conditions
             for different steps.</td>
-        <td rowspan="6"><img class="td-controls" width="40" src="step-sequencer-externally-clocked.png" /></td>
+        <td rowspan="6"><img class="controls" src="step-sequencer-externally-clocked.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -693,7 +695,7 @@ To create a **timer-controlled step sequencer**
 that holds each level for a specified duration,
 configure each step like this:
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -705,7 +707,7 @@ configure each step like this:
         <td>OFF</td>
         <td>Emit the sampled voltage until the timer expires,
             ignoring the GATE condition.</td>
-        <td rowspan="6"><img class="td-controls" width="40" src="step-sequencer-timer-controlled.png" /></td>
+        <td rowspan="6"><img class="controls" src="step-sequencer-timer-controlled.png" /></td>
     </tr>
     <tr>
         <td>SUST</td>
@@ -745,7 +747,7 @@ sample-and-hold sequencer
 where each step advances on a different _GATE_ condition,
 configure each step liks this:
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -756,7 +758,7 @@ configure each step liks this:
         <td>TRIG</td>
         <td>any</td>
         <td>Different steps can advance on different GATE conditions.</td>
-        <td rowspan="6"><img class="td-controls" width="40" src="sample-and-hold-externally-clocked.png" /></td>
+        <td rowspan="6"><img class="controls" src="sample-and-hold-externally-clocked.png" /></td>
     </tr>
     <tr>
         <td>INT</td>
@@ -796,7 +798,7 @@ To create a multi-step, timer-controlled sample-and-hold sequencer
 where each step holds for a different duration,
 configure each step liks this:
 
-<table>
+<table class='techniques'>
     <tr>
         <th>Parameter</th>
         <th>Value</th>
@@ -808,7 +810,7 @@ configure each step liks this:
         <td>OFF</td>
         <td>Emit the sampled voltage until the timer expires,
             ignoring the GATE condition.</td>
-        <td rowspan="6"><img class="td-controls" width="40" src="sample-and-hold-timer-controlled.png" /></td>
+        <td rowspan="6"><img class="controls" src="sample-and-hold-timer-controlled.png" /></td>
     </tr>
     <tr>
         <td>SUST</td>
