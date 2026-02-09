@@ -33,7 +33,7 @@ $(DHEUNIT_INCLUDE_DIR):
 
 RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
 TEST_INCLUDES =  -Itest -I$(DHEUNIT_SRC)
-TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES) 
+TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES)
 
 TEST_SOURCES = $(shell find test -name "*.cpp")
 
@@ -65,7 +65,7 @@ vtest: $(TEST_RUNNER)
 #
 ########################################################################
 
-PLUGIN_ZIP_NAME := $(SLUG)-$(VERSION)-mac.vcvplugin
+PLUGIN_ZIP_NAME := $(SLUG)-$(VERSION)-mac-$(ARCH_CPU).vcvplugin
 DIST_PLUGIN_ZIP := dist/$(PLUGIN_ZIP_NAME)
 
 STAGING_DIRNAME := .stage
@@ -73,26 +73,27 @@ STAGING_DIR := $(realpath .)/$(STAGING_DIRNAME)
 STAGING_USER_DIRNAME := rack-user-dir
 
 STAGING_USER_DIR := $(STAGING_DIR)/$(STAGING_USER_DIRNAME)
-STAGING_PLUGIN_DIR := $(STAGING_USER_DIR)/plugins
+STAGING_PLUGIN_DIR := $(STAGING_USER_DIR)/plugins-mac-$(ARCH_CPU)
 STAGING_PLUGIN_ZIP := $(STAGING_PLUGIN_DIR)/$(PLUGIN_ZIP_NAME)
 STAGING_PLUGIN_MANIFEST =  $(STAGING_PLUGIN_DIR)/$(SLUG)/plugin.json
 
-RACK_EXECUTABLE_PATH = $(RACK_APP)/Contents/MacOS/Rack
+# RACK_EXECUTABLE_PATH = "$(RACK_APP)/Contents/MacOS/Rack"
 
 $(STAGING_DIR) $(STAGING_PLUGIN_DIR):
 	mkdir -p $@
 
 stage: dist $(STAGING_PLUGIN_DIR)
 	cp $(DIST_PLUGIN_ZIP) $(STAGING_PLUGIN_DIR)
+	cp -r test-stage/* $(STAGING_USER_DIR)
 
 clean-stage:
 	rm -rf $(STAGING_DIRNAME)
 
 run: stage
-	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
+	cd $(STAGING_USER_DIR) && RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
 
 run-unhidden: stage-unhidden
-	$(RACK_EXECUTABLE_PATH) -u $(STAGING_USER_DIR)
+	cd $(STAGING_USER_DIR) && RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
 
 stage-unhidden: stage
 	cd $(STAGING_PLUGIN_DIR) && tar xf $(PLUGIN_ZIP_NAME)

@@ -1,0 +1,78 @@
+{
+  "version": "2.6.6",
+  "zoom": 1.0,
+  "gridOffset": [
+    -6.8266925811767578,
+    -0.18132196366786957
+  ],
+  "modules": [
+    {
+      "id": 8000251954407808,
+      "plugin": "DHE-Modules",
+      "model": "Blossom",
+      "version": "2.1.0",
+      "params": [
+        {
+          "value": 0.75,
+          "id": 0
+        },
+        {
+          "value": 0.5,
+          "id": 1
+        },
+        {
+          "value": 0.5,
+          "id": 2
+        },
+        {
+          "value": 0.5,
+          "id": 3
+        },
+        {
+          "value": 1.0,
+          "id": 4
+        },
+        {
+          "value": 0.5,
+          "id": 5
+        },
+        {
+          "value": 0.5,
+          "id": 6
+        },
+        {
+          "value": 0.5,
+          "id": 7
+        },
+        {
+          "value": 0.5,
+          "id": 8
+        },
+        {
+          "value": 0.5,
+          "id": 9
+        },
+        {
+          "value": 0.5,
+          "id": 10
+        },
+        {
+          "value": 0.0,
+          "id": 11
+        },
+        {
+          "value": 0.0,
+          "id": 12
+        }
+      ],
+      "data": {
+        "preset_version": 0
+      },
+      "pos": [
+        11,
+        0
+      ]
+    }
+  ],
+  "cables": []
+}
