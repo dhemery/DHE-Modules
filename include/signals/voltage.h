@@ -13,7 +13,7 @@ static auto constexpr unit = " V";
 static auto bipolar_range = Range{-5.F, 5.F};
 static auto unipolar_range = Range{0.F, 10.F};
 static auto ranges = std::array<Range, 2>{bipolar_range, unipolar_range};
-static auto labels = std::array<char const *, ranges.size()>{"±5 V", "0–10 V"};
+static auto constexpr labels = std::array<char const *, ranges.size()>{"±5 V", "0–10 V"};
 
 } // namespace voltage
 
