@@ -6,7 +6,7 @@
 namespace dhe {
 namespace cubic {
 namespace coefficient {
-static auto constexpr range = Range{-2.F, 2.F};
+static auto range = Range{-2.F, 2.F};
 } // namespace coefficient
 
 struct Coefficient : LinearSignal<Coefficient> {

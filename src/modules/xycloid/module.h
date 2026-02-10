@@ -120,7 +120,7 @@ private:
   }
 
   auto wobble_depth() const -> float {
-    static auto constexpr range = Range{0.F, 1.F};
+    static auto range = Range{0.F, 1.F};
     auto const rotation = rotation_of(params[ParamId::WobbleDepth],
                                       inputs[InputId::WobbleDepthCv],
                                       params[ParamId::WobbleDepthAv]);

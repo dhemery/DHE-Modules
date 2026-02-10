@@ -13,20 +13,16 @@
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/duration-signals.h"
 #include "signals/linear-signals.h"
 #include "signals/shape-signals.h"
 #include "signals/voltage-signals.h"
 
-#include "rack.hpp"
-
 #include <string>
-#include <vector>
 
 namespace dhe {
 namespace scannibal {
 
-static auto constexpr brightness_range = Range{0.F, 1.F};
+static auto brightness_range = Range{0.F, 1.F};
 
 template <int N> class Module : public rack::engine::Module {
   using InputId = InputIds<N>;

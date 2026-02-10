@@ -8,7 +8,7 @@
 namespace dhe {
 
 namespace curvature {
-static auto constexpr range = Range{-0.9999F, 0.9999F};
+static auto range = Range{-0.9999F, 0.9999F};
 } // namespace curvature
 
 namespace shape {

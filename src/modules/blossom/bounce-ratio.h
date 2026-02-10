@@ -12,7 +12,7 @@ enum class BounceRatioMode { Quantized, Free };
 
 namespace bounce_ratio {
 static auto constexpr size = 2;
-static auto constexpr range = Range{1.F, 17.F};
+static auto range = Range{1.F, 17.F};
 static auto constexpr labels =
     std::array<char const *, size>{"Quantized", "Free"};
 

@@ -16,8 +16,7 @@ namespace dhe {
 namespace curve_sequencer {
 
 static auto constexpr brightness_skew = 0.7F;
-static auto constexpr brightness_range =
-    Range{-brightness_skew, 1.F + brightness_skew};
+static auto brightness_range = Range{-brightness_skew, 1.F + brightness_skew};
 
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>

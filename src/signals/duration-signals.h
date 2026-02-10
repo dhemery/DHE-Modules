@@ -9,9 +9,9 @@ namespace dhe {
 enum class DurationRangeId { Short, Medium, Long };
 
 namespace duration {
-static auto constexpr short_range = Range{0.001F, 1.F};
-static auto constexpr medium_range = Range{0.01F, 10.F};
-static auto constexpr long_range = Range{0.1F, 100.F};
+static auto short_range = Range{0.001F, 1.F};
+static auto medium_range = Range{0.01F, 10.F};
+static auto long_range = Range{0.1F, 100.F};
 
 /*
  * Each duration range is of the form [n, 1000n]. Given ranges of that form,
@@ -21,15 +21,15 @@ static auto constexpr long_range = Range{0.1F, 100.F};
  */
 static auto constexpr taper_curvature = 0.8018017F;
 
-static constexpr auto scale(float rotation, Range range) -> float {
+static auto scale(float rotation, Range range) -> float {
   return range.scale(JShape::apply(rotation, taper_curvature));
 }
 
-static constexpr auto normalize(float seconds, Range range) -> float {
+static auto normalize(float seconds, Range range) -> float {
   return JShape::invert(range.normalize(seconds), taper_curvature);
 }
 
-static auto constexpr ranges =
+static auto ranges =
     std::array<Range, 3>{short_range, medium_range, long_range};
 
 static auto constexpr labels = std::array<char const *, ranges.size()>{

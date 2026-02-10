@@ -6,7 +6,7 @@
 namespace dhe {
 namespace blossom {
 namespace spin_speed {
-static auto constexpr range = Range{-10.F, 10.F};
+static auto range = Range{-10.F, 10.F};
 } // namespace spin_speed
 
 struct SpinSpeed {

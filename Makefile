@@ -1,6 +1,6 @@
 RACK_DIR ?= ../..
 
-FLAGS += -Isrc
+FLAGS += -Isrc -Iinclude
 CFLAGS +=
 CXXFLAGS +=
 LDFLAGS +=
@@ -36,8 +36,9 @@ TEST_INCLUDES =  -Itest -I$(DHEUNIT_SRC)
 TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES)
 
 TEST_SOURCES = $(shell find test -name "*.cpp")
+COMPONENT_SOURCES = $(shell find src/components -name "*.cpp")
 
-TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES) $(COMPONENT_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
 
 $(TEST_OBJECTS): $(DHEUNIT_INCLUDE_DIR)

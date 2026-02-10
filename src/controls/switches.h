@@ -1,9 +1,6 @@
 #pragma once
 
 #include "panels/assets.h"
-#include "panels/dimensions.h"
-
-#include "rack.hpp"
 
 #include <string>
 #include <vector>

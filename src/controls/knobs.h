@@ -62,10 +62,10 @@ template <typename Scale> struct LinearKnob {
 };
 
 namespace linear {
-static auto constexpr attenuverter_knob_range = Range{-100.F, 100.F};
-static auto constexpr gain_knob_range = Range{0.F, 200.F};
-static auto constexpr percentage_knob_range = Range{0.F, 100.F};
-static auto constexpr phase_knob_range = Range{-180.F, 180.F};
+static auto attenuverter_knob_range = Range{-100.F, 100.F};
+static auto gain_knob_range = Range{0.F, 200.F};
+static auto percentage_knob_range = Range{0.F, 100.F};
+static auto phase_knob_range = Range{-180.F, 180.F};
 } // namespace linear
 
 struct AttenuverterKnob : LinearKnob<AttenuverterKnob> {

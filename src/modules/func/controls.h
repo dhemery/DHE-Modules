@@ -9,8 +9,6 @@
 #include "controls/knobs.h"
 #include "controls/switches.h"
 
-#include "rack.hpp"
-
 #include <string>
 #include <vector>
 
@@ -20,7 +18,7 @@ struct OperandKnob {
   template <typename Panel> struct Widget : Knob::Widget<Panel, Large> {};
 
   struct Quantity : rack::engine::ParamQuantity {
-    static auto constexpr default_value = BipolarVoltage::scale(0.F);
+    static float default_value;
 
     auto getDisplayValue() -> float override {
       auto const value = getValue();

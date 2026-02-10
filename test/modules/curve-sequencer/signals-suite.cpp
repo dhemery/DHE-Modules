@@ -158,7 +158,7 @@ public:
                 curve_knob_rotation);
 
             auto const got = signals.curvature(step);
-            auto constexpr want = dhe::Curvature::scale(curve_knob_rotation);
+            auto want = dhe::Curvature::scale(curve_knob_rotation);
             assert_that(t, got, is_near(want, 0.000001F));
           }));
 

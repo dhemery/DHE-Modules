@@ -6,7 +6,7 @@
 namespace dhe {
 namespace xycloid {
 namespace throb_speed {
-static auto constexpr range = Range{-10.F, 10.F};
+static auto range = Range{-10.F, 10.F};
 } // namespace throb_speed
 
 struct ThrobSpeed {

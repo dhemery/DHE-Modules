@@ -19,10 +19,10 @@ template <typename T> struct LinearSignal {
 };
 
 namespace linear {
-static auto constexpr attenuverter_range = Range{-1.F, 1.F};
-static auto constexpr gain_range = Range{0.F, 2.F};
-static auto constexpr phase_range = Range{-pi, pi};
-static auto constexpr rotation_range = Range{0.F, 1.F};
+static auto attenuverter_range = Range{-1.F, 1.F};
+static auto gain_range = Range{0.F, 2.F};
+static auto phase_range = Range{-pi, pi};
+static auto rotation_range = Range{0.F, 1.F};
 } // namespace linear
 
 struct Attenuverter : LinearSignal<Attenuverter> {

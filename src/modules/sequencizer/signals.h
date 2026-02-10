@@ -21,8 +21,7 @@ namespace sequencizer {
 // fully lit for a little while during early progress, and the "completed"
 // light reaches fully lit a little while before progress is complete.
 static auto constexpr brightness_skew = 0.7F;
-static auto constexpr brightness_range =
-    Range{-brightness_skew, 1.F + brightness_skew};
+static auto brightness_range = Range{-brightness_skew, 1.F + brightness_skew};
 
 template <typename TParam, typename TInput, typename TOutput, typename TLight,
           int N>

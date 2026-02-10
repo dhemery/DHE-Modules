@@ -10,10 +10,9 @@ enum class VoltageRangeId { Bipolar, Unipolar };
 
 namespace voltage {
 static auto constexpr unit = " V";
-static auto constexpr bipolar_range = Range{-5.F, 5.F};
-static auto constexpr unipolar_range = Range{0.F, 10.F};
-static auto constexpr ranges =
-    std::array<Range, 2>{bipolar_range, unipolar_range};
+static auto bipolar_range = Range{-5.F, 5.F};
+static auto unipolar_range = Range{0.F, 10.F};
+static auto ranges = std::array<Range, 2>{bipolar_range, unipolar_range};
 static auto constexpr labels =
     std::array<char const *, ranges.size()>{"±5 V", "0–10 V"};
 

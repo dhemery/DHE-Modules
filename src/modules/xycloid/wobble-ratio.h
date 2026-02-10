@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/range.h"
-#include "components/sigmoid.h"
 
 #include <array>
 #include <cmath>
@@ -18,7 +17,7 @@ static auto constexpr mode_labels =
     std::array<char const *, 2>{"Quantized", "Free"};
 
 static auto constexpr max_ratio = 16.F;
-static auto constexpr ranges =
+static auto ranges =
     std::array<Range, 3>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
                          Range{0.F, max_ratio}};
 static auto constexpr range_labels =
