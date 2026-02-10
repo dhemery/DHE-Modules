@@ -91,10 +91,10 @@ clean-stage:
 	rm -rf $(STAGING_DIRNAME)
 
 run: stage
-	cd $(STAGING_USER_DIR) && RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
+	RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
 
 run-unhidden: stage-unhidden
-	cd $(STAGING_USER_DIR) && RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
+	RACK_USER_DIR=$(STAGING_USER_DIR) open "$(RACK_APP)"
 
 stage-unhidden: stage
 	cd $(STAGING_PLUGIN_DIR) && tar xf $(PLUGIN_ZIP_NAME)
