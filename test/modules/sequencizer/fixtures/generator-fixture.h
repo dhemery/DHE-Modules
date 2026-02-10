@@ -4,7 +4,7 @@
 
 #include "components/range.h"
 #include "components/sigmoid.h"
-#include "signals/shape-signals.h"
+#include "signals/shape.h"
 
 #include "dheunit/test.h"
 

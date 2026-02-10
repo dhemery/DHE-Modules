@@ -2,7 +2,7 @@
 
 #include "components/phase-timer.h"
 #include "components/range.h"
-#include "signals/shape-signals.h"
+#include "signals/shape.h"
 #include "status.h"
 
 namespace dhe {

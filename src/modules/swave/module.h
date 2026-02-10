@@ -8,7 +8,7 @@
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/linear-signals.h"
-#include "signals/shape-signals.h"
+#include "signals/shape.h"
 #include "signals/voltage-signals.h"
 
 #include "rack.hpp"

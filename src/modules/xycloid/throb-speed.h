@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/shape-signals.h"
+#include "signals/shape.h"
 
 namespace dhe {
 namespace xycloid {

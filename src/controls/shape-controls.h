@@ -2,7 +2,7 @@
 
 #include "app/SvgSwitch.hpp"
 #include "engine/ParamQuantity.hpp"
-#include "signals/shape-signals.h"
+#include "signals/shape.h"
 #include "switches.h"
 
 #include "rack.hpp"
