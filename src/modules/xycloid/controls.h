@@ -110,7 +110,7 @@ struct WobbleRatioModeSwitch {
 
 struct WobbleRatioRangeSwitch {
   template <typename Panel>
-  struct Widget : ThumbSwitch::Widget<Panel, wobble_ratio::ranges.size()> {};
+  struct Widget : ThumbSwitch::Widget<Panel, wobble_ratio::range_count> {};
 
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {

@@ -65,7 +65,7 @@ struct DurationKnob {
 
 struct DurationRangeSwitch {
   template <typename Panel>
-  using Widget = ThumbSwitch::Widget<Panel, duration::ranges.size()>;
+  using Widget = ThumbSwitch::Widget<Panel, duration::range_count>;
 
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {

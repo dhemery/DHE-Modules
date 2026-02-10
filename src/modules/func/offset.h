@@ -11,11 +11,12 @@ namespace func {
 enum class OffsetRangeId { Unipolar5, Bipolar, Unipolar, Bipolar10 };
 
 namespace offsets {
+static auto constexpr range_count = 4;
 static auto ranges =
-    std::array<Range, 4>{Range{0.F, 5.F}, BipolarVoltage::range,
-                         UnipolarVoltage::range, Range{-10.F, 10.F}};
+    std::array<Range, range_count>{Range{0.F, 5.F}, BipolarVoltage::range,
+                                   UnipolarVoltage::range, Range{-10.F, 10.F}};
 static auto constexpr labels =
-    std::array<char const *, ranges.size()>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
+    std::array<char const *, range_count>{"0–5 V", "±5 V", "0–10 V", "±10 V"};
 
 } // namespace offsets
 

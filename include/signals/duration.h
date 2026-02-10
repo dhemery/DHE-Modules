@@ -24,10 +24,12 @@ auto scale(float rotation, Range range) -> float;
 
 auto normalize(float seconds, Range range) -> float;
 
-static auto ranges =
-    std::array<Range, 3>{short_range, medium_range, long_range};
+static auto constexpr range_count = 3;
 
-static auto constexpr labels = std::array<char const *, ranges.size()>{
+static auto ranges =
+    std::array<Range, range_count>{short_range, medium_range, long_range};
+
+static auto constexpr labels = std::array<char const *, range_count>{
     "0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
 
 template <typename R> struct Tapered {

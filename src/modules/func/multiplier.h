@@ -11,16 +11,17 @@ namespace func {
 enum class MultiplierRangeId { Attenuator, Attenuverter, Gain, Gainuverter };
 
 namespace multipliers {
-static auto ranges = std::array<Range, 8>{Attenuator::range,
-                                          Attenuverter::range,
-                                          Gain::range,
-                                          {-2.F, 2.F},
-                                          Range{0.F, 5.F},
-                                          BipolarVoltage::range,
-                                          UnipolarVoltage::range,
-                                          Range{-10.F, 10.F}};
+static auto constexpr range_count = 8;
+static auto ranges = std::array<Range, range_count>{Attenuator::range,
+                                                    Attenuverter::range,
+                                                    Gain::range,
+                                                    {-2.F, 2.F},
+                                                    Range{0.F, 5.F},
+                                                    BipolarVoltage::range,
+                                                    UnipolarVoltage::range,
+                                                    Range{-10.F, 10.F}};
 
-static auto constexpr labels = std::array<char const *, ranges.size()>{
+static auto constexpr labels = std::array<char const *, range_count>{
     "0–1", "±1", "0–2", "±2", "0–5", "±5", "0–10", "±10"};
 
 } // namespace multipliers

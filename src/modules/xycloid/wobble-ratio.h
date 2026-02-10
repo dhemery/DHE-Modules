@@ -17,11 +17,12 @@ static auto constexpr mode_labels =
     std::array<char const *, 2>{"Quantized", "Free"};
 
 static auto constexpr max_ratio = 16.F;
-static auto ranges =
-    std::array<Range, 3>{Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
-                         Range{0.F, max_ratio}};
+static auto constexpr range_count = 3;
+static auto ranges = std::array<Range, range_count>{
+    Range{0.F, -max_ratio}, Range{-max_ratio, max_ratio},
+    Range{0.F, max_ratio}};
 static auto constexpr range_labels =
-    std::array<char const *, ranges.size()>{"In", "-In +Out", "Out"};
+    std::array<char const *, range_count>{"In", "-In +Out", "Out"};
 } // namespace wobble_ratio
 
 struct WobbleRatio {

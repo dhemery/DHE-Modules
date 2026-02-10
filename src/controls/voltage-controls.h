@@ -44,7 +44,7 @@ struct VoltageKnob {
 
 struct VoltageRangeSwitch {
   template <typename Panel>
-  using Widget = ThumbSwitch::Widget<Panel, voltage::ranges.size()>;
+  using Widget = ThumbSwitch::Widget<Panel, voltage::range_count>;
 
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {
