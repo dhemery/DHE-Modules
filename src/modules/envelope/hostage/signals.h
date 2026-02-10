@@ -5,7 +5,7 @@
 #include "modules/envelope/mode/mode-ids.h"
 #include "signals/basic.h"
 #include "signals/duration.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include <vector>
 

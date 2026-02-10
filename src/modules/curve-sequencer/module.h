@@ -20,7 +20,7 @@
 #include "params/presets.h"
 #include "signals/duration.h"
 #include "signals/shape.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include "rack.hpp"
 

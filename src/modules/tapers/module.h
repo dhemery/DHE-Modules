@@ -11,7 +11,7 @@
 #include "signals/basic.h"
 #include "signals/linear.h"
 #include "signals/shape.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include "rack.hpp"
 

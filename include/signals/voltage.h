@@ -26,16 +26,10 @@ struct UnipolarVoltage : LinearSignal<UnipolarVoltage> {
 };
 
 struct Voltage {
-  static inline auto range(VoltageRangeId id) -> Range {
-    return voltage::ranges[static_cast<size_t>(id)];
-  }
+  static auto range(VoltageRangeId id) -> Range;
 
-  static inline auto scale(float normalized, VoltageRangeId range_id) -> float {
-    return range(range_id).scale(normalized);
-  }
+  static auto scale(float normalized, VoltageRangeId range_id) -> float;
 
-  static inline auto normalize(float scaled, VoltageRangeId range_id) -> float {
-    return range(range_id).normalize(scaled);
-  }
+  static auto normalize(float scaled, VoltageRangeId range_id) -> float;
 };
 } // namespace dhe

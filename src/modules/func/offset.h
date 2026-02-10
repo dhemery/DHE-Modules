@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include <array>
 

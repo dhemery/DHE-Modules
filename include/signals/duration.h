@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/shape.h"
 
 #include <array>
 

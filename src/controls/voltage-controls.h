@@ -1,7 +1,7 @@
 #pragma once
 
 #include "knobs.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 #include "switches.h"
 
 #include "rack.hpp"

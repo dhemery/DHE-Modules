@@ -1,10 +1,6 @@
-#pragma once
-
 #include "signals/duration.h"
 #include "components/range.h"
 #include "signals/shape.h"
-
-#include <array>
 
 namespace dhe {
 

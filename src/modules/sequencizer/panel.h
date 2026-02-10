@@ -16,7 +16,7 @@
 #include "controls/voltage-controls.h"
 #include "panels/dimensions.h"
 #include "panels/panel-widget.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include "rack.hpp"
 

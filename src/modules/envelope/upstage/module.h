@@ -9,7 +9,7 @@
 #include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
-#include "signals/voltage-signals.h"
+#include "signals/voltage.h"
 
 #include "rack.hpp"
 
