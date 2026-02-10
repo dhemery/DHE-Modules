@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "linear-signals.h"
+#include "signals/linear.h"
 
 #include <array>
 

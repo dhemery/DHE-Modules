@@ -1,8 +1,8 @@
 #include "modules/sequencizer/control-ids.h"
 #include "modules/sequencizer/signals.h"
 
-#include "signals/duration-signals.h"
-#include "signals/linear-signals.h"
+#include "signals/duration.h"
+#include "signals/linear.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"

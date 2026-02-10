@@ -5,7 +5,7 @@
 #include "components/cxmath.h"
 #include "components/sigmoid.h"
 #include "signals/basic.h"
-#include "signals/duration-signals.h"
+#include "signals/duration.h"
 #include "signals/shape.h"
 #include "signals/voltage-signals.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/range.h"
-#include "signals/linear-signals.h"
+#include "signals/linear.h"
 
 namespace dhe {
 namespace cubic {

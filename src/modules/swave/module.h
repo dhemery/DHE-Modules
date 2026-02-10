@@ -7,7 +7,7 @@
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/linear-signals.h"
+#include "signals/linear.h"
 #include "signals/shape.h"
 #include "signals/voltage-signals.h"
 

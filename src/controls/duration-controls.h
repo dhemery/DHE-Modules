@@ -3,7 +3,7 @@
 #include "switches.h"
 
 #include "panels/assets.h"
-#include "signals/duration-signals.h"
+#include "signals/duration.h"
 
 #include "rack.hpp"
 

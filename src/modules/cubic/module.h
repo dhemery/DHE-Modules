@@ -7,7 +7,7 @@
 #include "controls/knobs.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/linear-signals.h"
+#include "signals/linear.h"
 
 #include "rack.hpp"
 

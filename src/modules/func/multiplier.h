@@ -1,6 +1,6 @@
 #pragma once
 
-#include "signals/linear-signals.h"
+#include "signals/linear.h"
 #include "signals/voltage-signals.h"
 
 #include <array>

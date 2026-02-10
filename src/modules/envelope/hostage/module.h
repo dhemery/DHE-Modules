@@ -14,7 +14,7 @@
 #include "modules/envelope/mode/input-mode.h"
 #include "modules/envelope/mode/sustain-mode.h"
 #include "params/presets.h"
-#include "signals/duration-signals.h"
+#include "signals/duration.h"
 
 #include "rack.hpp"
 

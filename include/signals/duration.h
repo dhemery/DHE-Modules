@@ -21,13 +21,9 @@ static auto long_range = Range{0.1F, 100.F};
  */
 static auto constexpr taper_curvature = 0.8018017F;
 
-static auto scale(float rotation, Range range) -> float {
-  return range.scale(JShape::apply(rotation, taper_curvature));
-}
+auto scale(float rotation, Range range) -> float;
 
-static auto normalize(float seconds, Range range) -> float {
-  return JShape::invert(range.normalize(seconds), taper_curvature);
-}
+auto normalize(float seconds, Range range) -> float;
 
 static auto ranges =
     std::array<Range, 3>{short_range, medium_range, long_range};
@@ -60,23 +56,13 @@ struct LongDuration : duration::Tapered<LongDuration> {
 };
 
 struct Duration {
-  static inline auto label(DurationRangeId id) -> char const * {
-    return duration::labels[static_cast<size_t>(id)];
-  }
+  static auto label(DurationRangeId id) -> char const *;
 
-  static inline auto range(DurationRangeId id) -> Range {
-    return duration::ranges[static_cast<size_t>(id)];
-  }
+  static auto range(DurationRangeId id) -> Range;
 
-  static inline auto scale(float normalized, DurationRangeId range_id)
-      -> float {
-    return duration::scale(normalized, range(range_id));
-  }
+  static auto scale(float normalized, DurationRangeId range_id) -> float;
 
-  static inline auto normalize(float scaled, DurationRangeId range_id)
-      -> float {
-    return duration::normalize(scaled, range(range_id));
-  }
+  static auto normalize(float scaled, DurationRangeId range_id) -> float;
 };
 
 } // namespace dhe

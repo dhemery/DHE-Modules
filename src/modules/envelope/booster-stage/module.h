@@ -13,7 +13,7 @@
 #include "controls/shape-controls.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
-#include "signals/duration-signals.h"
+#include "signals/duration.h"
 #include "signals/shape.h"
 #include "signals/voltage-signals.h"
 

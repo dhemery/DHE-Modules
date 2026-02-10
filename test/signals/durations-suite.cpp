@@ -1,4 +1,4 @@
-#include "signals/duration-signals.h"
+#include "signals/duration.h"
 
 #include "dheunit/test.h"
 

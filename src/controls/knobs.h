@@ -3,7 +3,7 @@
 #include "components/meta.h"
 #include "panels/assets.h"
 #include "panels/dimensions.h"
-#include "signals/linear-signals.h"
+#include "signals/linear.h"
 
 #include "rack.hpp"
 
