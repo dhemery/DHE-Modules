@@ -1,34 +1,38 @@
 #pragma once
 
+#include <cstdint>
+
 #include "components/range.h"
 
-#include <array>
-
 namespace dhe {
+namespace shape {}
+
+struct Shape {
+  enum class Id : std::uint8_t { J, S };
+  static auto constexpr labels = std::array<char const *, 2>{"J", "S"};
+
+  virtual auto apply(float input, float curvature) const -> float = 0;
+  virtual auto invert(float input, float curvature) const -> float = 0;
+
+  static auto by_id(Id id) -> Shape const &;
+};
+
+struct JShape : Shape {
+  auto apply(float input, float curvature) const -> float override;
+  auto invert(float input, float curvature) const -> float override;
+};
+
+struct SShape : Shape {
+  auto apply(float input, float curvature) const -> float override;
+  auto invert(float input, float curvature) const -> float override;
+};
+
+static Shape const &j_shape = JShape{};
+static Shape const &s_shape = SShape{};
 
 namespace curvature {
 static auto range = Range{-0.9999F, 0.9999F};
 } // namespace curvature
-
-namespace shape {
-static auto constexpr labels = std::array<char const *, 2>{"J", "S"};
-} // namespace shape
-
-struct JShape {
-  static auto apply(float input, float curvature) -> float;
-  static auto invert(float input, float curvature) -> float;
-};
-
-struct SShape {
-  static auto apply(float input, float curvature) -> float;
-  static auto invert(float input, float curvature) -> float;
-};
-
-struct Shape {
-  enum class Id { J, S };
-
-  static auto apply(float input, Id id, float curvature) -> float;
-};
 
 struct Curvature {
   static auto constexpr &range = curvature::range;

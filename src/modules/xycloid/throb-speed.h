@@ -10,8 +10,7 @@ static auto range = Range{-10.F, 10.F};
 } // namespace throb_speed
 
 struct ThrobSpeed {
-  static auto scale(float normalized, float modulation = 0.F)
-      -> float {
+  static auto scale(float normalized, float modulation = 0.F) -> float {
     return range.scale(apply_taper(normalized) + modulation);
   }
 
@@ -24,11 +23,11 @@ private:
   static auto constexpr &range = throb_speed::range;
 
   static auto apply_taper(float normalized) -> float {
-    return SShape::apply(normalized, curvature);
+    return s_shape.apply(normalized, curvature);
   }
 
   static auto invert_taper(float tapered) -> float {
-    return SShape::invert(tapered, curvature);
+    return s_shape.invert(tapered, curvature);
   }
 };
 

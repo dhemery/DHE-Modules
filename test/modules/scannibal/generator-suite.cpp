@@ -29,7 +29,7 @@ public:
             auto constexpr phase_1_voltage = 7.F;
             auto const scaled_tapered_phase =
                 (phase_1_voltage - phase_0_voltage) *
-                Shape::apply(phase, shape, curvature);
+                Shape::by_id(shape).apply(phase, curvature);
 
             phase_0_anchor.voltage_ = phase_0_voltage;
             phase_1_anchor.voltage_ = phase_1_voltage;

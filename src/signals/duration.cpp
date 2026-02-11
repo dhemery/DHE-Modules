@@ -14,11 +14,11 @@ namespace duration {
  */
 
 auto scale(float rotation, Range range) -> float {
-  return range.scale(JShape::apply(rotation, taper_curvature));
+  return range.scale(j_shape.apply(rotation, taper_curvature));
 }
 
 auto normalize(float seconds, Range range) -> float {
-  return JShape::invert(range.normalize(seconds), taper_curvature);
+  return j_shape.invert(range.normalize(seconds), taper_curvature);
 }
 
 } // namespace duration

@@ -7,7 +7,6 @@
 #include "components/cxmath.h"
 #include "components/latch.h"
 #include "components/phase-timer.h"
-#include "components/range.h"
 #include "signals/shape.h"
 
 namespace dhe {
@@ -104,7 +103,7 @@ private:
   auto taper(float input) const -> float {
     auto const curvature = signals_.curvature(step_);
     auto const shape = signals_.shape(step_);
-    return Shape::apply(input, shape, curvature);
+    return Shape::by_id(shape).apply(input, curvature);
   }
 
   int step_{0};

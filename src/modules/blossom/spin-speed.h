@@ -24,11 +24,11 @@ private:
   static auto constexpr taper_curvature = -0.8F;
 
   static auto apply_taper(float normalized) -> float {
-    return SShape::apply(normalized, taper_curvature);
+    return s_shape.apply(normalized, taper_curvature);
   }
 
   static auto invert_taper(float tapered) -> float {
-    return SShape::invert(tapered, taper_curvature);
+    return s_shape.invert(tapered, taper_curvature);
   }
 };
 

@@ -3,15 +3,12 @@
 #include "control-ids.h"
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
-#include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/linear.h"
 #include "signals/shape.h"
 #include "signals/voltage.h"
-
-#include "rack.hpp"
 
 namespace dhe {
 namespace swave {
@@ -36,7 +33,7 @@ struct Module : public rack::engine::Module {
     auto const voltage_range = Voltage::range(voltage_range_id());
     auto const clamped = voltage_range.clamp(input_voltage());
     auto const normalized = voltage_range.normalize(clamped);
-    auto const tapered = Shape::apply(normalized, shape(), curvature());
+    auto const tapered = Shape::by_id(shape()).apply(normalized, curvature());
     auto const output_voltage = voltage_range.scale(tapered);
     send_signal(output_voltage);
   }

@@ -2,18 +2,14 @@
 
 #include "control-ids.h"
 
-#include "components/range.h"
 #include "controls/knobs.h"
 #include "controls/shape-controls.h"
-#include "controls/switches.h"
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
 #include "signals/linear.h"
 #include "signals/shape.h"
 #include "signals/voltage.h"
-
-#include "rack.hpp"
 
 namespace dhe {
 namespace tapers {
@@ -94,7 +90,7 @@ private:
 
   static inline auto tapered(float rotation, Shape::Id shape, float curvature,
                              VoltageRangeId range_id) -> float {
-    auto const tapered = Shape::apply(rotation, shape, curvature);
+    auto const tapered = Shape::by_id(shape).apply(rotation, curvature);
     return Voltage::scale(tapered, range_id);
   }
 

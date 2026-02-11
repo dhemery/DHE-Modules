@@ -4,7 +4,6 @@
 
 #include "components/cxmath.h"
 #include "components/latch.h"
-#include "components/range.h"
 #include "signals/shape.h"
 
 namespace dhe {
@@ -23,7 +22,8 @@ public:
     auto const shape = signals_.shape();
 
     timer_.advance(sample_time / signals_.duration());
-    auto const tapered_phase = Shape::apply(timer_.phase(), shape, curvature);
+    auto const tapered_phase =
+        Shape::by_id(shape).apply(timer_.phase(), curvature);
 
     signals_.output(cx::scale(tapered_phase, start_voltage_, level));
 

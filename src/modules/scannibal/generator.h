@@ -10,8 +10,8 @@ using dhe::Range;
 template <typename Module, typename Anchor> class Generator {
 public:
   Generator(Module &module, Anchor &phase_0_anchor, Anchor &phase_1_anchor)
-      : module_{module}, phase_0_anchor_{phase_0_anchor}, phase_1_anchor_{
-                                                              phase_1_anchor} {}
+      : module_{module}, phase_0_anchor_{phase_0_anchor},
+        phase_1_anchor_{phase_1_anchor} {}
 
   void generate(int step, float phase) {
     if (step != previous_step_) {
@@ -25,7 +25,8 @@ public:
     auto const range = Range{phase_0_voltage, phase_1_voltage};
     auto const shape = module_.shape(step);
 
-    auto const out_voltage = range.scale(Shape::apply(phase, shape, curvature));
+    auto const out_voltage =
+        range.scale(Shape::by_id(shape).apply(phase, curvature));
 
     module_.output(out_voltage);
   }

@@ -18,12 +18,12 @@ struct ShapeTest {
   float input;  // NOLINT
   float output; // NOLINT
 
-  template <typename S> void run(Tester &t, float curvature) {
+  void run(Tester &t, dhe::Shape const &shape, float curvature) {
     auto const name = std::to_string(input) + " → " + std::to_string(output);
-    t.run(name, [this, curvature](Tester &t) {
-      auto const applied = S::apply(input, curvature);
+    t.run(name, [this, &shape, curvature](Tester &t) {
+      auto const applied = shape.apply(input, curvature);
       assert_that(t, "apply", applied, is_near(output, 0.000001F));
-      auto const inverted = S::invert(applied, curvature);
+      auto const inverted = shape.invert(applied, curvature);
       assert_that(t, "invert", inverted, is_near(input, 0.001F));
     });
   }
@@ -35,10 +35,10 @@ template <typename S> struct TaperSuite {
   float curvature;              // NOLINT
   std::vector<ShapeTest> tests; // NOLINT
 
-  void run(Tester &t) {
-    t.run(name, [this](Tester &t) {
+  void run(Tester &t, dhe::Shape const &shape) {
+    t.run(name, [this, &shape](Tester &t) {
       for (auto test : tests) {
-        test.template run<S>(t, curvature);
+        test.run(t, shape, curvature);
       }
     });
   }
@@ -207,10 +207,10 @@ struct ShapeSuite : Suite {
 
   void run(Tester &t) override {
     for (auto &test : j_shape_tests) {
-      test.run(t);
+      test.run(t, dhe::j_shape);
     }
     for (auto &test : s_shape_tests) {
-      test.run(t);
+      test.run(t, dhe::s_shape);
     }
   }
 };

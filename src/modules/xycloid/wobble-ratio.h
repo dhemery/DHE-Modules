@@ -4,13 +4,14 @@
 
 #include <array>
 #include <cmath>
+#include <cstdint>
 
 namespace dhe {
 namespace xycloid {
 
-enum class WobbleRatioMode { Quantized, Free };
+enum class WobbleRatioMode : std::int8_t { Quantized, Free };
 
-enum class WobbleRatioRangeId { Inward, InwardOutward, Outward };
+enum class WobbleRatioRangeId : std::int8_t { Inward, InwardOutward, Outward };
 
 namespace wobble_ratio {
 static auto constexpr mode_labels =

@@ -12,8 +12,8 @@ using dhe::Range;
 template <typename Signals, typename Anchor> class Generator {
 public:
   Generator(Signals &signals, Anchor &start_anchor, Anchor &end_anchor)
-      : signals_{signals}, start_anchor_{start_anchor}, end_anchor_{
-                                                            end_anchor} {}
+      : signals_{signals}, start_anchor_{start_anchor},
+        end_anchor_{end_anchor} {}
 
   void start(int step) {
     step_ = step;
@@ -33,7 +33,9 @@ public:
 
     timer_.advance(sample_time / duration);
     auto const phase = timer_.phase();
-    auto const out_voltage = range.scale(Shape::apply(phase, shape, curvature));
+
+    auto const out_voltage =
+        range.scale(Shape::by_id(shape).apply(phase, curvature));
     signals_.output(out_voltage);
     signals_.show_progress(step_, phase);
     return timer_.in_progress() ? GeneratorStatus::Generating
