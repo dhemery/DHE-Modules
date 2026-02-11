@@ -14,7 +14,7 @@ struct ThrobSpeed {
     return range.scale(apply_taper(normalized) + modulation);
   }
 
-  static constexpr auto normalize(float scaled) -> float {
+  static auto normalize(float scaled) -> float {
     return invert_taper(range.normalize(scaled));
   }
 
