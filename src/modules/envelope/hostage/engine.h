@@ -18,8 +18,8 @@ struct Engine {
   Engine(Signals &signals, InputMode &input_mode, DeferMode &defer_mode,
          HoldMode &hold_mode, SustainMode &sustain_mode, IdleMode &idle_mode)
       : signals_{signals}, input_mode_{input_mode}, defer_mode_{defer_mode},
-        hold_mode_{hold_mode}, sustain_mode_{sustain_mode}, idle_mode_{
-                                                                idle_mode} {}
+        hold_mode_{hold_mode}, sustain_mode_{sustain_mode},
+        idle_mode_{idle_mode} {}
 
   void process(float sample_time) {
     defer_.clock(signals_.defer());

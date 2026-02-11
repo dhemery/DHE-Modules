@@ -22,8 +22,8 @@ static auto constexpr rising_latch = dhe::latch::rising;
 struct SustainerTestCase {
   SustainerTestCase(SustainMode completion_mode, TriggerMode trigger_mode,
                     Latch latch, bool is_done)
-      : completion_mode_{completion_mode},
-        trigger_mode_{trigger_mode}, latch_{latch}, is_done_{is_done} {}
+      : completion_mode_{completion_mode}, trigger_mode_{trigger_mode},
+        latch_{latch}, is_done_{is_done} {}
   SustainMode completion_mode_{}; // NOLINT
   TriggerMode trigger_mode_{};    // NOLINT
   Latch latch_{};                 // NOLINT

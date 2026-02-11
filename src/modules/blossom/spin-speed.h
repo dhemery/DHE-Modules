@@ -10,8 +10,7 @@ static auto range = Range{-10.F, 10.F};
 } // namespace spin_speed
 
 struct SpinSpeed {
-  static auto scale(float normalized, float modulation = 0.F)
-      -> float {
+  static auto scale(float normalized, float modulation = 0.F) -> float {
     return range.scale(apply_taper(normalized) + modulation);
   }
 

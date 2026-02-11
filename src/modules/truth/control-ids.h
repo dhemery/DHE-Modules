@@ -1,6 +1,6 @@
 #pragma once
 
-#define MULTIPLE(name, n) name, name##_LAST = (name) + (n)-1
+#define MULTIPLE(name, n) name, name##_LAST = (name) + (n) - 1
 
 namespace dhe {
 namespace truth {

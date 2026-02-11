@@ -1,6 +1,6 @@
 #pragma once
 
-#define PER_CHANNEL(name, n) name, name##_LAST = ((name) + (n)-1)
+#define PER_CHANNEL(name, n) name, name##_LAST = ((name) + (n) - 1)
 
 namespace dhe {
 namespace func {

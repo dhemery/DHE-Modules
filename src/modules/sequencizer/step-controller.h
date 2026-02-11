@@ -13,8 +13,8 @@ class StepController {
 public:
   StepController(Interrupter &interrupter, Generator &generator,
                  Sustainer &sustainer)
-      : interrupter_{interrupter}, generator_{generator}, sustainer_{
-                                                              sustainer} {}
+      : interrupter_{interrupter}, generator_{generator},
+        sustainer_{sustainer} {}
 
   void enter(int step) {
     current_step_ = step;

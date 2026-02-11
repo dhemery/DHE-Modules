@@ -22,9 +22,7 @@ static auto scale(float normalized, BounceRatioMode mode) -> float {
              : range.scale(normalized);
 }
 
-static auto normalize(float scaled) -> float {
-  return range.normalize(scaled);
-}
+static auto normalize(float scaled) -> float { return range.normalize(scaled); }
 
 } // namespace bounce_ratio
 

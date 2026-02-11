@@ -1,6 +1,6 @@
 #pragma once
 
-#define PER_INPUT(name) name, name##_LAST = ((name) + (input_count)-1)
+#define PER_INPUT(name) name, name##_LAST = ((name) + (input_count) - 1)
 
 namespace dhe {
 namespace gator {
