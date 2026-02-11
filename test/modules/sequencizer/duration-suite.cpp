@@ -37,7 +37,7 @@ struct DurationRangeTest {
   float tolerance;           // NOLINT
 
   void run(Tester &t, DurationRangeId range_id) const {
-    t.run(name, [this, range_id](Tester &t) {
+    t.run(name, [this, range_id](Tester &t) -> void {
       std::vector<Param> params{ParamId::Count};
       std::vector<Port> inputs{InputId::Count};
       std::vector<Port> outputs{OutputId::Count};
@@ -64,7 +64,7 @@ struct DurationRangeSuite {
 
   void run(Tester &t) const {
     auto const name = std::string{"With range "} + Duration::label(range_id);
-    t.run(name, [this](Tester &t) {
+    t.run(name, [this](Tester &t) -> void {
       for (auto const &test : tests) {
         test.run(t, range_id);
       }
@@ -72,7 +72,8 @@ struct DurationRangeSuite {
   }
 };
 
-static auto short_duration_tests = DurationRangeSuite{
+namespace {
+auto short_duration_tests = DurationRangeSuite{
     .range_id = DurationRangeId::Short,
     .tests =
         {
@@ -82,6 +83,7 @@ static auto short_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 1e-3F,
+                .tolerance = 0.F,
             },
             {
                 .name = "center rotation → 100ms",
@@ -97,6 +99,7 @@ static auto short_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 1.F,
+                .tolerance = 0.F,
             },
             {
                 .name = "max multiplier rotation → 2x duration",
@@ -112,6 +115,7 @@ static auto short_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
                 .want = ShortDuration::scale(0.5F) * 2.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "-5V cv reduces multiplier by 1x",
@@ -119,6 +123,7 @@ static auto short_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
                 .want = ShortDuration::scale(0.5F) * 0.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "limits minimum duration even with extreme negative CV",
@@ -126,11 +131,12 @@ static auto short_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.F, // 0x
                 .multiplier_cv = -3000.F,   // -3000V subtracts 600x
                 .want = 1e-3F,              // Even with -600x
+                .tolerance = 0.F,
             },
         },
 };
 
-static auto medium_duration_tests = DurationRangeSuite{
+auto medium_duration_tests = DurationRangeSuite{
     .range_id = DurationRangeId::Medium,
     .tests =
         {
@@ -140,6 +146,7 @@ static auto medium_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 1e-2F,
+                .tolerance = 0.F,
             },
             {
                 .name = "center rotation → 1s",
@@ -155,6 +162,7 @@ static auto medium_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 10.F,
+                .tolerance = 0.F,
             },
             {
                 .name = "max multiplier rotation → 2x duration",
@@ -170,6 +178,7 @@ static auto medium_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
                 .want = MediumDuration::scale(0.5F) * 2.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "-5V cv reduces multiplier by 1x",
@@ -177,6 +186,7 @@ static auto medium_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
                 .want = MediumDuration::scale(0.5F) * 0.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "limits minimum duration even with extreme negative CV",
@@ -184,11 +194,12 @@ static auto medium_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.F, // 0x
                 .multiplier_cv = -3000.F,   // -3000V subtracts 600x
                 .want = 1e-3F,              // Even with -600x
+                .tolerance = 0.F,
             },
         },
 };
 
-static auto long_duration_tests = DurationRangeSuite{
+auto long_duration_tests = DurationRangeSuite{
     .range_id = DurationRangeId::Long,
     .tests =
         {
@@ -198,6 +209,7 @@ static auto long_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 1e-1F,
+                .tolerance = 0.F,
             },
             {
                 .name = "center rotation → 10s",
@@ -213,6 +225,7 @@ static auto long_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.5F, // 1x
                 .multiplier_cv = 0.F,        /// No modulation from CV
                 .want = 100.F,
+                .tolerance = 0.F,
             },
             {
                 .name = "max multiplier rotation → 2x duration",
@@ -228,6 +241,7 @@ static auto long_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
                 .want = LongDuration::scale(0.5F) * 2.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "-5V cv reduces multiplier by 1x",
@@ -235,6 +249,7 @@ static auto long_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
                 .want = LongDuration::scale(0.5F) * 0.5F,
+                .tolerance = 0.F,
             },
             {
                 .name = "limits minimum duration even with extreme negative CV",
@@ -242,6 +257,7 @@ static auto long_duration_tests = DurationRangeSuite{
                 .multiplier_rotation = 0.F, // 0x
                 .multiplier_cv = -3000.F,   // -3000V subtracts 600x
                 .want = 1e-3F,              // Even with -600x
+                .tolerance = 0.F,
             },
         },
 };
@@ -256,6 +272,7 @@ struct DurationSuite : Suite {
   }
 };
 
-static auto _ = DurationSuite{};
+auto duration_suite = DurationSuite{};
+} // namespace
 } // namespace sequencizer
 } // namespace test
