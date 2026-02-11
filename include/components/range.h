@@ -25,9 +25,9 @@ public:
 
   auto operator!=(Range rhs) const -> bool;
 
-  friend auto operator<<(std::ostream &os, Range range) -> std::ostream & {
-    os << "Range{" << range.lower_ << "," << range.upper_ << '}';
-    return os;
+  friend auto operator<<(std::ostream &out, Range range) -> std::ostream & {
+    out << "Range{" << range.lower_ << "," << range.upper_ << '}';
+    return out;
   }
 
 private:

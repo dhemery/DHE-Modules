@@ -42,14 +42,17 @@ static auto constexpr low = Latch{false, false};
 
 static auto constexpr values = std::array<Latch, 4>{low, high, falling, rising};
 
-static auto constexpr name(Latch l) -> char const * {
-  return l.is_high() ? (l.is_edge() ? "Rising" : "High")
-                     : (l.is_edge() ? "Falling" : "Low");
+static auto name(Latch latch) -> char const * {
+  if (latch.is_high()) {
+    return latch.is_edge() ? "Rising" : "High";
+  }
+  return latch.is_edge() ? "Falling" : "Low";
 }
 } // namespace latch
 
-static inline auto operator<<(std::ostream &os, Latch latch) -> std::ostream & {
-  return os << latch::name(latch);
+static inline auto operator<<(std::ostream &out, Latch latch)
+    -> std::ostream & {
+  return out << latch::name(latch);
 }
 
 } // namespace dhe

@@ -2,13 +2,11 @@
 #include "modules/sequencizer/signals.h"
 
 #include "signals/duration.h"
-#include "signals/linear.h"
 
 #include "dheunit/test.h"
 #include "helpers/assertions.h"
 #include "helpers/rack-controls.h"
 
-#include <functional>
 #include <vector>
 
 namespace test {
@@ -17,7 +15,6 @@ static auto constexpr N = 8; // NOLINT
 
 using dhe::Duration;
 using dhe::DurationRangeId;
-using dhe::Gain;
 using dhe::LongDuration;
 using dhe::MediumDuration;
 using dhe::ShortDuration;

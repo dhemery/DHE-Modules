@@ -10,11 +10,11 @@ void PhaseRotor::advance(float delta) {
 }
 
 auto PhaseRotor::sin(float offset) const -> float {
-  return std::sin(phase_ * tau + offset);
+  return std::sin((phase_ * tau) + offset);
 }
 
 auto PhaseRotor::cos(float offset) const -> float {
-  return std::cos(phase_ * tau + offset);
+  return std::cos((phase_ * tau) + offset);
 }
 
 } // namespace dhe

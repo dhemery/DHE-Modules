@@ -1,7 +1,6 @@
 Checks: '-*,bugprone-*,misc-*,modernize-*,performance-*,portability-*,readability-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: '^src/.*'
-AnalyzeTemporaryDtors: false
 FormatStyle: file
 User: Dale
 CheckOptions:

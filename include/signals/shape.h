@@ -22,10 +22,6 @@ struct JShape {
 struct SShape {
   static auto apply(float input, float curvature) -> float;
   static auto invert(float input, float curvature) -> float;
-
-private:
-  static auto scale_up(float input) -> float;
-  static auto scale_down(float curved) -> float;
 };
 
 struct Shape {
