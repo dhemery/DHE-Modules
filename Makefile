@@ -32,14 +32,14 @@ $(DHEUNIT_INCLUDE_DIR):
 	git submodule update --init --recursive
 
 RACK_INCLUDES = -I$(RACK_DIR)/include -I$(RACK_DIR)/dep/include
-TEST_INCLUDES =  -Itest -I$(DHEUNIT_SRC)
+TEST_INCLUDES = -Itest -I$(DHEUNIT_SRC)
 TEST_CXXFLAGS = $(filter-out $(RACK_INCLUDES),$(CXXFLAGS)) $(TEST_INCLUDES)
 
 TEST_SOURCES = $(shell find test -name "*.cpp")
-COMPONENT_SOURCES = $(shell find src/components -name "*.cpp")
-SIGNAL_SOURCES = $(shell find src/signals -name "*.cpp")
+TEST_SOURCES += $(shell find src/components -name "*.cpp")
+TEST_SOURCES += $(shell find src/signals -name "*.cpp")
 
-TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES) $(COMPONENT_SOURCES) $(SIGNAL_SOURCES))
+TEST_OBJECTS := $(patsubst %, build/%.o, $(TEST_SOURCES))
 -include $(TEST_OBJECTS:.o=.d)
 
 $(TEST_OBJECTS): $(DHEUNIT_INCLUDE_DIR)
