@@ -14,13 +14,13 @@ namespace sequencizer {
 static auto constexpr N = 8; // NOLINT
 
 using dhe::DurationCurve;
-using dhe::short_duration_range;
+using dhe::short_duration_curve;
 using dhe::sequencizer::InputId;
 using ParamId = dhe::sequencizer::ParamIds<N>;
 using dhe::sequencizer::OutputId;
 using LightId = dhe::sequencizer::LightIds<N>;
-using dhe::long_duration_range;
-using dhe::medium_duration_range;
+using dhe::long_duration_curve;
+using dhe::medium_duration_curve;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::fake::Light;
@@ -62,7 +62,7 @@ struct DurationRangeSuite {
   std::vector<DurationRangeTest> tests; // NOLINT
 
   void run(Tester &t) const {
-    auto const name = std::string{"With range "} + DurationCurve::label(id);
+    auto const name = std::string{"With range "} + DurationCurve::by_id(id).label();
     t.run(name, [this](Tester &t) -> void {
       for (auto const &test : tests) {
         test.run(t, id);
@@ -105,7 +105,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = short_duration_range.scale(0.781F) * 2.F,
+                .want = short_duration_curve.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -113,7 +113,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = short_duration_range.scale(0.5F) * 2.5F,
+                .want = short_duration_curve.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -121,7 +121,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = short_duration_range.scale(0.5F) * 0.5F,
+                .want = short_duration_curve.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {
@@ -168,7 +168,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = dhe::medium_duration_range.scale(0.781F) * 2.F,
+                .want = dhe::medium_duration_curve.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -176,7 +176,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = dhe::medium_duration_range.scale(0.5F) * 2.5F,
+                .want = dhe::medium_duration_curve.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -184,7 +184,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = medium_duration_range.scale(0.5F) * 0.5F,
+                .want = medium_duration_curve.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {
@@ -231,7 +231,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = long_duration_range.scale(0.781F) * 2.F,
+                .want = long_duration_curve.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -239,7 +239,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = long_duration_range.scale(0.5F) * 2.5F,
+                .want = long_duration_curve.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -247,7 +247,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = long_duration_range.scale(0.5F) * 0.5F,
+                .want = long_duration_curve.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {

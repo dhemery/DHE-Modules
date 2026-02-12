@@ -72,7 +72,7 @@ struct Signals {
         Gain::scale(rotation_of(params_[ParamId::DurationMultiplier],
                                 inputs_[InputId::DurationMultiplierCV]));
     auto const scaled_duration = nominal_duration * multiplier;
-    return cx::max(scaled_duration, short_duration_range.range().lower_bound());
+    return cx::max(scaled_duration, short_duration_curve.range().lower_bound());
   }
 
   auto gate() const -> bool {

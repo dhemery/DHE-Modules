@@ -15,18 +15,18 @@ struct MediumDurationKnob {
 
   struct Quantity : rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
-      return medium_duration_range.scale(getValue());
+      return medium_duration_curve.scale(getValue());
     }
 
     void setDisplayValue(float display) override {
-      setValue(medium_duration_range.normalize(display));
+      setValue(medium_duration_curve.normalize(display));
     }
   };
 
   static auto config(rack::engine::Module *module, int id,
                      std::string const &name, float value = default_duration)
       -> Quantity * {
-    auto const default_rotation = medium_duration_range.normalize(value);
+    auto const default_rotation = medium_duration_curve.normalize(value);
     auto *q = module->configParam<Quantity>(id, 0.F, 1.F, default_rotation,
                                             name, " s");
     return q;
