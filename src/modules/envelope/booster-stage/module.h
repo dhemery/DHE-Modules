@@ -37,7 +37,7 @@ struct Module : public rack::engine::Module {
     configInput(InputId::LevelCv, "Level CV");
 
     CurvatureKnob::config(this, ParamId::Curvature, "Curvature");
-    ShapeSwitch::config(this, ParamId::Shape, "Shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape, "Shape");
     configInput(InputId::CurvatureCv, "Curvature CV");
 
     auto *duration_range_switch =

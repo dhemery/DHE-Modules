@@ -29,13 +29,12 @@ public:
     auto const start_voltage = start_anchor_.voltage();
     auto const end_voltage = end_anchor_.voltage();
     auto const range = Range{start_voltage, end_voltage};
-    auto const shape = signals_.shape(step_);
+    auto const &shape = signals_.shape(step_);
 
     timer_.advance(sample_time / duration);
     auto const phase = timer_.phase();
 
-    auto const out_voltage =
-        range.scale(Shape::by_id(shape).apply(phase, curvature));
+    auto const out_voltage = range.scale(shape.apply(phase, curvature));
     signals_.output(out_voltage);
     signals_.show_progress(step_, phase);
     return timer_.in_progress() ? GeneratorStatus::Generating
@@ -48,7 +47,7 @@ private:
   Signals &signals_;
   Anchor &start_anchor_;
   Anchor &end_anchor_;
-  PhaseTimer timer_{};
+  PhaseTimer timer_;
   int step_{0};
 };
 } // namespace sequencizer

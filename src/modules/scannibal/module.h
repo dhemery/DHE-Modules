@@ -76,8 +76,7 @@ public:
                                   step_name + "phase 1 anchor mode",
                                   AnchorMode::Track);
 
-      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
-                          Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape");
       CurvatureKnob::config(this, ParamId::StepCurvature + step,
                             step_name + "curvature");
       configInput(InputId::StepCurvatureCv + step, step_name + "curvature CV");
@@ -159,8 +158,8 @@ public:
     outputs[OutputId::StepPhase].setVoltage(phase * 10.F);
   }
 
-  auto shape(int step) const -> Shape::Id {
-    return value_of<Shape::Id>(params[ParamId::StepShape + step]);
+  auto shape(int step) const -> Shape const & {
+    return Shape::get(value_of<Shape::Id>(params[ParamId::StepShape + step]));
   }
 
   auto dataToJson() -> json_t * override {

@@ -1,21 +1,19 @@
 #pragma once
 
-#include <array>
-#include <cstdint>
-
 #include "components/range.h"
 
 namespace dhe {
 namespace shape {}
 
 struct Shape {
-  enum class Id : std::uint8_t { J, S };
-  static auto constexpr labels = std::array<char const *, 2>{"J", "S"};
+  static auto constexpr count = 2;
+  enum class Id : std::int8_t { J, S };
+
+  static auto get(Id id) -> Shape const &;
+  static auto labels() -> std::vector<std::string> const &;
 
   virtual auto apply(float input, float curvature) const -> float = 0;
   virtual auto invert(float input, float curvature) const -> float = 0;
-
-  static auto by_id(Id id) -> Shape const &;
 };
 
 struct JShape : Shape {
@@ -28,8 +26,8 @@ struct SShape : Shape {
   auto invert(float input, float curvature) const -> float override;
 };
 
-static Shape const &j_shape = JShape{};
-static Shape const &s_shape = SShape{};
+static auto const j_shape = JShape{};
+static auto const s_shape = SShape{};
 
 namespace curvature {
 static auto range = Range{-0.9999F, 0.9999F};

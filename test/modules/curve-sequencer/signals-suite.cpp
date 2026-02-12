@@ -191,12 +191,12 @@ public:
                 module.params_[ParamId::StepShape + step].setValue(
                     static_cast<float>(selection));
 
-                auto const got = signals.shape(step);
-                auto const want = static_cast<Shape::Id>(selection);
+                auto const *got = &signals.shape(step);
+                auto const *want =
+                    &Shape::get(static_cast<Shape::Id>(selection));
 
                 if (got != want) {
-                  t.errorf("Got {}, want {}", static_cast<int>(got),
-                           static_cast<int>(want));
+                  t.errorf("Got {}, want {}", got, want);
                 }
               }));
       }

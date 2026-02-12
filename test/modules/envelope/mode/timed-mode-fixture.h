@@ -22,7 +22,7 @@ struct Signals {
   auto input() const -> float { return input_; }
   void output(float f) { output_ = f; }
   void show_active(bool active) { active_ = active; }
-  auto shape() const -> Shape::Id { return shape_; }
+  auto shape() const -> Shape const & { return Shape::get(shape_); }
   bool active_{};                  // NOLINT
   float duration_{};               // NOLINT
   float curvature_{};              // NOLINT

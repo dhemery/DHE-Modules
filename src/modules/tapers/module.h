@@ -30,7 +30,7 @@ public:
     CurvatureKnob::config(this, ParamId::Curvature1, "Taper 1 curvature");
     AttenuverterKnob::config(this, ParamId::CurvatureAv1,
                              "Taper 1 curvature CV gain");
-    ShapeSwitch::config(this, ParamId::Shape1, "Taper 1 shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape1, "Taper 1 shape");
     configInput(InputId::CurvatureCv1, "Taper 1 curvature CV");
 
     configOutput(OutputId::Taper1, "Taper 1");
@@ -46,7 +46,7 @@ public:
     CurvatureKnob::config(this, ParamId::Curvature2, "Taper 2 curvature");
     AttenuverterKnob::config(this, ParamId::CurvatureAv2,
                              "Taper 2 curvature CV gain");
-    ShapeSwitch::config(this, ParamId::Shape2, "Taper 2 shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape2, "Taper 2 shape");
     configInput(InputId::CurvatureCv2, "Taper 2 curvature CV");
 
     configOutput(OutputId::Taper2, "Taper 2Shape");
@@ -84,13 +84,14 @@ private:
     return Curvature::scale(safe_rotation(knob_id, cv_id, av_id));
   }
 
-  auto shape(int id) const -> Shape::Id {
-    return value_of<Shape::Id>(params[id]);
+  auto shape(int id) const -> Shape const & {
+    return Shape::get(value_of<Shape::Id>(params[id]));
   }
 
-  static inline auto tapered(float rotation, Shape::Id shape, float curvature,
-                             VoltageRangeId range_id) -> float {
-    auto const tapered = Shape::by_id(shape).apply(rotation, curvature);
+  static inline auto tapered(float rotation, Shape const &shape,
+                             float curvature, VoltageRangeId range_id)
+      -> float {
+    auto const tapered = shape.apply(rotation, curvature);
     return Voltage::scale(tapered, range_id);
   }
 

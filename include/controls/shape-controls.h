@@ -5,6 +5,7 @@
 #include "signals/shape.h"
 #include "switches.h"
 
+#include <array>
 #include <string>
 
 namespace dhe {
@@ -32,7 +33,7 @@ struct CurvatureKnob {
 struct ShapeSwitch {
   using Quantity = rack::engine::SwitchQuantity;
   template <typename Panel>
-  using Widget = ThumbSwitch::Widget<Panel, Shape::labels.size()>;
+  using Widget = ThumbSwitch::Widget<Panel, Shape::count>;
 
   template <typename Panel>
   static auto install(Panel *panel, int param_id, float xmm, float ymm)
@@ -44,21 +45,19 @@ struct ShapeSwitch {
   }
 
   static auto config(rack::engine::Module *module, int param_id,
-                     std::string const &name,
-                     Shape::Id default_shape = Shape::Id::J) -> Quantity * {
-    static auto const labels =
-        std::vector<std::string>{Shape::labels.cbegin(), Shape::labels.cend()};
-    static auto const max_value = static_cast<float>(labels.size() - 1);
+                     std::string const &name, int default_shape = 0)
+      -> Quantity * {
+    static auto const max_value = static_cast<float>(Shape::count - 1);
     auto const default_value = static_cast<float>(default_shape);
     auto *quantity = module->configSwitch<Quantity>(
-        param_id, 0.F, max_value, default_value, name, labels);
+        param_id, 0.F, max_value, default_value, name, Shape::labels());
     return quantity;
   }
 };
 
 struct ShapeStepper {
   template <typename Panel> struct Widget : rack::app::SvgSwitch {
-    static auto constexpr size = Shape::labels.size();
+    static auto constexpr size = Shape::count;
     Widget() {
       auto const prefix = std::string{Panel::svg_dir} + "/shape-";
       for (size_t position = 1; position <= size; position++) {

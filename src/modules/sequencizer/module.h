@@ -102,8 +102,7 @@ public:
           this, ParamId::StepDuration + step, step_name + "duration");
       duration_range_switch->add_knob(duration_knob);
 
-      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
-                          Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape");
       Button::config(this, ParamId::StepEnabled + step, step_name + "enabled",
                      1);
 

@@ -24,7 +24,7 @@ struct Module : public rack::engine::Module {
     AttenuverterKnob::config(this, ParamId::CurvatureAv, "Curvature CV gain",
                              0.F);
     configInput(InputId::CurvatureCv, "Curvature CV");
-    ShapeSwitch::config(this, ParamId::Shape, "Shape", Shape::Id::J);
+    ShapeSwitch::config(this, ParamId::Shape, "Shape");
     VoltageRangeSwitch::config(this, ParamId::Level, "IN voltage range",
                                VoltageRangeId::Bipolar);
   }
@@ -33,7 +33,7 @@ struct Module : public rack::engine::Module {
     auto const voltage_range = Voltage::range(voltage_range_id());
     auto const clamped = voltage_range.clamp(input_voltage());
     auto const normalized = voltage_range.normalize(clamped);
-    auto const tapered = Shape::by_id(shape()).apply(normalized, curvature());
+    auto const tapered = shape().apply(normalized, curvature());
     auto const output_voltage = voltage_range.scale(tapered);
     send_signal(output_voltage);
   }
@@ -56,8 +56,8 @@ private:
     outputs[OutputId::Swave].setVoltage(voltage);
   }
 
-  auto shape() const -> Shape::Id {
-    return value_of<Shape::Id>(params[ParamId::Shape]);
+  auto shape() const -> Shape const & {
+    return Shape::get(value_of<Shape::Id>(params[ParamId::Shape]));
   }
 
   auto input_voltage() const -> float {

@@ -29,7 +29,9 @@ struct Anchor {
 struct Module {
   auto curvature(int step) const -> float { return curvature_[step]; }
   void output(float v) { output_ = v; }
-  auto shape(int step) const -> Shape::Id { return shape_[step]; }
+  auto shape(int step) const -> dhe::Shape const & {
+    return Shape::get(shape_[step]);
+  }
 
   std::array<float, step_count> curvature_{}; // NOLINT
   float output_{};                            // NOLINT

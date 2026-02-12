@@ -161,8 +161,8 @@ struct Signals {
     }
   }
 
-  auto shape(int step) const -> Shape::Id {
-    return value_of<Shape::Id>(params_[ParamId::StepShape + step]);
+  auto shape(int step) const -> Shape const & {
+    return Shape::get(value_of<Shape::Id>(params_[ParamId::StepShape + step]));
   }
 
 private:

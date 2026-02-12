@@ -52,7 +52,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
     outputs_[OutputId::Eoc].setVoltage(voltage);
   }
 
-  static auto shape() -> Shape::Id { return Shape::Id::J; };
+  static auto shape() -> Shape const & { return j_shape; };
 
 private:
   std::vector<TParam> &params_;

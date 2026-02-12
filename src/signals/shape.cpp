@@ -3,6 +3,18 @@
 #include "components/sigmoid.h"
 
 namespace dhe {
+auto Shape::get(Id id) -> Shape const & {
+  if (id == Id::J) {
+    return j_shape;
+  }
+  return s_shape;
+}
+
+auto Shape::labels() -> std::vector<std::string> const & {
+  static auto const labels = std::vector<std::string>{"J", "S"};
+  return labels;
+}
+
 auto JShape::apply(float input, float curvature) const -> float {
   return sigmoid::curve(input, curvature);
 }
@@ -19,10 +31,6 @@ auto SShape::apply(float input, float curvature) const -> float {
 
 auto SShape::invert(float input, float curvature) const -> float {
   return apply(input, -curvature);
-}
-
-auto Shape::by_id(Id id) -> Shape const & {
-  return id == Id::J ? j_shape : s_shape;
 }
 
 auto Curvature::scale(float normalized) -> float {

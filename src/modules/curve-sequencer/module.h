@@ -72,8 +72,7 @@ template <int N> struct Module : rack::engine::Module {
                                              step_name + "level");
       level_range_switch->add_knob(level_knob);
 
-      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape",
-                          Shape::Id::J);
+      ShapeSwitch::config(this, ParamId::StepShape + step, step_name + "shape");
       CurvatureKnob::config(this, ParamId::StepCurvature + step,
                             step_name + "curvature");
       auto *duration_knob = DurationKnob::config(
@@ -100,7 +99,7 @@ template <int N> struct Module : rack::engine::Module {
 private:
   using SignalsType = Signals<rack::engine::Param, rack::engine::Input,
                               rack::engine::Output, rack::engine::Light, N>;
-  PhaseTimer timer_{};
+  PhaseTimer timer_;
   SignalsType signals_{params, inputs, outputs, lights};
   StepController<SignalsType> step_controller_{signals_, timer_};
   StepSelector<SignalsType> selector_{signals_, N};

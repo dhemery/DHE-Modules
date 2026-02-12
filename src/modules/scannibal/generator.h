@@ -23,10 +23,9 @@ public:
     auto const phase_0_voltage = phase_0_anchor_.voltage();
     auto const phase_1_voltage = phase_1_anchor_.voltage();
     auto const range = Range{phase_0_voltage, phase_1_voltage};
-    auto const shape = module_.shape(step);
+    auto const &shape = module_.shape(step);
 
-    auto const out_voltage =
-        range.scale(Shape::by_id(shape).apply(phase, curvature));
+    auto const out_voltage = range.scale(shape.apply(phase, curvature));
 
     module_.output(out_voltage);
   }

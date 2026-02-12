@@ -1,6 +1,6 @@
 #pragma once
 
-#include "switches.h"
+#include "controls/switches.h"
 
 #include "panels/assets.h"
 #include "signals/duration.h"

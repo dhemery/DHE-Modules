@@ -4,6 +4,7 @@
 
 #include "components/cxmath.h"
 #include "components/sigmoid.h"
+#include "controls/shape-controls.h"
 #include "signals/basic.h"
 #include "signals/duration.h"
 #include "signals/shape.h"
@@ -72,8 +73,8 @@ public:
     outputs_[OutputId::Eoc].setVoltage(voltage);
   }
 
-  auto shape() const -> Shape::Id {
-    return value_of<Shape::Id>(params_[ParamId::Shape]);
+  auto shape() const -> Shape const & {
+    return Shape::get(value_of<Shape::Id>(params_[ParamId::Shape]));
   }
 
 private:

@@ -31,7 +31,9 @@ struct Signals {
   auto curvature(int step) const -> float { return curvature_[step]; }
   auto duration(int step) const -> float { return duration_[step]; }
   void output(float v) { output_ = v; }
-  auto shape(int step) const -> Shape::Id { return shape_[step]; }
+  auto shape(int step) const -> Shape const & {
+    return Shape::get(shape_[step]);
+  }
   void show_progress(int step, float progress) { progress_[step] = progress; }
   void show_inactive(int step) { inactive_step_ = step; }
 

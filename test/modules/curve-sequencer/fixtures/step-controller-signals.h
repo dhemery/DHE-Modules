@@ -36,7 +36,7 @@ template <int N> struct StepControllerSignals {
   auto level(int s) -> float { return level_[s]; }
   void output(float v) { output_ = v; }
   auto output() -> float { return output_; }
-  auto shape(int s) -> Shape::Id const & { return shape_[s]; }
+  auto shape(int s) -> dhe::Shape const & { return Shape::get(shape_[s]); }
   void show_inactive(int s) { deactivated_step_ = s; }
   void show_progress(int s, float p) { progress_[s] = p; }
 };
