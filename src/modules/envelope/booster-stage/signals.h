@@ -38,8 +38,8 @@ public:
     auto const rotation =
         rotation_of(params_[ParamId::Duration], inputs_[InputId::DurationCv]);
     auto const range =
-        value_of<DurationTaper::Id>(params_[ParamId::DurationRange]);
-    return DurationTaper::by_id(range).scale(cx::max(rotation, 0.F));
+        value_of<DurationCurve::Id>(params_[ParamId::DurationRange]);
+    return DurationCurve::by_id(range).scale(cx::max(rotation, 0.F));
   }
 
   auto gate() const -> bool {

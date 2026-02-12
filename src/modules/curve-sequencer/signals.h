@@ -41,8 +41,8 @@ struct Signals {
   auto duration(int step) const -> float {
     auto const rotation = value_of(params_[ParamId::StepDuration + step]);
     auto const range =
-        value_of<DurationTaper::Id>(params_[ParamId::DurationRange]);
-    return DurationTaper::by_id(range).scale(rotation);
+        value_of<DurationCurve::Id>(params_[ParamId::DurationRange]);
+    return DurationCurve::by_id(range).scale(rotation);
   }
 
   auto generate_mode(int step) const -> GenerateMode {

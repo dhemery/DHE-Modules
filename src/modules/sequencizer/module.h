@@ -60,7 +60,7 @@ public:
 
     auto *duration_range_switch = DurationRangeSwitch::config(
         this, ParamId::DurationRange, "Duration range",
-        DurationTaper::Id::Medium);
+        DurationCurve::Id::Medium);
     auto *level_range_switch = VoltageRangeSwitch::config(
         this, ParamId::LevelRange, "Level range", VoltageRangeId::Unipolar);
 

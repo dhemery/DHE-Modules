@@ -15,9 +15,9 @@ namespace dhe {
  */
 static auto constexpr taper_curvature = 0.8018017F;
 
-DurationTaper::DurationTaper(Range const &range) : range_{range} {}
+DurationCurve::DurationCurve(Range const &range) : range_{range} {}
 
-auto DurationTaper::by_id(Id id) -> DurationTaper const & {
+auto DurationCurve::by_id(Id id) -> DurationCurve const & {
   switch (id) {
   case Id::Short:
     return short_duration_range;
@@ -28,24 +28,24 @@ auto DurationTaper::by_id(Id id) -> DurationTaper const & {
   }
 }
 
-auto DurationTaper::labels() -> std::vector<std::string> const & {
+auto DurationCurve::labels() -> std::vector<std::string> const & {
   static auto const labels =
       std::vector<std::string>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
   return labels;
 }
 
-auto DurationTaper::label(Id id) -> std::string {
+auto DurationCurve::label(Id id) -> std::string {
   return labels()[static_cast<int>(id)];
 }
 
-auto DurationTaper::scale(float rotation) const -> float {
+auto DurationCurve::scale(float rotation) const -> float {
   return range_.scale(j_shape.apply(rotation, taper_curvature));
 }
 
-auto DurationTaper::normalize(float seconds) const -> float {
+auto DurationCurve::normalize(float seconds) const -> float {
   return j_shape.invert(range_.normalize(seconds), taper_curvature);
 }
 
-auto DurationTaper::range() const -> Range const & { return range_; }
+auto DurationCurve::range() const -> Range const & { return range_; }
 
 } // namespace dhe

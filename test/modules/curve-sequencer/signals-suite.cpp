@@ -8,7 +8,7 @@
 
 namespace test {
 namespace curve_sequencer {
-using dhe::DurationTaper;
+using dhe::DurationCurve;
 using dhe::Shape;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
@@ -166,7 +166,7 @@ public:
           test([](Tester &t, Module &module, Signals &signals) {
             auto const step = std::rand() % step_count;
             auto constexpr duration_knob_rotation = 0.75F;
-            auto constexpr duration_range_id = DurationTaper::Id::Long;
+            auto constexpr duration_range_id = DurationCurve::Id::Long;
 
             module.params_[ParamId::StepDuration + step].setValue(
                 duration_knob_rotation);
@@ -174,7 +174,7 @@ public:
                 static_cast<float>(duration_range_id));
 
             auto const got = signals.duration(step);
-            auto const want = DurationTaper::by_id(duration_range_id)
+            auto const want = DurationCurve::by_id(duration_range_id)
                                   .scale(duration_knob_rotation);
             if (got != want) {
               t.errorf("Got {}, want {}", got, want);

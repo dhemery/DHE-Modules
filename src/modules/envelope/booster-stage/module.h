@@ -42,7 +42,7 @@ struct Module : public rack::engine::Module {
 
     auto *duration_range_switch = DurationRangeSwitch::config(
         this, ParamId::DurationRange, "Duration range",
-        DurationTaper::Id::Medium);
+        DurationCurve::Id::Medium);
     auto *duration_knob =
         DurationKnob::config(this, ParamId::Duration, "Duration");
     duration_range_switch->add_knob(duration_knob);

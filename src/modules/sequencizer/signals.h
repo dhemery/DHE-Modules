@@ -63,11 +63,11 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    DurationTaper::Id range_id =
-        value_of<DurationTaper::Id>(params_[ParamId::DurationRange]);
+    DurationCurve::Id range_id =
+        value_of<DurationCurve::Id>(params_[ParamId::DurationRange]);
     auto const rotation = value_of(params_[ParamId::StepDuration + step]);
     auto const nominal_duration =
-        DurationTaper::by_id(range_id).scale(rotation);
+        DurationCurve::by_id(range_id).scale(rotation);
     auto const multiplier =
         Gain::scale(rotation_of(params_[ParamId::DurationMultiplier],
                                 inputs_[InputId::DurationMultiplierCV]));

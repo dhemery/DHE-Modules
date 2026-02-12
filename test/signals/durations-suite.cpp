@@ -4,20 +4,20 @@
 
 namespace test {
 namespace duration {
-using dhe::DurationTaper;
+using dhe::DurationCurve;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 
 struct DurationsSuite : Suite {
   DurationsSuite() : Suite{"dhe::Durations::value()"} {}
   void run(Tester &t) override {
-    static auto const range_ids = std::vector<DurationTaper::Id>{
-        DurationTaper::Id::Short, DurationTaper::Id::Medium,
-        DurationTaper::Id::Long};
+    static auto const range_ids = std::vector<DurationCurve::Id>{
+        DurationCurve::Id::Short, DurationCurve::Id::Medium,
+        DurationCurve::Id::Long};
     for (auto const range_id : range_ids) {
-      auto range_name = DurationTaper::label(range_id);
+      auto range_name = DurationCurve::label(range_id);
       t.run(range_name, [range_id](Tester &t) {
-        auto const taper = DurationTaper::by_id(range_id);
+        auto const taper = DurationCurve::by_id(range_id);
         t.run("minimum normalize yields lower bound", [taper](Tester &t) {
           auto constexpr rotation = 0.F;
           auto const want = taper.range().lower_bound();

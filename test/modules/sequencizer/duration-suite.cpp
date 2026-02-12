@@ -13,7 +13,7 @@ namespace test {
 namespace sequencizer {
 static auto constexpr N = 8; // NOLINT
 
-using dhe::DurationTaper;
+using dhe::DurationCurve;
 using dhe::short_duration_range;
 using dhe::sequencizer::InputId;
 using ParamId = dhe::sequencizer::ParamIds<N>;
@@ -35,8 +35,8 @@ struct DurationRangeTest {
   float want;                // NOLINT
   float tolerance;           // NOLINT
 
-  void run(Tester &t, DurationTaper::Id range_id) const {
-    t.run(name, [this, range_id](Tester &t) -> void {
+  void run(Tester &t, DurationCurve::Id id) const {
+    t.run(name, [this, id](Tester &t) -> void {
       std::vector<Param> params{ParamId::Count};
       std::vector<Port> inputs{InputId::Count};
       std::vector<Port> outputs{OutputId::Count};
@@ -47,7 +47,7 @@ struct DurationRangeTest {
           dhe::sequencizer::Signals<Param, Port, Port, Light, N>{
               inputs, params, outputs, lights};
       params[ParamId::StepDuration + step].setValue(rotation);
-      params[ParamId::DurationRange].setValue(static_cast<float>(range_id));
+      params[ParamId::DurationRange].setValue(static_cast<float>(id));
       params[ParamId::DurationMultiplier].setValue(multiplier_rotation);
       inputs[InputId::DurationMultiplierCV].setVoltage(multiplier_cv);
 
@@ -58,15 +58,14 @@ struct DurationRangeTest {
 };
 
 struct DurationRangeSuite {
-  DurationTaper::Id range_id;           // NOLINT
+  DurationCurve::Id id;                 // NOLINT
   std::vector<DurationRangeTest> tests; // NOLINT
 
   void run(Tester &t) const {
-    auto const name =
-        std::string{"With range "} + DurationTaper::label(range_id);
+    auto const name = std::string{"With range "} + DurationCurve::label(id);
     t.run(name, [this](Tester &t) -> void {
       for (auto const &test : tests) {
-        test.run(t, range_id);
+        test.run(t, id);
       }
     });
   }
@@ -74,7 +73,7 @@ struct DurationRangeSuite {
 
 namespace {
 auto short_duration_tests = DurationRangeSuite{
-    .range_id = DurationTaper::Id::Short,
+    .id = DurationCurve::Id::Short,
     .tests =
         {
             {
@@ -137,7 +136,7 @@ auto short_duration_tests = DurationRangeSuite{
 };
 
 auto medium_duration_tests = DurationRangeSuite{
-    .range_id = DurationTaper::Id::Medium,
+    .id = DurationCurve::Id::Medium,
     .tests =
         {
             {
@@ -200,7 +199,7 @@ auto medium_duration_tests = DurationRangeSuite{
 };
 
 auto long_duration_tests = DurationRangeSuite{
-    .range_id = DurationTaper::Id::Long,
+    .id = DurationCurve::Id::Long,
     .tests =
         {
             {
