@@ -3,9 +3,24 @@
 #include "components/range.h"
 
 #include <array>
+#include <cstdint>
 
 namespace dhe {
 enum class DurationRangeId { Short, Medium, Long };
+struct DurationRange {
+  DurationRange(Range const &);
+  enum class Id : std::int8_t { Short, Medium, Long };
+
+  static auto constexpr count = 2;
+  static auto labels() -> std::vector<std::string> const &;
+  static auto by_id(Id) -> DurationRange const &;
+
+  auto scale(float rotation) -> float;
+  auto normalize(float seconds) -> float;
+
+private:
+  Range const range_;
+};
 
 namespace duration {
 static auto short_range = Range{0.001F, 1.F};
@@ -40,9 +55,14 @@ template <typename R> struct Tapered {
   static constexpr auto normalize(float scaled) -> float {
     return duration::normalize(scaled, R::range);
   }
+  friend R;
 };
 
 } // namespace duration
+
+static auto short_duration_range = DurationRange{duration::short_range};
+static auto medium_duration_range = DurationRange{duration::medium_range};
+static auto long_duration_range = DurationRange{duration::long_range};
 
 struct ShortDuration : duration::Tapered<ShortDuration> {
   static auto constexpr &range = duration::short_range;
@@ -57,9 +77,9 @@ struct LongDuration : duration::Tapered<LongDuration> {
 };
 
 struct Duration {
-  static auto label(DurationRangeId id) -> char const *;
+  static auto label(DurationRangeId range_id) -> char const *;
 
-  static auto range(DurationRangeId id) -> Range;
+  static auto range(DurationRangeId range_id) -> Range;
 
   static auto scale(float normalized, DurationRangeId range_id) -> float;
 
