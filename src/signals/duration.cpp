@@ -24,6 +24,7 @@ auto DurationCurve::by_id(Id id) -> DurationCurve const & {
   case Id::Short:
     return short_duration_curve;
   case Id::Medium:
+  default:
     return medium_duration_curve;
   case Id::Long:
     return long_duration_curve;
