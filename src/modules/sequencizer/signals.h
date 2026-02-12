@@ -63,15 +63,16 @@ struct Signals {
   }
 
   auto duration(int step) const -> float {
-    DurationRangeId range_id =
-        value_of<DurationRangeId>(params_[ParamId::DurationRange]);
+    DurationTaper::Id range_id =
+        value_of<DurationTaper::Id>(params_[ParamId::DurationRange]);
     auto const rotation = value_of(params_[ParamId::StepDuration + step]);
-    auto const nominal_duration = Duration::scale(rotation, range_id);
+    auto const nominal_duration =
+        DurationTaper::by_id(range_id).scale(rotation);
     auto const multiplier =
         Gain::scale(rotation_of(params_[ParamId::DurationMultiplier],
                                 inputs_[InputId::DurationMultiplierCV]));
     auto const scaled_duration = nominal_duration * multiplier;
-    return cx::max(scaled_duration, ShortDuration::range.lower_bound());
+    return cx::max(scaled_duration, short_duration_range.range().lower_bound());
   }
 
   auto gate() const -> bool {

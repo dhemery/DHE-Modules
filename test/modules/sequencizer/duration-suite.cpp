@@ -13,15 +13,14 @@ namespace test {
 namespace sequencizer {
 static auto constexpr N = 8; // NOLINT
 
-using dhe::Duration;
-using dhe::DurationRangeId;
-using dhe::LongDuration;
-using dhe::MediumDuration;
-using dhe::ShortDuration;
+using dhe::DurationTaper;
+using dhe::short_duration_range;
 using dhe::sequencizer::InputId;
 using ParamId = dhe::sequencizer::ParamIds<N>;
 using dhe::sequencizer::OutputId;
 using LightId = dhe::sequencizer::LightIds<N>;
+using dhe::long_duration_range;
+using dhe::medium_duration_range;
 using dhe::unit::Suite;
 using dhe::unit::Tester;
 using test::fake::Light;
@@ -36,7 +35,7 @@ struct DurationRangeTest {
   float want;                // NOLINT
   float tolerance;           // NOLINT
 
-  void run(Tester &t, DurationRangeId range_id) const {
+  void run(Tester &t, DurationTaper::Id range_id) const {
     t.run(name, [this, range_id](Tester &t) -> void {
       std::vector<Param> params{ParamId::Count};
       std::vector<Port> inputs{InputId::Count};
@@ -59,11 +58,12 @@ struct DurationRangeTest {
 };
 
 struct DurationRangeSuite {
-  DurationRangeId range_id;             // NOLINT
+  DurationTaper::Id range_id;           // NOLINT
   std::vector<DurationRangeTest> tests; // NOLINT
 
   void run(Tester &t) const {
-    auto const name = std::string{"With range "} + Duration::label(range_id);
+    auto const name =
+        std::string{"With range "} + DurationTaper::label(range_id);
     t.run(name, [this](Tester &t) -> void {
       for (auto const &test : tests) {
         test.run(t, range_id);
@@ -74,7 +74,7 @@ struct DurationRangeSuite {
 
 namespace {
 auto short_duration_tests = DurationRangeSuite{
-    .range_id = DurationRangeId::Short,
+    .range_id = DurationTaper::Id::Short,
     .tests =
         {
             {
@@ -106,7 +106,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = ShortDuration::scale(0.781F) * 2.F,
+                .want = short_duration_range.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -114,7 +114,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = ShortDuration::scale(0.5F) * 2.5F,
+                .want = short_duration_range.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -122,7 +122,7 @@ auto short_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = ShortDuration::scale(0.5F) * 0.5F,
+                .want = short_duration_range.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {
@@ -137,7 +137,7 @@ auto short_duration_tests = DurationRangeSuite{
 };
 
 auto medium_duration_tests = DurationRangeSuite{
-    .range_id = DurationRangeId::Medium,
+    .range_id = DurationTaper::Id::Medium,
     .tests =
         {
             {
@@ -169,7 +169,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = MediumDuration::scale(0.781F) * 2.F,
+                .want = dhe::medium_duration_range.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -177,7 +177,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = MediumDuration::scale(0.5F) * 2.5F,
+                .want = dhe::medium_duration_range.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -185,7 +185,7 @@ auto medium_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = MediumDuration::scale(0.5F) * 0.5F,
+                .want = medium_duration_range.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {
@@ -200,7 +200,7 @@ auto medium_duration_tests = DurationRangeSuite{
 };
 
 auto long_duration_tests = DurationRangeSuite{
-    .range_id = DurationRangeId::Long,
+    .range_id = DurationTaper::Id::Long,
     .tests =
         {
             {
@@ -232,7 +232,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.781F,
                 .multiplier_rotation = 1.F, // 2x
                 .multiplier_cv = 0.F,       // No modulation from CV
-                .want = LongDuration::scale(0.781F) * 2.F,
+                .want = long_duration_range.scale(0.781F) * 2.F,
                 .tolerance = 0.00001F,
             },
             {
@@ -240,7 +240,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = 5.F,         // 5V adds 1x
-                .want = LongDuration::scale(0.5F) * 2.5F,
+                .want = long_duration_range.scale(0.5F) * 2.5F,
                 .tolerance = 0.F,
             },
             {
@@ -248,7 +248,7 @@ auto long_duration_tests = DurationRangeSuite{
                 .rotation = 0.5F,
                 .multiplier_rotation = 0.75F, // 1.5x
                 .multiplier_cv = -5.F,        // -5V subtracts 1x
-                .want = LongDuration::scale(0.5F) * 0.5F,
+                .want = long_duration_range.scale(0.5F) * 0.5F,
                 .tolerance = 0.F,
             },
             {

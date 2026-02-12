@@ -15,18 +15,18 @@ struct MediumDurationKnob {
 
   struct Quantity : rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
-      return MediumDuration::scale(getValue());
+      return medium_duration_range.scale(getValue());
     }
 
     void setDisplayValue(float display) override {
-      setValue(MediumDuration::normalize(display));
+      setValue(medium_duration_range.normalize(display));
     }
   };
 
   static auto config(rack::engine::Module *module, int id,
                      std::string const &name, float value = default_duration)
       -> Quantity * {
-    auto const default_rotation = MediumDuration::normalize(value);
+    auto const default_rotation = medium_duration_range.normalize(value);
     auto *q = module->configParam<Quantity>(id, 0.F, 1.F, default_rotation,
                                             name, " s");
     return q;
@@ -36,26 +36,26 @@ struct MediumDurationKnob {
 struct DurationKnob {
   struct Quantity : rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
-      return Duration::scale(getValue(), range_id_);
+      return DurationTaper::by_id(range_id_).scale(getValue());
     }
 
     void setDisplayValue(float display) override {
-      setValue(Duration::normalize(display, range_id_));
+      setValue(DurationTaper::by_id(range_id_).normalize(display));
     }
 
-    void select_range(DurationRangeId id) { range_id_ = id; }
+    void select_range(DurationTaper::Id id) { range_id_ = id; }
 
   private:
-    DurationRangeId range_id_{};
+    DurationTaper::Id range_id_{};
   };
 
   static auto
   config(rack::engine::Module *module, int param_id, std::string const &name,
          float default_duration = MediumDurationKnob::default_duration,
-         DurationRangeId default_range_id = DurationRangeId::Medium)
+         DurationTaper::Id default_range_id = DurationTaper::Id::Medium)
       -> Quantity * {
     auto const default_value =
-        Duration::normalize(default_duration, default_range_id);
+        DurationTaper::by_id(default_range_id).normalize(default_duration);
     auto *q = module->configParam<Quantity>(param_id, 0.F, 1.F, default_value,
                                             name, " s");
     q->select_range(default_range_id);
@@ -65,19 +65,19 @@ struct DurationKnob {
 
 struct DurationRangeSwitch {
   template <typename Panel>
-  using Widget = ThumbSwitch::Widget<Panel, duration::range_count>;
+  using Widget = ThumbSwitch::Widget<Panel, DurationTaper::count>;
 
   struct Quantity : rack::engine::SwitchQuantity {
     void setValue(float value) override {
       rack::engine::SwitchQuantity::setValue(value);
       for (auto *knob : knobs_) {
-        knob->select_range(static_cast<DurationRangeId>(value));
+        knob->select_range(static_cast<DurationTaper::Id>(value));
       }
     }
 
     void add_knob(DurationKnob::Quantity *knob) {
       knobs_.push_back(knob);
-      knob->select_range(static_cast<DurationRangeId>(getValue()));
+      knob->select_range(static_cast<DurationTaper::Id>(getValue()));
     }
 
   private:
@@ -95,10 +95,10 @@ struct DurationRangeSwitch {
 
   static inline auto
   config(rack::engine::Module *module, int param_id, std::string const &name,
-         DurationRangeId default_range_id = DurationRangeId::Medium)
+         DurationTaper::Id default_range_id = DurationTaper::Id::Medium)
       -> Quantity * {
     static auto const labels = std::vector<std::string>{
-        duration::labels.cbegin(), duration::labels.cend()};
+        DurationTaper::labels().cbegin(), DurationTaper::labels().cend()};
     static auto const max_value = static_cast<float>(labels.size() - 1);
     auto const default_value = static_cast<float>(default_range_id);
     auto *q = module->configSwitch<Quantity>(param_id, 0.F, max_value,

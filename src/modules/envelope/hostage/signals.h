@@ -24,8 +24,8 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
     auto const rotation =
         rotation_of(params_[ParamId::Duration], inputs_[InputId::DurationCv]);
     auto const range =
-        value_of<DurationRangeId>(params_[ParamId::DurationRange]);
-    return Duration::scale(rotation, range);
+        value_of<DurationTaper::Id>(params_[ParamId::DurationRange]);
+    return DurationTaper::by_id(range).scale(rotation);
   }
 
   auto gate() const -> bool { return is_high(inputs_[InputId::Trigger]); }

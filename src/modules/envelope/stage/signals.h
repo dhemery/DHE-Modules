@@ -2,7 +2,6 @@
 
 #include "control-ids.h"
 
-#include "components/sigmoid.h"
 #include "signals/basic.h"
 #include "signals/duration.h"
 #include "signals/shape.h"
@@ -26,7 +25,7 @@ template <typename TParam, typename TInput, typename TOutput> struct Signals {
   auto defer() const -> bool { return is_high(inputs_[InputId::Defer]); }
 
   auto duration() const -> float {
-    return MediumDuration::scale(value_of(params_[ParamId::Duration]));
+    return medium_duration_range.scale(value_of(params_[ParamId::Duration]));
   }
 
   auto gate() const -> bool { return is_high(inputs_[InputId::Trigger]); }

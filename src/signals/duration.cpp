@@ -2,11 +2,22 @@
 #include "components/range.h"
 #include "signals/shape.h"
 
+#include <string>
+#include <vector>
+
 namespace dhe {
 
-DurationRange::DurationRange(Range const &range) : range_{range} {}
+/*
+ * Each duration taper's range is of the form [n, 1000n]. Given ranges of that
+ * form, this curvature tapers the rotation so a knob positioned dead center
+ * yields a duration equal to 1/10 of the range's upper bound (to within 7
+ * decimal places).
+ */
+static auto constexpr taper_curvature = 0.8018017F;
 
-auto DurationRange::by_id(Id id) -> DurationRange const & {
+DurationTaper::DurationTaper(Range const &range) : range_{range} {}
+
+auto DurationTaper::by_id(Id id) -> DurationTaper const & {
   switch (id) {
   case Id::Short:
     return short_duration_range;
@@ -17,46 +28,24 @@ auto DurationRange::by_id(Id id) -> DurationRange const & {
   }
 }
 
-auto DurationRange::labels() -> std::vector<std::string> const & {
+auto DurationTaper::labels() -> std::vector<std::string> const & {
   static auto const labels =
       std::vector<std::string>{"0.001–1.0 s", "0.01–10.0 s", "0.1–100.0 s"};
   return labels;
 }
 
-auto DurationRange::scale(float rotation) -> float {
-  return range_.scale(j_shape.apply(rotation, duration::taper_curvature));
+auto DurationTaper::label(Id id) -> std::string {
+  return labels()[static_cast<int>(id)];
 }
 
-auto DurationRange::normalize(float seconds) -> float {
-  return j_shape.invert(range_.normalize(seconds), duration::taper_curvature);
+auto DurationTaper::scale(float rotation) const -> float {
+  return range_.scale(j_shape.apply(rotation, taper_curvature));
 }
 
-// TODO: Move uses to DurationRange and delete these.
-namespace duration {
-auto scale(float rotation, Range range) -> float {
-  return range.scale(j_shape.apply(rotation, taper_curvature));
+auto DurationTaper::normalize(float seconds) const -> float {
+  return j_shape.invert(range_.normalize(seconds), taper_curvature);
 }
 
-auto normalize(float seconds, Range range) -> float {
-  return j_shape.invert(range.normalize(seconds), taper_curvature);
-}
-
-} // namespace duration
-
-auto Duration::label(DurationRangeId id) -> char const * {
-  return duration::labels[static_cast<size_t>(id)];
-}
-
-auto Duration::range(DurationRangeId id) -> Range {
-  return duration::ranges[static_cast<size_t>(id)];
-}
-
-auto Duration::scale(float normalized, DurationRangeId range_id) -> float {
-  return duration::scale(normalized, range(range_id));
-}
-
-auto Duration::normalize(float scaled, DurationRangeId range_id) -> float {
-  return duration::normalize(scaled, range(range_id));
-}
+auto DurationTaper::range() const -> Range const & { return range_; }
 
 } // namespace dhe
