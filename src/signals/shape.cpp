@@ -32,13 +32,4 @@ auto SShape::apply(float input, float curvature) const -> float {
 auto SShape::invert(float input, float curvature) const -> float {
   return apply(input, -curvature);
 }
-
-auto Curvature::scale(float normalized) -> float {
-  return range.scale(s_shape.apply(normalized, taper_curvature));
-}
-
-auto Curvature::normalize(float scaled) -> float {
-  return s_shape.invert(range.normalize(scaled), taper_curvature);
-}
-
 } // namespace dhe

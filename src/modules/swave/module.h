@@ -49,7 +49,7 @@ private:
     auto const rotation =
         rotation_of(params[ParamId::Curvature], inputs[InputId::CurvatureCv],
                     params[ParamId::CurvatureAv]);
-    return Curvature::scale(Rotation::clamp(rotation));
+    return curvature::scale(Rotation::clamp(rotation));
   }
 
   void send_signal(float voltage) {

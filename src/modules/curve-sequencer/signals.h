@@ -5,6 +5,7 @@
 #include "generate-mode.h"
 
 #include "signals/basic.h"
+#include "signals/curvature.h"
 #include "signals/duration.h"
 #include "signals/shape.h"
 #include "signals/voltage.h"
@@ -35,7 +36,7 @@ struct Signals {
   }
 
   auto curvature(int step) const -> float {
-    return Curvature::scale(value_of(params_[ParamId::StepCurvature + step]));
+    return curvature::scale(value_of(params_[ParamId::StepCurvature + step]));
   }
 
   auto duration(int step) const -> float {

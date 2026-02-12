@@ -17,17 +17,18 @@ struct DurationsSuite : Suite {
         dhe::long_duration_curve,
     };
     for (auto const &duration_curve : duration_curves) {
-      const auto& range_name = duration_curve.label();
+      const auto &range_name = duration_curve.label();
       t.run(range_name, [duration_curve](Tester &t) {
-        t.run("minimum normalize yields lower bound", [duration_curve](Tester &t) {
-          auto constexpr rotation = 0.F;
-          auto const want = duration_curve.range().lower_bound();
+        t.run("minimum normalize yields lower bound",
+              [duration_curve](Tester &t) {
+                auto constexpr rotation = 0.F;
+                auto const want = duration_curve.range().lower_bound();
 
-          auto const got = duration_curve.scale(rotation);
-          if (got != want) {
-            t.errorf("Got {}, want {}", got, want);
-          }
-        });
+                auto const got = duration_curve.scale(rotation);
+                if (got != want) {
+                  t.errorf("Got {}, want {}", got, want);
+                }
+              });
 
         t.run("center normalize yields 1/10 of upper bound",
               [duration_curve](Tester &t) {
@@ -42,15 +43,16 @@ struct DurationsSuite : Suite {
                 }
               });
 
-        t.run("maximum normalize yields upper bound", [duration_curve](Tester &t) {
-          auto const rotation = 1.F;
-          auto const want = duration_curve.range().upper_bound();
+        t.run("maximum normalize yields upper bound",
+              [duration_curve](Tester &t) {
+                auto const rotation = 1.F;
+                auto const want = duration_curve.range().upper_bound();
 
-          auto const got = duration_curve.scale(rotation);
-          if (got != want) {
-            t.errorf("Got {}, want {}", got, want);
-          }
-        });
+                auto const got = duration_curve.scale(rotation);
+                if (got != want) {
+                  t.errorf("Got {}, want {}", got, want);
+                }
+              });
       });
     }
   }

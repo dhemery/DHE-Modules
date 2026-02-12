@@ -8,6 +8,7 @@
 
 #include "components/range.h"
 #include "signals/basic.h"
+#include "signals/curvature.h"
 #include "signals/duration.h"
 #include "signals/shape.h"
 #include "signals/voltage.h"
@@ -59,7 +60,7 @@ struct Signals {
 
   auto curvature(int step) const -> float {
     auto const rotation = rotation_of(params_[ParamId::StepCurvature + step]);
-    return Curvature::scale(rotation);
+    return curvature::scale(rotation);
   }
 
   auto duration(int step) const -> float {

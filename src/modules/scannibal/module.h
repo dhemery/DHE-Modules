@@ -13,7 +13,7 @@
 #include "controls/voltage-controls.h"
 #include "params/presets.h"
 #include "signals/basic.h"
-#include "signals/linear.h"
+#include "signals/curvature.h"
 #include "signals/shape.h"
 #include "signals/voltage.h"
 
@@ -122,7 +122,7 @@ public:
   auto curvature(int step) const -> float {
     auto const rotation = rotation_of(params[ParamId::StepCurvature + step],
                                       inputs[InputId::StepCurvatureCv + step]);
-    return Curvature::scale(Rotation::clamp(rotation));
+    return curvature::scale(Rotation::clamp(rotation));
   }
 
   auto duration(int step) const -> float {

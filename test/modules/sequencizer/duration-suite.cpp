@@ -62,7 +62,8 @@ struct DurationRangeSuite {
   std::vector<DurationRangeTest> tests; // NOLINT
 
   void run(Tester &t) const {
-    auto const name = std::string{"With range "} + DurationCurve::by_id(id).label();
+    auto const name =
+        std::string{"With range "} + DurationCurve::by_id(id).label();
     t.run(name, [this](Tester &t) -> void {
       for (auto const &test : tests) {
         test.run(t, id);

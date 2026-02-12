@@ -81,7 +81,7 @@ private:
   }
 
   inline auto curvature(int knob_id, int cv_id, int av_id) -> float {
-    return Curvature::scale(safe_rotation(knob_id, cv_id, av_id));
+    return curvature::scale(safe_rotation(knob_id, cv_id, av_id));
   }
 
   auto shape(int id) const -> Shape const & {

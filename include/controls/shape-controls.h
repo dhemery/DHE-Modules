@@ -2,28 +2,28 @@
 
 #include "app/SvgSwitch.hpp"
 #include "engine/ParamQuantity.hpp"
+#include "signals/curvature.h"
 #include "signals/shape.h"
 #include "switches.h"
 
-#include <array>
 #include <string>
 
 namespace dhe {
 struct CurvatureKnob {
   struct Quantity : rack::engine::ParamQuantity {
     auto getDisplayValue() -> float override {
-      return Curvature::scale(getValue());
+      return curvature::scale(getValue());
     }
 
     void setDisplayValue(float display_value) override {
-      setValue(Curvature::normalize(display_value));
+      setValue(curvature::normalize(display_value));
     }
   };
 
   static auto config(rack::engine::Module *module, int id,
                      std::string const &name, float default_curvature = 0.F)
       -> Quantity * {
-    auto const default_rotation = Curvature::normalize(default_curvature);
+    auto const default_rotation = curvature::normalize(default_curvature);
     auto *quantity =
         module->configParam<Quantity>(id, 0.F, 1.F, default_rotation, name);
     return quantity;
