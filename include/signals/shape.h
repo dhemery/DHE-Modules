@@ -2,8 +2,10 @@
 
 #include "components/range.h"
 
+#include <cstdint>
+#include <vector>
+
 namespace dhe {
-namespace shape {}
 
 struct Shape {
   static auto constexpr count = 2;
